@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONE BATTLE AFTER ANOTHER</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Bogle&family=Climate+Crisis&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'BBH Sans Bogle', sans-serif;
+      line-height: 1.5;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #FFD700;
+    }
+    nav a {
+      color: #000;
+      text-decoration: none;
+      margin-left: 2rem;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    nav .logo {
+      font-family: 'Climate Crisis', cursive;
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    /* Hero section */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .hero img {
+      max-width: 300px;
+      border: 3px solid #FFD700;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Climate Crisis', cursive;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: #fff;
+    }
+    .hero p span {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Cards section */
+    .cards {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding: 3rem 2rem;
+    }
+    .card {
+      background-color: #111;
+      border: 2px solid #FFD700;
+      border-radius: 10px;
+      padding: 1rem;
+      width: 250px;
+      text-align: center;
+    }
+    .card img.profile-img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 3px solid #FFD700;
+      margin-bottom: 1rem;
+    }
+    .card h3 {
+      font-family: 'Climate Crisis', cursive;
+      margin-bottom: 0.5rem;
+      font-size: 1.2rem;
+    }
+    .card p {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+    .card p span {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Content section */
+    .content {
+      padding: 2rem 3rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .content img {
+      float: right;
+      max-width: 250px;
+      margin: 0 0 1rem 1rem;
+      border: 3px solid #FFD700;
+      border-radius: 6px;
+    }
+    .content h2 {
+      font-family: 'Climate Crisis', cursive;
+      text-transform: uppercase;
+      color: #fff;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .content p span {
+      color: red;
+      font-weight: bold;
+    }
+
+    /* Footer */
+    footer {
+      background-color: #222;
+      color: #fff;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #FFD700;
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">ONE BATTLE AFTER ANOTHER</div>
+    <div class="menu">
+      <a href="#hero">Home</a>
+      <a href="#cast">Elenco</a>
+      <a href="#content">Sinopse</a>
+      <a href="#footer">Contactos</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <img src="poster.jpg" alt="Poster do filme ONE BATTLE AFTER ANOTHER">
+    <h1>ONE BATTLE AFTER ANOTHER</h1>
+    <p>Uma história <span>intensa</span> de rivalidade e coragem.</p>
+  </section>
+
+  <!-- Cards Section -->
+  <section class="cards" id="cast">
+    <div class="card">
+      <img class="profile-img" src="paul.jpg" alt="Paul Thomas Anderson">
+      <h3>Paul Thomas Anderson</h3>
+      <p>O <span>realizador</span> do filme, conhecido pelo seu estilo único.</p>
+    </div>
+    <div class="card">
+      <img class="profile-img" src="leo.jpg" alt="Leonardo DiCaprio">
+      <h3>Leonardo DiCaprio</h3>
+      <p>O protagonista, com <span>intensidade</span> e dedicação no seu papel.</p>
+    </div>
+  </section>
+
+  <!-- Content Section -->
+  <section class="content" id="content">
+    <h2>Sinopse</h2>
+    <img src="filme.jpg" alt="Cena do filme ONE BATTLE AFTER ANOTHER">
+    <p><span>ONE BATTLE AFTER ANOTHER</span> acompanha um guerreiro em desafios que testam a sua coragem e determinação. Durante o filme, vemos conflitos internos e externos que moldam a história.</p>
+    <p>O filme combina ação e drama, com momentos de tensão e emoção. A atuação de <span>Leonardo DiCaprio</span> dá profundidade ao personagem principal, enquanto <span>Paul Thomas Anderson</span> cria uma narrativa clara e envolvente.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p>© 2025 ONE BATTLE AFTER ANOTHER. Todos os direitos reservados.</p>
+    <p>
+      <a href="#">Instagram</a> |
+      <a href="#">Facebook</a> |
+      <a href="#">Twitter</a>
+    </p>
+  </footer>
+
+</body>
+</html>
