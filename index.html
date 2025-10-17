@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SAMOT — Portfólio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=BBH+Sans+Bogle&family=Bowlby+One&family=Climate+Crisis:YEAR@2008&family=Dorsa&family=Lexend+Deca:wght@100..900&family=Notable&display=swap" rel="stylesheet">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+
+<style>
+  /* ---------- RESET & NEW FONT (updated body/html font-family and weight) ---------- */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{
+    height:100%;
+    /* Nova fonte Lexend Deca com peso 748 (ou o mais próximo) */
+    font-family:"Lexend Deca",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    font-weight: 700; /* 748 não existe diretamente, usamos 700 ou ajustamos no CSS */
+    color:#f4f4f2;
+    overflow-x:hidden;
+    scroll-behavior:smooth
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* Font-weight 748 for Lexend Deca */
+  body, .project-overlay p, .contact-grid a {
+      font-weight: 700; /* closest to 748 as per standard weights */
+  }
+
+  /* ---------- BACKGROUND (image full-screen) ---------- */
+  :root{
+    --glass-bg: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.06);
+    --muted: rgba(255,255,255,0.85);
+    /* Nova cor para o hover social: Azul */
+    --social-hover-color: #5aa6ff; 
+  }
+  body{
+    background-image: url('back.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-color: #0b254a;
+  }
+
+  /* ---------- SOCIALS top-left (Cor do hover atualizada) ---------- */
+  .socials{
+    position:fixed; left:18px; top:18px; display:flex; gap:10px; z-index:260;
+  }
+  .socials a{
+    width:44px;height:44px;display:inline-grid;place-items:center;border-radius:10px;
+    background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03);
+    color:#fff; font-size:1.05rem; transition:transform .16s ease, background .16s;
+  }
+  .socials a:hover{ 
+    transform:translateY(-6px) scale(1.06); 
+    background: rgba(255,255,255,0.12); 
+    color:var(--social-hover-color); /* Atualizado para azul */
+  }
+
+  /* ---------- TOP MENU top-right (Tomás / Videógrafo / Realizador / Editor) ---------- */
+  header{
+    position:fixed; right:24px; top:18px; z-index:270; display:flex; gap:14px; align-items:center;
+    background:transparent;
+  }
+  header a{
+    font-family:"Lexend Deca",sans-serif;
+    font-weight:700; font-size:0.95rem;
+    text-transform:uppercase; letter-spacing:1px; padding:.45rem .65rem; border-radius:8px;
+    color:#fff; opacity:0.95; transition:opacity .14s ease, transform .14s;
+  }
+  header a:hover{ opacity:1; transform:translateY(-4px) }
+
+  /* ---------- MINI SAMOT (top center) - appears on scroll) ---------- */
+  .mini-samot{
+    position:fixed; left:50%; transform:translateX(-50%); top:16px; z-index:280;
+    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(14px, 2.2vw, 22px);
+    color:#fff; opacity:0.06; cursor:pointer; transition:opacity .25s ease, transform .25s ease;
+    padding:.2rem .6rem; border-radius:6px;
+  }
+  .mini-samot.visible{ opacity:0.9; background: rgba(0,0,0,0.18); box-shadow:0 6px 18px rgba(0,0,0,0.45); transform:translateX(-50%) translateY(0) }
+
+  /* ---------- HERO (very large) ---------- */
+  .hero{
+    height:100vh; width:100%; display:grid; place-items:center; position:relative; overflow:hidden; padding:6vh 6%;
+  }
+
+  .hero-card{
+    width:min(1200px,96%); display:flex; gap:3.2rem; align-items:center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:20px; padding:4rem; box-shadow: 0 40px 80px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
+    backdrop-filter: blur(8px) saturate(140%); position:relative; z-index:40;
+  }
+
+  /* Left: hero text */
+  .hero-left{ flex:1 1 56%; display:flex; flex-direction:column; gap:1.2rem; align-items:flex-start; }
+  .hero-sub{
+    font-family:"Lexend Deca",sans-serif;
+    font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted)
+  }
+  /* ESPAÇAMENTO DO TÍTULO PRINCIPAL AUMENTADO */
+  .hero-title{
+    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(54px, 12vw, 160px); line-height:0.9; text-transform:uppercase;
+    color: #fff; letter-spacing:4px; /* Aumentado de 2px para 4px */
+  }
+  .hero-desc{
+    font-family:"Lexend Deca",sans-serif;
+    font-size:clamp(1.15rem, 1.5vw, 1.3rem);
+    max-width:56ch;
+    color: rgba(255,255,255,0.94)
+  }
+
+  /* Right: portrait */
+  .hero-right{ flex:0 0 44%; display:flex; justify-content:center; align-items:center }
+  /* Ajustes da Imagem: Sombra com blur para disfarçar o recorte */
+  .hero-portrait{
+    width: 100%;
+    height: auto;
+    border-radius:0;
+    overflow:visible; display:block;
+    filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0.6px); 
+    transition: opacity .6s ease, transform .6s ease;
+    border:none;
+    max-width: 130%; 
+    transform: translateX(15%); 
+  }
+
+  /* ghost big SAMOT behind (subtle parallax) */
+  .hero-ghost{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:10; pointer-events:none;
+    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(80px,20vw,220px); color:rgba(255,255,255,0.06); text-transform:uppercase; letter-spacing:5px;
+    mix-blend-mode: screen; transform: translateY(-4%);
+  }
+
+  /* ---------- MAIN / SECTIONS ---------- */
+  main{ position:relative; z-index:30 }
+
+  .section{
+    padding:6rem 6% 6rem 6%; display:flex; flex-direction:column; gap:2.4rem; background: transparent;
+  }
+  /* ESPAÇAMENTO DO TÍTULO DA SECÇÃO AUMENTADO */
+  .section h2{
+    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(32px,5vw,50px);
+    text-transform:uppercase; text-align:center; margin-bottom:.6rem;
+    letter-spacing: 4px; /* Aumentado */
+  }
+  .section h2::after{ content:""; display:block; width:72px;height:4px;background:#fff;margin:12px auto 0;border-radius:4px }
+
+  /* ========================================= */
+  /* LAYOUT DE GRID COM OVERLAY (Todas as secções) */
+  /* ========================================= */
+  .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 3rem; 
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+  }
+
+  /* Card de Projeto (Container) */
+  .project-card {
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: all 0.3s cubic-bezier(.2,.9,.3,1);
+      /* Para o efeito de reveal ao scroll */
+      transform:translateY(28px); opacity:0; transition: all .75s cubic-bezier(.2,.9,.3,1);
+  }
+  .project-card.in-view{ transform:none; opacity:1 }
+
+
+  .project-card:hover {
+      box-shadow: 0 30px 60px rgba(2,6,23,0.8);
+      transform: translateY(-4px) scale(1.02);
+  }
+  
+  /* Esconder título fixo no hover */
+  .project-card:hover .project-title-top {
+      opacity: 0;
+  }
+
+  /* Imagem/Thumbnail - CORREÇÃO DE TAMANHO */
+  .project-card .project-media {
+      width: 100%;
+      height: 250px; 
+      position: relative;
+      overflow: hidden;
+  }
+  .project-card .project-media img {
+      width: 100%;
+      height: 100%; 
+      display: block;
+      object-fit: cover; 
+  }
+  
+  /* ESPAÇAMENTO DO TÍTULO POR CIMA DA THUMBNAIL AUMENTADO */
+  .project-card .project-title-top {
+      position: absolute;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family:"BBH Sans Bogle",sans-serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      text-transform: uppercase;
+      letter-spacing: 3px; /* Aumentado de 2px para 3px */
+      z-index: 10;
+      pointer-events: none;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+      transition: opacity 0.3s ease; 
+  }
+
+  /* Overlay de Texto (Estilo iOS Glass 26) */
+  .project-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      
+      /* Estilo Glassmorphism */
+      background: rgba(255, 255, 255, 0.08); 
+      backdrop-filter: blur(20px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+
+      opacity: 0; 
+      transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .project-card:hover .project-overlay {
+      opacity: 1;
+      transform: scale(1.0);
+  }
+  
+  .project-overlay .role {
+      font-size: 1rem;
+      color: #ffd25a;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      font-weight: 700;
+  }
+  /* ESPAÇAMENTO DO TÍTULO DENTRO DO OVERLAY AUMENTADO */
+  .project-overlay h3 {
+      font-family:"BBH Sans Bogle",sans-serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      line-height: 1.1;
+      letter-spacing: 3px; /* Aumentado */
+  }
+  /* CORREÇÃO: Redução da fonte do texto de descrição do overlay */
+  .project-overlay p {
+      font-family:"Lexend Deca",sans-serif;
+      font-size: 1rem; /* Reduzido de 1.1rem para 1rem */
+      line-height: 1.4; /* Ligeiramente reduzido para encaixar mais texto */
+      max-width: 55ch;
+  }
+  
+  /* ========================================= */
+  /* CONTACTOS (Manter layout simples) */
+  /* ========================================= */
+  .contact-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
+  .contact-grid a{
+    font-family:"Lexend Deca",sans-serif;
+    display:inline-flex; align-items:center; gap:8px; padding:8px 12px; background: rgba(255,255,255,0.03); border-radius:10px; font-weight:700
+  }
+
+  footer{
+    font-family:"Lexend Deca",sans-serif;
+    padding:48px 6%; text-align:center; color:rgba(255,255,255,0.8)
+  }
+
+  /* ---------- MODAL for video ---------- */
+  .modal{
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:999;
+    background: rgba(0,0,0,0.7); padding:24px;
+  }
+  .modal.open{ display:flex }
+  .modal .frame{
+    width:min(1100px,96%); aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,0.8)
+  }
+  .modal .close{
+    position:absolute; top:18px; right:18px; z-index:1000; background:rgba(255,255,255,0.06); color:#fff; border-radius:8px; width:44px; height:44px; display:grid; place-items:center; font-size:1.05rem; cursor:pointer;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:1100px){
+    .hero-card{ padding:3rem }
+    .hero-portrait{ width:100% }
+  }
+  @media (max-width:880px){
+    .hero-card{ flex-direction:column-reverse; gap:1.2rem; padding:2.5rem }
+    .hero-left{text-align:center; align-items:center}
+    .hero-right{ width:100% }
+    .hero-portrait{ width:100%; max-width:85vw; transform: none; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)) blur(0.3px); } 
+    .hero-ghost{ font-size:18vw; transform: translateY(-12%) }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    /* Ajuste da altura do card em mobile */
+    .project-card .project-media {
+      height: 200px;
+    }
+    /* CORREÇÃO: Fonte ainda mais pequena em mobile */
+    .project-overlay p {
+      font-size: 0.9rem; /* Reduzido de 0.95rem para 0.9rem */
+    }
+  }
+  @media (max-width:480px){
+    header{ right:12px; top:12px }
+    .socials{ left:8px; top:12px }
+    .hero-portrait{ width:100%; max-width:90vw; }
+    .hero-ghost{ font-size:22vw }
+    
+    .project-overlay {
+      padding: 2rem 1.5rem;
+    }
+    .project-overlay h3 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="socials" aria-hidden="true">
+    <a href="https://www.instagram.com/samot_____/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.youtube.com/@samot____" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="mailto:tomasvieira04@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+  </div>
+
+  <header role="banner" aria-label="menu">
+    <a href="#videografo">Videógrafo</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#editor">Editor</a>
+    <a href="#contactos">Contactos</a>
+  </header>
+
+  <div class="mini-samot" id="miniSamot" title="Voltar ao topo" aria-hidden="true">SAMOT</div>
+
+  <section class="hero" id="hero">
+    <div class="hero-card" role="region" aria-label="intro">
+      <div class="hero-left">
+        <div class="hero-sub">VIDEÓGRAFO</div>
+        <div class="hero-title">SAMOT</div>
+        <div class="hero-desc">Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.</div>
+      </div>
+
+      <div class="hero-right">
+        <img src="eu.png" alt="Samot portrait" class="hero-portrait" id="portrait">
+      </div>
+
+      <div class="hero-ghost" aria-hidden="true">SAMOT</div>
+    </div>
+  </section>
+
+  <main>
+
+    <section class="section" id="videografo">
+      <h2>Trabalhos como Videógrafo</h2>
+      <div class="projects-grid">
+        
+        <div class="project-card" data-id="gZWty7tHZlg">
+          <div class="project-title-top">ADEPTOS FC PORTO VS VITÓRIA</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/gZWty7tHZlg/maxresdefault.jpg" alt="Clip FC Porto vs Vitória SC">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Clip de Cobertura (2025)</div>
+            <h3>COBERTURA ADEPTOS</h3>
+            <p>Clip de adeptos do FC Porto vs Vitória. Gravado e editado por mim, focando na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
+          </div>
+        </div>
+        
+        <div class="project-card" data-id="EfF95Yf0vxU">
+          <div class="project-title-top">COMPILAÇÃO DE CLIPES</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/EfF95Yf0vxU/maxresdefault.jpg" alt="Compilação de Clips Porto Canal">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Porto Canal (2025)</div>
+            <h3>TRABALHO EM BROADCAST</h3>
+            <p>Clipes de diversas áreas para o Porto Canal. A maioria das captações e todas as edições são da minha autoria. Demonstração de versatilidade.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="EsjzYQ1qLhg">
+          <div class="project-title-top">KOTARO NAGATA</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/EsjzYQ1qLhg/maxresdefault.jpg" alt="Kotaro Nagata Raw Footage">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Raw Footage (2025)</div>
+            <h3>CAPTAÇÃO DE CONTRATAÇÃO</h3>
+            <p>Imagens brutas (raw footage) captadas no dia da contratação do jogador Kotaro Nagata. Foco na qualidade da captação e trabalho de câmara.</p>
+          </div>
+        </div>
+        
+        <div class="project-card" data-id="DUMMY_3">
+          <div class="project-title-top">HIGHLIGHTS DE JOGO DO PORTO</div>
+          <div class="project-media">
+             <img src="7.jpg" alt="Highlights Jogo FC Porto">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Highlights de Jogo (2025)</div>
+            <h3>JOGO FC PORTO VS VITÓRIA</h3>
+            <p>Lances do jogo FC Porto vs Vitória. Captação e edição próprias. Foco na captação em alta pressão e edição rápida de momentos chave. *Vídeo em breve.*</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="1O0X5esNQv4">
+          <div class="project-title-top">RENOVAÇÃO RODRIGO MORA</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/1O0X5esNQv4/maxresdefault.jpg" alt="Renovação Rodrigo Mora">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Clip Oficial (2025)</div>
+            <h3>EDIÇÃO DE COMUNICAÇÃO</h3>
+            <p>Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    
+    <section class="section" id="projetos">
+      <h2>Projetos Pessoais (Realizador)</h2>
+
+      <div class="projects-grid">
+        
+        <div class="project-card" data-id="RU6TjLccPsU">
+          <div class="project-title-top">JOVENS ADULTOS</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/RU6TjLccPsU/maxresdefault.jpg" alt="Jovens Adultos Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Documentário (2023)</div>
+            <h3>CULTURA E MODA</h3>
+            <p>Co-Realizador e Editor. Documentário feito por jovens sobre moda e skate na cidade do Porto. Trabalho experimental com foco em subculturas urbanas.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="rZnV_EgftCo">
+          <div class="project-title-top">BRUNO NUNO</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/rZnV_EgftCo/maxresdefault.jpg" alt="Bruno Nuno Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Curta-metragem (2024)</div>
+            <h3>COMÉDIA SATÍRICA</h3>
+            <p>Realizador e Argumentista. Bruno Nuno é uma comédia satírica que explora os absurdos do quotidiano e as ambições falhadas de um homem. </p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="zwHU_jOtvtE">
+          <div class="project-title-top">WHY STOP NOW?</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/zwHU_jOtvtE/maxresdefault.jpg" alt="Why Stop Now Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Documentário (2025)</div>
+            <h3>CENTRO COMERCIAL STOP</h3>
+            <p>Pesquisa e Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP e a resistência da cultura musical do Porto.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="Zj2FeeNroTc">
+          <div class="project-title-top">FUMAR MATA</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/Zj2FeeNroTc/maxresdefault.jpg" alt="Fumar Mata Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Curta-metragem (2025)</div>
+            <h3>DRAMA EXPERIMENTAL</h3>
+            <p>Realizador e Diretor de Fotografia. Um drama íntimo sobre relações e fragilidades humanas em contextos familiares. Apresentado no Cinema Batalha.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="FucYalKzpRs">
+          <div class="project-title-top">VIVER EM PART-TIME</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Projeto Experimental (2023)</div>
+            <h3>ROMANCE VISUAL</h3>
+            <p>Realizador e Editor. Curta-metragem experimental focada na narrativa visual, sem falas, construindo um romance com ambientes e emoções.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="JfjUF5nuwd0">
+          <div class="project-title-top">PINGUINS</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/JfjUF5nuwd0/maxresdefault.jpg" alt="Pinguins Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Sketch (2024)</div>
+            <h3>COMÉDIA</h3>
+            <p>Ator, Realizador e Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
+          </div>
+        </div>
+        
+        <div class="project-card" data-id="DUMMY_2">
+          <div class="project-title-top">SAMOT21</div>
+          <div class="project-media">
+             <img src="4.jpg" alt="Samot21 Thumbnail">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Documentário Pessoal (2025)</div>
+            <h3>DOCUMENTÁRIO CAÓTICO</h3>
+            <p>Realizador e Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Exploração de narrativa documental rápida. *Vídeo em breve.*</p>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+    
+    <section class="section" id="editor">
+      <h2>Trabalhos como Editor</h2>
+      <div class="projects-grid">
+
+        <div class="project-card" data-id="P4YQVZSMGjo">
+          <div class="project-title-top">CLIPES ADEPTOS FUTEBOL CLUBE</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/P4YQVZSMGjo/maxresdefault.jpg" alt="Clipes Adeptos Futebol Clube">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Edição de Clips (2025)</div>
+            <h3>ADEPTOS EM DESTAQUE</h3>
+            <p>Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="GUck3Raa4D4">
+          <div class="project-title-top">CLIP CONTRATAÇÃO JOGADORA</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/GUck3Raa4D4/maxresdefault.jpg" alt="Clip contratação jogadora">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Comunicação Oficial (2025)</div>
+            <h3>FUTEBOL FEMININO FC PORTO</h3>
+            <p>Clip oficial da contratação do Futebol Feminino do FC Porto. Gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
+          </div>
+        </div>
+        
+        <div class="project-card" data-id="FucYalKzpRs">
+          <div class="project-title-top">VIVER PART-TIME (TIKTOK)</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time TikTok">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Edição Vertical (2025)</div>
+            <h3>REEDIÇÃO PARA REDES SOCIAIS</h3>
+            <p>Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, otimizado para plataformas como o TikTok e Reels.</p>
+          </div>
+        </div>
+        
+        <div class="project-card" data-id="54ELYGuWrPw">
+          <div class="project-title-top">FUMAR MATA (TIKTOK)</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/54ELYGuWrPw/maxresdefault.jpg" alt="Fumar Mata TikTok">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Edição Vertical (2025)</div>
+            <h3>ADAPTAÇÃO PARA TIKTOK</h3>
+            <p>Reedição do meu projeto Fumar Mata para um tom atual e um formato vertical otimizado para a audiência do TikTok.</p>
+          </div>
+        </div>
+
+        <div class="project-card" data-id="m_3-wbV15Tk">
+          <div class="project-title-top">CLIP EDIT “SUCCESSION”</div>
+          <div class="project-media">
+             <img src="https://img.youtube.com/vi/m_3-wbV15Tk/maxresdefault.jpg" alt="Succession clip edit">
+          </div>
+          <div class="project-overlay">
+            <div class="role">Clip de Tendência (2025)</div>
+            <h3>EDIÇÃO 2D DE LETRAS</h3>
+            <p>Edit de letras 2D, demonstrando domínio num formato de clip muito usado em redes sociais, com foco em ritmo e design gráfico.</p>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+
+    <section class="section" id="contactos">
+      <h2>Contactos</h2>
+      <div class="contact-grid">
+        <a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+        <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="mailto:tomasvieira04@gmail.com" target="_blank"><i class="fas fa-envelope"></i> Email</a>
+      </div>
+    </section>
+
+    <footer>© 2025 SAMOT — Todos os direitos reservados</footer>
+
+  </main>
+
+  <div class="modal" id="modal" role="dialog" aria-hidden="true">
+    <button class="close" id="modalClose" aria-label="Fechar">✕</button>
+    <div class="frame" id="modalFrame"></div>
+  </div>
+
+<script>
+  /* ---------- portrait / hero behavior ---------- */
+  const portrait = document.getElementById('portrait');
+  const heroGhost = document.querySelector('.hero-ghost');
+  const heroTitle = document.querySelector('.hero-title');
+  const mini = document.getElementById('miniSamot');
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    
+    // 1. A imagem de perfil desaparece suavemente (opacity) ao descer
+    const fade = Math.max(0, 1 - (y / 160));
+    if (portrait) {
+      portrait.style.opacity = fade;
+      // Pequeno parallax/shift para o efeito de "desaparecer para baixo" e manter o deslocamento X
+      portrait.style.transform = `scale(${0.98 + fade*0.02}) translateY(${Math.min(0, -y/80)}px) translateX(15%)`; 
+    }
+    
+    // Hero title fades and ghost shifts
+    if (heroGhost) heroGhost.style.transform = `translateY(${Math.max(-60, -y/6)}px)`;
+    if (heroTitle) heroTitle.style.opacity = Math.max(0, 1 - (y / 220));
+
+    // 2. Mostrar/esconder mini-samot
+    if (y > 120) mini.classList.add('visible'); else mini.classList.remove('visible');
+  });
+
+  // 2. Corrigir o clique do mini-samot para rolar para o topo
+  mini.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Foi corrigido para funcionar corretamente
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Forçar a imagem a aparecer se estiver escondida (só por segurança)
+    if (portrait) portrait.style.opacity = 1;
+  });
+
+  // clicking a top menu anchor also hide portrait for UX
+  document.querySelectorAll('header a').forEach(a => a.addEventListener('click', ()=> {
+    if (portrait) portrait.style.opacity = 0;
+    setTimeout(()=>{ if(window.scrollY < 60 && portrait) portrait.style.opacity = 1 }, 900);
+  }));
+
+  /* ---------- widgets reveal with intersection observer ---------- */
+  // Agora só usamos .project-card para todas as secções de trabalho
+  const widgets = document.querySelectorAll('.project-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.16 });
+
+  widgets.forEach(w => io.observe(w));
+
+
+  /* ---------- thumbnails clickable -> modal with youtube embed ---------- */
+  const modal = document.getElementById('modal');
+  const modalFrame = document.getElementById('modalFrame');
+  const modalClose = document.getElementById('modalClose');
+
+  // open modal helper
+  function openVideo(id){
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    
+    // Lista de DUMMY IDs para verificar se o vídeo está disponível
+    const dummyIds = ['DUMMY_1', 'DUMMY_2', 'DUMMY_3']; 
+
+    // Only create iframe if it's a valid YouTube ID
+    if (id && !dummyIds.includes(id)) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      modalFrame.innerHTML = '';
+      modalFrame.appendChild(iframe);
+    } else {
+      // For placeholders, we show a message
+      modalFrame.innerHTML = '<p style="color:white;
