@@ -46,33 +46,37 @@
     background-color: #0b254a;
   }
 
-  /* ---------- SOCIALS top-left (Cor do hover atualizada) ---------- */
+  /* ---------- SOCIALS top-left (DIMINUÍDO MAIS) ---------- */
   .socials{
-    position:fixed; left:18px; top:18px; display:flex; gap:10px; z-index:260;
+    position:fixed; left:14px; top:14px; display:flex; gap:6px; z-index:260; 
   }
   .socials a{
-    width:44px;height:44px;display:inline-grid;place-items:center;border-radius:10px;
+    width:32px;height:32px; /* Tamanho ainda mais reduzido (de 36px) */
+    display:inline-grid;place-items:center;border-radius:8px; /* Reduzido de 10px */
     background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03);
-    color:#fff; font-size:1.05rem; transition:transform .16s ease, background .16s;
+    color:#fff; font-size:0.8rem; /* Tamanho do ícone reduzido */
+    transition:transform .16s ease, background .16s;
   }
   .socials a:hover{ 
-    transform:translateY(-6px) scale(1.06); 
+    transform:translateY(-4px) scale(1.08); /* Ajustado para ser mais subtil */
     background: rgba(255,255,255,0.12); 
-    color:var(--social-hover-color); /* Atualizado para azul */
+    color:var(--social-hover-color); 
   }
 
-  /* ---------- TOP MENU top-right (Tomás / Videógrafo / Realizador / Editor) ---------- */
+  /* ---------- TOP MENU top-right (DIMINUÍDO MAIS) ---------- */
   header{
-    position:fixed; right:24px; top:18px; z-index:270; display:flex; gap:14px; align-items:center;
+    position:fixed; right:14px; top:14px; z-index:270; display:flex; gap:8px; align-items:center; /* Gap reduzido */
     background:transparent;
   }
   header a{
     font-family:"Lexend Deca",sans-serif;
-    font-weight:700; font-size:0.95rem;
-    text-transform:uppercase; letter-spacing:1px; padding:.45rem .65rem; border-radius:8px;
+    font-weight:700; font-size:0.85rem; /* Tamanho da fonte reduzido (de 0.9rem) */
+    text-transform:uppercase; letter-spacing:1px; 
+    padding:.25rem .45rem; /* Padding reduzido (de .3rem .5rem) */
+    border-radius:6px; /* Reduzido de 8px */
     color:#fff; opacity:0.95; transition:opacity .14s ease, transform .14s;
   }
-  header a:hover{ opacity:1; transform:translateY(-4px) }
+  header a:hover{ opacity:1; transform:translateY(-3px) } /* Movimento de hover reduzido */
 
   /* ---------- MINI SAMOT (top center) - appears on scroll) ---------- */
   .mini-samot{
@@ -104,7 +108,7 @@
     font-family:"Lexend Deca",sans-serif;
     font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted)
   }
-  /* TÍTULO PRINCIPAL: Letter-spacing revertido para o valor ideal */
+  /* TÍTULO PRINCIPAL: Letter-spacing revertido para o valor original */
   .hero-title{
     font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(54px, 12vw, 160px); line-height:0.9; text-transform:uppercase;
     color: #fff; letter-spacing:2px; 
@@ -117,27 +121,19 @@
   }
 
   /* Right: portrait */
-  .hero-right{ 
-    flex:0 0 44%; 
-    display:flex; 
-    justify-content:center; 
-    align-items:center 
-  }
-
-  /* IMAGEM EU.PNG: AJUSTE FINAL E FORÇADO COM VW E TRANSLATE EXTREMO */
+  .hero-right{ flex:0 0 44%; display:flex; justify-content:center; align-items:center }
+  /* Ajustes da Imagem: Sombra com blur para disfarçar o recorte */
+  /* IMAGEM EU.PNG: AJUSTES FINAIS PARA TAMANHO E POSIÇÃO */
   .hero-portrait{
-    width: 45vw; /* Tamanho forçado em relação ao viewport */
+    width: 100%;
     height: auto;
     border-radius:0;
-    overflow:visible; 
-    display:block;
+    overflow:visible; display:block;
     filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9)); 
-    transition: opacity .6s ease, transform .6s ease, filter .3s ease;
+    transition: opacity .6s ease, transform .6s ease, filter .3s ease; /* Transição suave para o blur */
     border:none;
-    /* Removendo a limitação de max-width e usando o deslocamento necessário para a imagem gigante */
-    max-width: none; 
-    /* NOVOS VALORES EXTREMOS PARA O DESIGN DESEJADO: 60% D para transbordar, 65% B para descer o tronco */
-    transform: translateX(60%) translateY(65%); 
+    max-width: 210%; /* Ajuste fino */
+    transform: translateX(10%) translateY(15%); /* Ajuste fino para centrar/tocar a base */
   }
 
   /* ghost big SAMOT behind (subtle parallax) */
@@ -294,7 +290,10 @@
   .contact-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
   .contact-grid a{
     font-family:"Lexend Deca",sans-serif;
-    display:inline-flex; align-items:center; gap:8px; padding:8px 12px; background: rgba(255,255,255,0.03); border-radius:10px; font-weight:700
+    display:inline-flex; align-items:center; gap:8px; background: rgba(255,255,255,0.03); border-radius:10px; font-weight:700;
+    /* Adicionar transição para o texto do e-mail */
+    padding:8px 12px;
+    transition: background 0.2s, color 0.2s, padding 0.2s; 
   }
 
   footer{
@@ -318,47 +317,15 @@
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:1100px){
     .hero-card{ padding:3rem }
-    /* Ajuste responsivo para a imagem eu.png em tablets */
-    .hero-portrait{ 
-        width: 40vw; /* Reduzir um pouco em ecrãs menores */
-        transform: translateX(40%) translateY(55%); /* Ajuste a translação */
-    } 
+    /* Ajuste responsivo para a imagem eu.png */
+    .hero-portrait{ max-width: 180%; transform: translateX(8%) translateY(10%); } /* Ajuste para écrans intermédios */
   }
-
-  /* ---------------------------------------------------- */
-  /* CORREÇÕES CRÍTICAS PARA MOBILE (max-width: 880px) */
-  /* ---------------------------------------------------- */
   @media (max-width:880px){
-    /* 1. CORREÇÃO DE SOBREPOSIÇÃO DE BARRAS */
-    .hero{ 
-        padding-top: 10vh; /* Aumentar o padding superior para afastar o cartão do menu fixo */
-        height: auto; /* Deixar o hero crescer na vertical para acomodar o conteúdo */
-        min-height: 80vh; /* Garantir um tamanho mínimo */
-        padding-bottom: 5rem;
-    }
-    
-    /* Reorganização do cartão: Imagem no topo, Texto em baixo */
-    .hero-card{ 
-        flex-direction:column-reverse; /* Título no topo, Imagem em baixo no código (Visualmente: Imagem, depois Título) */
-        gap:1.5rem; 
-        padding:2.5rem 1.5rem; /* Ajuste do padding do cartão */
-    }
+    .hero-card{ flex-direction:column-reverse; gap:1.2rem; padding:2.5rem }
     .hero-left{text-align:center; align-items:center}
     .hero-right{ width:100% }
-    
-    /* 2. CORREÇÃO DA IMAGEM SOBRE O TÍTULO */
-    .hero-portrait{ 
-        width: 60vw; /* Imagem mais pequena no mobile */
-        max-width: 300px; /* Limitar o tamanho máximo */
-        transform: none; /* Remover o translate forçado do PC */
-        filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8));
-        margin-bottom: 1.5rem; /* Espaço entre a imagem e o texto */
-    } 
-
+    .hero-portrait{ width:100%; max-width:85vw; transform: none; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)); } 
     .hero-ghost{ font-size:18vw; transform: translateY(-12%) }
-
-    /* Ajuste da fonte do TÍTULO SAMOT para evitar quebras de linha no centro */
-    .hero-title{ font-size: 16vw; letter-spacing: 0px; } 
     
     .projects-grid {
         grid-template-columns: 1fr;
@@ -373,35 +340,12 @@
       font-size: 0.9rem; /* Ajustado para mobile */
     }
   }
-
   @media (max-width:480px){
-    /* 1. CORREÇÃO DOS MENUS DE TOPO PARA NÃO SOBREPOR O TÍTULO */
-    /* Mover a barra do menu para a linha de baixo do Socials */
-    header{ 
-      top: 56px; /* Descer o menu para baixo dos ícones sociais */
-      right: 12px;
-      gap: 8px;
-    }
-    /* Ajustar o Socials para cima */
-    .socials{ 
-      left: 12px; 
-      top: 12px; 
-      gap: 6px;
-    }
-    .socials a, .modal .close{
-      width: 36px;
-      height: 36px;
-      font-size: 0.9rem;
-    }
-    header a{
-      font-size: 0.8rem;
-    }
-
-    .hero{ 
-        padding-top: 14vh; /* Aumentar ainda mais o padding para o novo layout de 2 linhas do menu */
-    }
+    /* Pequenos ajustes para os novos tamanhos ultra-compactos */
+    header{ right:10px; top:10px; gap:6px }
+    .socials{ left:6px; top:10px; gap:4px }
     
-    .hero-portrait{ max-width: 80vw; }
+    .hero-portrait{ width:100%; max-width:90vw; }
     .hero-ghost{ font-size:22vw }
     
     .project-overlay {
@@ -409,9 +353,6 @@
     }
     .project-overlay h3 {
       font-size: 1.5rem;
-    }
-    .hero-desc {
-      font-size: 1rem;
     }
   }
 </style>
@@ -435,15 +376,14 @@
 
   <section class="hero" id="hero">
     <div class="hero-card" role="region" aria-label="intro" id="heroCard">
-      
-      <div class="hero-right">
-        <img src="eu.png" alt="Samot portrait" class="hero-portrait" id="portrait">
-      </div>
-      
       <div class="hero-left">
         <div class="hero-sub">VIDEÓGRAFO</div>
         <div class="hero-title">SAMOT</div>
         <div class="hero-desc">Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.</div>
+      </div>
+
+      <div class="hero-right">
+        <img src="eu.png" alt="Samot portrait" class="hero-portrait" id="portrait">
       </div>
 
       <div class="hero-ghost" aria-hidden="true">SAMOT</div>
@@ -518,7 +458,7 @@
 
       </div>
     </section>
-
+    
     <section class="section" id="projetos">
       <h2>Projetos Pessoais (Realizador)</h2>
 
@@ -683,7 +623,7 @@
       <div class="contact-grid">
         <a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
         <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-        <a href="mailto:tomasvieira04@gmail.com" target="_blank"><i class="fas fa-envelope"></i> Email</a>
+        <a href="mailto:tomasvieira04@gmail.com" id="contactEmail" data-email="tomasvieira04@gmail.com"><i class="fas fa-envelope"></i> Email</a>
       </div>
     </section>
 
@@ -704,18 +644,16 @@
   const heroCard = document.getElementById('heroCard'); 
   const mini = document.getElementById('miniSamot');
 
-  // Valores iniciais de translateY e translateX (ajustados no CSS para PC)
-  const initialTranslateY = 65; // Ajuste para PC
-  const initialTranslateX = 60; // Ajuste para PC
+  // Valores iniciais de translateY e translateX (ajustados no CSS)
+  const initialTranslateY = 15; 
+  const initialTranslateX = 10;  
 
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     
-    // 1. A imagem de perfil desaparece suavemente (opacity) e faz parallax (SÓ NO PC)
-    const isMobile = window.innerWidth <= 880;
-    
-    if (portrait && !isMobile) {
-      const fade = Math.max(0, 1 - (y / 160));
+    // 1. A imagem de perfil desaparece suavemente (opacity) e faz parallax
+    const fade = Math.max(0, 1 - (y / 160));
+    if (portrait) {
       portrait.style.opacity = fade;
       
       const currentTranslateY = initialTranslateY + Math.min(0, -y/80);
@@ -728,7 +666,7 @@
       // Aplicar blur no CARD (backdrop-filter)
       const cardBlurAmount = 8 + Math.min(2, y / 100); 
       heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
-    } 
+    }
     
     // Hero title fades and ghost shifts
     if (heroGhost) heroGhost.style.transform = `translateY(${Math.max(-60, -y/6)}px)`;
@@ -742,11 +680,158 @@
   mini.addEventListener('click', (e) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    
-    const isMobile = window.innerWidth <= 880;
-
-    if (portrait && !isMobile) {
+    if (portrait) {
         portrait.style.opacity = 1;
         portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`;
     }
-    if
+    if (heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`;
+  });
+
+  // clicking a top menu anchor also hide portrait for UX
+  document.querySelectorAll('header a').forEach(a => a.addEventListener('click', ()=> {
+    if (portrait) {
+        portrait.style.opacity = 0;
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(3px)`; 
+    }
+    if (heroCard) heroCard.style.backdropFilter = `blur(10px) saturate(140%)`; 
+    
+    setTimeout(()=>{ 
+      if(window.scrollY < 60 && portrait) {
+        portrait.style.opacity = 1; 
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`; 
+      }
+      if(window.scrollY < 60 && heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`; 
+    }, 900);
+  }));
+
+  /* ---------- widgets reveal with intersection observer ---------- */
+  const widgets = document.querySelectorAll('.project-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('in-view');
+    });
+  }, { threshold: 0.16 });
+
+  widgets.forEach(w => io.observe(w));
+
+
+  /* ---------- MODAL for video & MOBILE/TOUCH LOGIC (Novo Comportamento) ---------- */
+  const modal = document.getElementById('modal');
+  const modalFrame = document.getElementById('modalFrame');
+  const modalClose = document.getElementById('modalClose');
+  let activeCard = null; // Para rastrear qual cartão está com o overlay aberto
+
+  // open modal helper (in-place)
+  function openVideo(id){
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden','false');
+    
+    const dummyIds = ['DUMMY_1', 'DUMMY_2', 'DUMMY_3']; 
+
+    if (id && !dummyIds.includes(id)) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+      iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.style.width = '100%';
+      iframe.style.height = '100%';
+      iframe.style.border = '0';
+      modalFrame.innerHTML = '';
+      modalFrame.appendChild(iframe);
+    } else {
+      modalFrame.innerHTML = '<p style="color:white; text-align:center; padding:20px; font-family: \'Lexend Deca\', sans-serif;">Vídeo em breve!</p>';
+    }
+    document.body.style.overflow = 'hidden';
+  }
+
+  // function to close all overlays
+  function closeAllOverlays() {
+      document.querySelectorAll('.project-card.active').forEach(card => {
+          card.classList.remove('active');
+      });
+      activeCard = null;
+  }
+
+  // NOVA LÓGICA DE CLIQUE/TOQUE: 1º toque mostra overlay, 2º toque abre vídeo
+  function handleProjectClick(e) {
+      const clickedCard = e.currentTarget;
+      const vid = clickedCard.dataset.id;
+      
+      if (!vid) return;
+
+      // Se o cartão clicado JÁ estiver ativo (overlay visível)
+      if (clickedCard.classList.contains('active')) {
+          // 2º toque: Abrir o vídeo
+          openVideo(vid);
+          closeAllOverlays(); // Fechar todos os overlays após abrir o vídeo
+      } else {
+          // 1º toque: Mostrar o overlay
+          closeAllOverlays(); // Fechar qualquer outro overlay que possa estar aberto
+          clickedCard.classList.add('active'); // Abrir o overlay deste cartão
+          activeCard = clickedCard;
+      }
+  }
+
+  // Attach listener to ALL .project-card elements
+  document.querySelectorAll('.project-card[data-id]').forEach(el => {
+    el.addEventListener('click', handleProjectClick);
+  });
+  
+  // Fechar overlays se clicar fora de um cartão de projeto (UX mobile)
+  document.addEventListener('click', (e) => {
+      if (!e.target.closest('.project-card')) {
+          closeAllOverlays();
+      }
+  });
+
+  // Corrigir o modalClose
+  modalClose.addEventListener('click', () => {
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      modalFrame.innerHTML = '';
+      document.body.style.overflow = '';
+  });
+
+  /* ---------- NOVO COMPORTAMENTO DO LINK DE E-MAIL (REVELAR ENDEREÇO) ---------- */
+  const emailLink = document.getElementById('contactEmail'); 
+  const initialText = ' Email';
+  const initialHTML = '<i class="fas fa-envelope"></i>' + initialText;
+  const revealedHTML = `<i class="fas fa-envelope"></i> ${emailLink ? emailLink.dataset.email : ''}`;
+  
+  if (emailLink) {
+      // Garantir o estado inicial
+      emailLink.innerHTML = initialHTML;
+
+      // Desktop: Mouse enter/leave para revelar/ocultar
+      emailLink.addEventListener('mouseenter', () => {
+          emailLink.innerHTML = revealedHTML;
+      });
+      emailLink.addEventListener('mouseleave', () => {
+          emailLink.innerHTML = initialHTML;
+      });
+
+      // Clique/Toque (Mobile/Desktop): Controla a ação mailto
+      emailLink.addEventListener('click', (e) => {
+          // Se o texto for 'Email', o primeiro clique/toque REVELA o endereço (e impede a ação mailto)
+          if (emailLink.innerHTML === initialHTML) {
+              e.preventDefault(); 
+              emailLink.innerHTML = revealedHTML;
+          } 
+          // Se o texto for o endereço completo, o segundo clique/toque (ou qualquer clique seguinte) permite a ação mailto padrão.
+      });
+      
+      // Perder o foco (ex: tabbing ou toque fora do elemento) reverte para o texto inicial
+      emailLink.addEventListener('blur', () => {
+          emailLink.innerHTML = initialHTML;
+      });
+      
+      // Lógica de fechar o e-mail se tocar noutra parte do ecrã (Mobile UX)
+      document.addEventListener('click', (e) => {
+          // Se o clique foi fora do link de e-mail e o endereço completo está visível
+          if (e.target !== emailLink && !emailLink.contains(e.target) && emailLink.innerHTML === revealedHTML) {
+              emailLink.innerHTML = initialHTML;
+          }
+      });
+  }
+</script>
+</body>
+</html>
