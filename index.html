@@ -92,7 +92,10 @@
     width:min(1200px,96%); display:flex; gap:3.2rem; align-items:center;
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border-radius:20px; padding:4rem; box-shadow: 0 40px 80px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
-    backdrop-filter: blur(8px) saturate(140%); position:relative; z-index:40;
+    /* Blur inicial para manter o efeito glass */
+    backdrop-filter: blur(8px) saturate(140%); 
+    transition: backdrop-filter .3s ease; 
+    position:relative; z-index:40;
   }
 
   /* Left: hero text */
@@ -101,10 +104,10 @@
     font-family:"Lexend Deca",sans-serif;
     font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted)
   }
-  /* ESPAÇAMENTO DO TÍTULO PRINCIPAL AUMENTADO */
+  /* TÍTULO PRINCIPAL: Letter-spacing revertido para o valor original */
   .hero-title{
     font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(54px, 12vw, 160px); line-height:0.9; text-transform:uppercase;
-    color: #fff; letter-spacing:4px; /* Aumentado de 2px para 4px */
+    color: #fff; letter-spacing:2px; 
   }
   .hero-desc{
     font-family:"Lexend Deca",sans-serif;
@@ -116,16 +119,18 @@
   /* Right: portrait */
   .hero-right{ flex:0 0 44%; display:flex; justify-content:center; align-items:center }
   /* Ajustes da Imagem: Sombra com blur para disfarçar o recorte */
+  /* IMAGEM EU.PNG: AJUSTES FINAIS PARA TAMANHO E POSIÇÃO */
   .hero-portrait{
     width: 100%;
     height: auto;
     border-radius:0;
     overflow:visible; display:block;
-    filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0.6px); 
-    transition: opacity .6s ease, transform .6s ease;
+    filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9)); 
+    transition: opacity .6s ease, transform .6s ease, filter .3s ease; /* Transição suave para o blur */
     border:none;
-    max-width: 130%; 
-    transform: translateX(15%); 
+    /* AJUSTE FINAL: Aumentar um pouco e subir mais */
+    max-width: 220%; /* Aumentado de 210% para 220% */
+    transform: translateX(10%) translateY(12%); /* Subido de 15% para 12% */
   }
 
   /* ghost big SAMOT behind (subtle parallax) */
@@ -141,11 +146,11 @@
   .section{
     padding:6rem 6% 6rem 6%; display:flex; flex-direction:column; gap:2.4rem; background: transparent;
   }
-  /* ESPAÇAMENTO DO TÍTULO DA SECÇÃO AUMENTADO */
+  /* Títulos das Secções: Spacing mantido no valor ideal */
   .section h2{
     font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(32px,5vw,50px);
     text-transform:uppercase; text-align:center; margin-bottom:.6rem;
-    letter-spacing: 4px; /* Aumentado */
+    letter-spacing: 2px; /* Mantido em 2px */
   }
   .section h2::after{ content:""; display:block; width:72px;height:4px;background:#fff;margin:12px auto 0;border-radius:4px }
 
@@ -205,7 +210,7 @@
       object-fit: cover; 
   }
   
-  /* ESPAÇAMENTO DO TÍTULO POR CIMA DA THUMBNAIL AUMENTADO */
+  /* TÍTULO POR CIMA DA THUMBNAIL: Spacing ligeiramente aumentado */
   .project-card .project-title-top {
       position: absolute;
       top: 1.5rem;
@@ -241,8 +246,13 @@
       opacity: 0; 
       transition: opacity 0.3s ease, transform 0.3s ease;
   }
-
+  /* O CSS original continua a funcionar para o hover do PC */
   .project-card:hover .project-overlay {
+      opacity: 1;
+      transform: scale(1.0);
+  }
+  /* CLASSE para abrir no toque (mobile) */
+  .project-card.active .project-overlay { 
       opacity: 1;
       transform: scale(1.0);
   }
@@ -254,20 +264,20 @@
       text-transform: uppercase;
       font-weight: 700;
   }
-  /* ESPAÇAMENTO DO TÍTULO DENTRO DO OVERLAY AUMENTADO */
+  /* TÍTULO DENTRO DO OVERLAY: Spacing ligeiramente aumentado */
   .project-overlay h3 {
       font-family:"BBH Sans Bogle",sans-serif;
       font-size: clamp(1.8rem, 3.5vw, 2.8rem);
       text-transform: uppercase;
       margin-bottom: 0.8rem;
       line-height: 1.1;
-      letter-spacing: 3px; /* Aumentado */
+      letter-spacing: 3px; /* Aumentado de 2px para 3px */
   }
-  /* CORREÇÃO: Redução da fonte do texto de descrição do overlay */
+  /* TEXTO DE DESCRIÇÃO DO OVERLAY: Fonte reduzida */
   .project-overlay p {
       font-family:"Lexend Deca",sans-serif;
       font-size: 1rem; /* Reduzido de 1.1rem para 1rem */
-      line-height: 1.4; /* Ligeiramente reduzido para encaixar mais texto */
+      line-height: 1.4;
       max-width: 55ch;
   }
   
@@ -301,13 +311,14 @@
   /* ---------- RESPONSIVE ---------- */
   @media (max-width:1100px){
     .hero-card{ padding:3rem }
-    .hero-portrait{ width:100% }
+    /* Ajuste responsivo para a imagem eu.png */
+    .hero-portrait{ max-width: 180%; transform: translateX(8%) translateY(10%); } /* Ajuste para écrans intermédios */
   }
   @media (max-width:880px){
     .hero-card{ flex-direction:column-reverse; gap:1.2rem; padding:2.5rem }
     .hero-left{text-align:center; align-items:center}
     .hero-right{ width:100% }
-    .hero-portrait{ width:100%; max-width:85vw; transform: none; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)) blur(0.3px); } 
+    .hero-portrait{ width:100%; max-width:85vw; transform: none; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)); } 
     .hero-ghost{ font-size:18vw; transform: translateY(-12%) }
     
     .projects-grid {
@@ -320,7 +331,7 @@
     }
     /* CORREÇÃO: Fonte ainda mais pequena em mobile */
     .project-overlay p {
-      font-size: 0.9rem; /* Reduzido de 0.95rem para 0.9rem */
+      font-size: 0.9rem; /* Ajustado para mobile */
     }
   }
   @media (max-width:480px){
@@ -356,7 +367,7 @@
   <div class="mini-samot" id="miniSamot" title="Voltar ao topo" aria-hidden="true">SAMOT</div>
 
   <section class="hero" id="hero">
-    <div class="hero-card" role="region" aria-label="intro">
+    <div class="hero-card" role="region" aria-label="intro" id="heroCard">
       <div class="hero-left">
         <div class="hero-sub">VIDEÓGRAFO</div>
         <div class="hero-title">SAMOT</div>
@@ -385,7 +396,7 @@
           <div class="project-overlay">
             <div class="role">Clip de Cobertura (2025)</div>
             <h3>COBERTURA ADEPTOS</h3>
-            <p>Clip de adeptos do FC Porto vs Vitória. Gravado e editado por mim, focando na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
+            <p>Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
           </div>
         </div>
         
@@ -397,7 +408,7 @@
           <div class="project-overlay">
             <div class="role">Porto Canal (2025)</div>
             <h3>TRABALHO EM BROADCAST</h3>
-            <p>Clipes de diversas áreas para o Porto Canal. A maioria das captações e todas as edições são da minha autoria. Demonstração de versatilidade.</p>
+            <p>Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção.</p>
           </div>
         </div>
 
@@ -408,8 +419,8 @@
           </div>
           <div class="project-overlay">
             <div class="role">Raw Footage (2025)</div>
-            <h3>CAPTAÇÃO DE CONTRATAÇÃO</h3>
-            <p>Imagens brutas (raw footage) captadas no dia da contratação do jogador Kotaro Nagata. Foco na qualidade da captação e trabalho de câmara.</p>
+            <h3>CONTRATAÇÃO (CÂMERA)</h3>
+            <p>Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação.</p>
           </div>
         </div>
         
@@ -421,7 +432,7 @@
           <div class="project-overlay">
             <div class="role">Highlights de Jogo (2025)</div>
             <h3>JOGO FC PORTO VS VITÓRIA</h3>
-            <p>Lances do jogo FC Porto vs Vitória. Captação e edição próprias. Foco na captação em alta pressão e edição rápida de momentos chave. *Vídeo em breve.*</p>
+            <p>Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave.</p>
           </div>
         </div>
 
@@ -453,7 +464,7 @@
           <div class="project-overlay">
             <div class="role">Documentário (2023)</div>
             <h3>CULTURA E MODA</h3>
-            <p>Co-Realizador e Editor. Documentário feito por jovens sobre moda e skate na cidade do Porto. Trabalho experimental com foco em subculturas urbanas.</p>
+            <p>Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto.</p>
           </div>
         </div>
 
@@ -465,7 +476,7 @@
           <div class="project-overlay">
             <div class="role">Curta-metragem (2024)</div>
             <h3>COMÉDIA SATÍRICA</h3>
-            <p>Realizador e Argumentista. Bruno Nuno é uma comédia satírica que explora os absurdos do quotidiano e as ambições falhadas de um homem. </p>
+            <p>Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas.</p>
           </div>
         </div>
 
@@ -477,7 +488,7 @@
           <div class="project-overlay">
             <div class="role">Documentário (2025)</div>
             <h3>CENTRO COMERCIAL STOP</h3>
-            <p>Pesquisa e Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP e a resistência da cultura musical do Porto.</p>
+            <p>Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto.</p>
           </div>
         </div>
 
@@ -489,7 +500,7 @@
           <div class="project-overlay">
             <div class="role">Curta-metragem (2025)</div>
             <h3>DRAMA EXPERIMENTAL</h3>
-            <p>Realizador e Diretor de Fotografia. Um drama íntimo sobre relações e fragilidades humanas em contextos familiares. Apresentado no Cinema Batalha.</p>
+            <p>Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas.</p>
           </div>
         </div>
 
@@ -501,7 +512,7 @@
           <div class="project-overlay">
             <div class="role">Projeto Experimental (2023)</div>
             <h3>ROMANCE VISUAL</h3>
-            <p>Realizador e Editor. Curta-metragem experimental focada na narrativa visual, sem falas, construindo um romance com ambientes e emoções.</p>
+            <p>Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes.</p>
           </div>
         </div>
 
@@ -513,7 +524,7 @@
           <div class="project-overlay">
             <div class="role">Sketch (2024)</div>
             <h3>COMÉDIA</h3>
-            <p>Ator, Realizador e Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
+            <p>Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
           </div>
         </div>
         
@@ -525,7 +536,7 @@
           <div class="project-overlay">
             <div class="role">Documentário Pessoal (2025)</div>
             <h3>DOCUMENTÁRIO CAÓTICO</h3>
-            <p>Realizador e Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Exploração de narrativa documental rápida. *Vídeo em breve.*</p>
+            <p>Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva.</p>
           </div>
         </div>
         
@@ -556,7 +567,7 @@
           <div class="project-overlay">
             <div class="role">Comunicação Oficial (2025)</div>
             <h3>FUTEBOL FEMININO FC PORTO</h3>
-            <p>Clip oficial da contratação do Futebol Feminino do FC Porto. Gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
+            <p>Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
           </div>
         </div>
         
@@ -568,7 +579,7 @@
           <div class="project-overlay">
             <div class="role">Edição Vertical (2025)</div>
             <h3>REEDIÇÃO PARA REDES SOCIAIS</h3>
-            <p>Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, otimizado para plataformas como o TikTok e Reels.</p>
+            <p>Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels.</p>
           </div>
         </div>
         
@@ -580,7 +591,7 @@
           <div class="project-overlay">
             <div class="role">Edição Vertical (2025)</div>
             <h3>ADAPTAÇÃO PARA TIKTOK</h3>
-            <p>Reedição do meu projeto Fumar Mata para um tom atual e um formato vertical otimizado para a audiência do TikTok.</p>
+            <p>Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok.</p>
           </div>
         </div>
 
@@ -592,7 +603,7 @@
           <div class="project-overlay">
             <div class="role">Clip de Tendência (2025)</div>
             <h3>EDIÇÃO 2D DE LETRAS</h3>
-            <p>Edit de letras 2D, demonstrando domínio num formato de clip muito usado em redes sociais, com foco em ritmo e design gráfico.</p>
+            <p>Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico.</p>
           </div>
         </div>
         
@@ -618,21 +629,35 @@
   </div>
 
 <script>
-  /* ---------- portrait / hero behavior ---------- */
+  /* ---------- portrait / hero behavior (inclui blur on scroll) ---------- */
   const portrait = document.getElementById('portrait');
   const heroGhost = document.querySelector('.hero-ghost');
   const heroTitle = document.querySelector('.hero-title');
+  const heroCard = document.getElementById('heroCard'); 
   const mini = document.getElementById('miniSamot');
+
+  // Valores iniciais de translateY e translateX (ajustados no CSS)
+  const initialTranslateY = 12; // Ajustado para 12%
+  const initialTranslateX = 10;  
 
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
     
-    // 1. A imagem de perfil desaparece suavemente (opacity) ao descer
+    // 1. A imagem de perfil desaparece suavemente (opacity) e faz parallax
     const fade = Math.max(0, 1 - (y / 160));
     if (portrait) {
       portrait.style.opacity = fade;
-      // Pequeno parallax/shift para o efeito de "desaparecer para baixo" e manter o deslocamento X
-      portrait.style.transform = `scale(${0.98 + fade*0.02}) translateY(${Math.min(0, -y/80)}px) translateX(15%)`; 
+      
+      const currentTranslateY = initialTranslateY + Math.min(0, -y/80);
+      portrait.style.transform = `scale(${0.98 + fade*0.02}) translateX(${initialTranslateX}%) translateY(${currentTranslateY}%)`; 
+      
+      // EFEITO BLUR NO SCROLL
+      const blurAmount = Math.min(3, y / 80); 
+      portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(${blurAmount}px)`;
+
+      // Aplicar blur no CARD (backdrop-filter)
+      const cardBlurAmount = 8 + Math.min(2, y / 100); 
+      heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
     }
     
     // Hero title fades and ghost shifts
@@ -646,20 +671,32 @@
   // 2. Corrigir o clique do mini-samot para rolar para o topo
   mini.addEventListener('click', (e) => {
     e.preventDefault();
-    // Foi corrigido para funcionar corretamente
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    // Forçar a imagem a aparecer se estiver escondida (só por segurança)
-    if (portrait) portrait.style.opacity = 1;
+    if (portrait) {
+        portrait.style.opacity = 1;
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`;
+    }
+    if (heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`;
   });
 
   // clicking a top menu anchor also hide portrait for UX
   document.querySelectorAll('header a').forEach(a => a.addEventListener('click', ()=> {
-    if (portrait) portrait.style.opacity = 0;
-    setTimeout(()=>{ if(window.scrollY < 60 && portrait) portrait.style.opacity = 1 }, 900);
+    if (portrait) {
+        portrait.style.opacity = 0;
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(3px)`; 
+    }
+    if (heroCard) heroCard.style.backdropFilter = `blur(10px) saturate(140%)`; 
+    
+    setTimeout(()=>{ 
+      if(window.scrollY < 60 && portrait) {
+        portrait.style.opacity = 1; 
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`; 
+      }
+      if(window.scrollY < 60 && heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`; 
+    }, 900);
   }));
 
   /* ---------- widgets reveal with intersection observer ---------- */
-  // Agora só usamos .project-card para todas as secções de trabalho
   const widgets = document.querySelectorAll('.project-card');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -670,20 +707,19 @@
   widgets.forEach(w => io.observe(w));
 
 
-  /* ---------- thumbnails clickable -> modal with youtube embed ---------- */
+  /* ---------- MODAL for video & MOBILE/TOUCH LOGIC (Novo Comportamento) ---------- */
   const modal = document.getElementById('modal');
   const modalFrame = document.getElementById('modalFrame');
   const modalClose = document.getElementById('modalClose');
+  let activeCard = null; // Para rastrear qual cartão está com o overlay aberto
 
-  // open modal helper
+  // open modal helper (in-place)
   function openVideo(id){
     modal.classList.add('open');
     modal.setAttribute('aria-hidden','false');
     
-    // Lista de DUMMY IDs para verificar se o vídeo está disponível
     const dummyIds = ['DUMMY_1', 'DUMMY_2', 'DUMMY_3']; 
 
-    // Only create iframe if it's a valid YouTube ID
     if (id && !dummyIds.includes(id)) {
       const iframe = document.createElement('iframe');
       iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
@@ -694,5 +730,68 @@
       modalFrame.innerHTML = '';
       modalFrame.appendChild(iframe);
     } else {
-      // For placeholders, we show a message
-      modalFrame.innerHTML = '<p style="color:white;
+      modalFrame.innerHTML = '<p style="color:white; text-align:center; padding:20px; font-family: \'Lexend Deca\', sans-serif;">Vídeo em breve!</p>';
+    }
+    document.body.style.overflow = 'hidden';
+  }
+
+  // function to close all overlays
+  function closeAllOverlays() {
+      document.querySelectorAll('.project-card.active').forEach(card => {
+          card.classList.remove('active');
+      });
+      activeCard = null;
+  }
+
+  // NOVA LÓGICA DE CLIQUE/TOQUE: 1º toque mostra overlay, 2º toque abre vídeo
+  function handleProjectClick(e) {
+      const clickedCard = e.currentTarget;
+      const vid = clickedCard.dataset.id;
+      
+      if (!vid) return;
+
+      // Se o cartão clicado JÁ estiver ativo (overlay visível)
+      if (clickedCard.classList.contains('active')) {
+          // 2º toque: Abrir o vídeo
+          openVideo(vid);
+          closeAllOverlays(); // Fechar todos os overlays após abrir o vídeo
+      } else {
+          // 1º toque: Mostrar o overlay
+          closeAllOverlays(); // Fechar qualquer outro overlay que possa estar aberto
+          clickedCard.classList.add('active'); // Abrir o overlay deste cartão
+          activeCard = clickedCard;
+      }
+  }
+
+  // Attach listener to ALL .project-card elements
+  document.querySelectorAll('.project-card[data-id]').forEach(el => {
+    el.addEventListener('click', handleProjectClick);
+  });
+  
+  // Fechar overlays se clicar fora de um cartão de projeto (UX mobile)
+  document.addEventListener('click', (e) => {
+    // Verificar se o clique foi fora de um project-card
+    if (activeCard && !e.target.closest('.project-card')) {
+        closeAllOverlays();
+    }
+  });
+
+
+  modalClose.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+  function closeModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden','true');
+    modalFrame.innerHTML = '';
+    document.body.style.overflow = '';
+  }
+
+  // keyboard escape to close
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // on load reveal top widget(s)
+  window.addEventListener('load', () => { widgets.forEach(w => { const r = w.getBoundingClientRect(); if (r.top < window.innerHeight) w.classList.add('in-view'); }); });
+</script>
+</body>
+</html>
