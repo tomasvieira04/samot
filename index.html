@@ -1,837 +1,2211 @@
 <!doctype html>
-<html lang="pt-PT">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SAMOT — Portfólio</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=BBH+Sans+Bogle&family=Bowlby+One&family=Climate+Crisis:YEAR@2008&family=Dorsa&family=Lexend+Deca:wght@100..900&family=Notable&display=swap" rel="stylesheet">
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-
-<style>
-  /* ---------- RESET & NEW FONT (updated body/html font-family and weight) ---------- */
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{
-    height:100%;
-    /* Nova fonte Lexend Deca com peso 748 (ou o mais próximo) */
-    font-family:"Lexend Deca",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    font-weight: 700; /* 748 não existe diretamente, usamos 700 ou ajustamos no CSS */
-    color:#f4f4f2;
-    overflow-x:hidden;
-    scroll-behavior:smooth
-  }
-  a{color:inherit;text-decoration:none}
-
-  /* Font-weight 748 for Lexend Deca */
-  body, .project-overlay p, .contact-grid a {
-      font-weight: 700; /* closest to 748 as per standard weights */
-  }
-
-  /* ---------- BACKGROUND (image full-screen) ---------- */
-  :root{
-    --glass-bg: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.06);
-    --muted: rgba(255,255,255,0.85);
-    /* Nova cor para o hover social: Azul */
-    --social-hover-color: #5aa6ff; 
-  }
-  body{
-    background-image: url('back.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-color: #0b254a;
-  }
-
-  /* ---------- SOCIALS top-left (DIMINUÍDO MAIS) ---------- */
-  .socials{
-    position:fixed; left:14px; top:14px; display:flex; gap:6px; z-index:260; 
-  }
-  .socials a{
-    width:32px;height:32px; /* Tamanho ainda mais reduzido (de 36px) */
-    display:inline-grid;place-items:center;border-radius:8px; /* Reduzido de 10px */
-    background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03);
-    color:#fff; font-size:0.8rem; /* Tamanho do ícone reduzido */
-    transition:transform .16s ease, background .16s;
-  }
-  .socials a:hover{ 
-    transform:translateY(-4px) scale(1.08); /* Ajustado para ser mais subtil */
-    background: rgba(255,255,255,0.12); 
-    color:var(--social-hover-color); 
-  }
-
-  /* ---------- TOP MENU top-right (DIMINUÍDO MAIS) ---------- */
-  header{
-    position:fixed; right:14px; top:14px; z-index:270; display:flex; gap:8px; align-items:center; /* Gap reduzido */
-    background:transparent;
-  }
-  header a{
-    font-family:"Lexend Deca",sans-serif;
-    font-weight:700; font-size:0.85rem; /* Tamanho da fonte reduzido (de 0.9rem) */
-    text-transform:uppercase; letter-spacing:1px; 
-    padding:.25rem .45rem; /* Padding reduzido (de .3rem .5rem) */
-    border-radius:6px; /* Reduzido de 8px */
-    color:#fff; opacity:0.95; transition:opacity .14s ease, transform .14s;
-  }
-  header a:hover{ opacity:1; transform:translateY(-3px) } /* Movimento de hover reduzido */
-
-  /* ---------- MINI SAMOT (top center) - appears on scroll) ---------- */
-  .mini-samot{
-    position:fixed; left:50%; transform:translateX(-50%); top:16px; z-index:280;
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(14px, 2.2vw, 22px);
-    color:#fff; opacity:0.06; cursor:pointer; transition:opacity .25s ease, transform .25s ease;
-    padding:.2rem .6rem; border-radius:6px;
-  }
-  .mini-samot.visible{ opacity:0.9; background: rgba(0,0,0,0.18); box-shadow:0 6px 18px rgba(0,0,0,0.45); transform:translateX(-50%) translateY(0) }
-
-  /* ---------- HERO (very large) ---------- */
-  .hero{
-    height:100vh; width:100%; display:grid; place-items:center; position:relative; overflow:hidden; padding:6vh 6%;
-  }
-
-  .hero-card{
-    width:min(1200px,96%); display:flex; gap:3.2rem; align-items:center;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:20px; padding:4rem; box-shadow: 0 40px 80px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
-    /* Blur inicial para manter o efeito glass */
-    backdrop-filter: blur(8px) saturate(140%); 
-    transition: backdrop-filter .3s ease; 
-    position:relative; z-index:40;
-  }
-
-  /* Left: hero text */
-  .hero-left{ flex:1 1 56%; display:flex; flex-direction:column; gap:1.2rem; align-items:flex-start; }
-  .hero-sub{
-    font-family:"Lexend Deca",sans-serif;
-    font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted)
-  }
-  /* TÍTULO PRINCIPAL: Letter-spacing revertido para o valor original */
-  .hero-title{
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(54px, 12vw, 160px); line-height:0.9; text-transform:uppercase;
-    color: #fff; letter-spacing:2px; 
-  }
-  .hero-desc{
-    font-family:"Lexend Deca",sans-serif;
-    font-size:clamp(1.15rem, 1.5vw, 1.3rem);
-    max-width:56ch;
-    color: rgba(255,255,255,0.94)
-  }
-
-  /* Right: portrait */
-  .hero-right{ flex:0 0 44%; display:flex; justify-content:center; align-items:center }
-  /* Ajustes da Imagem: Sombra com blur para disfarçar o recorte */
-  /* IMAGEM EU.PNG: AJUSTES FINAIS PARA TAMANHO E POSIÇÃO */
-  .hero-portrait{
-    width: 100%;
-    height: auto;
-    border-radius:0;
-    overflow:visible; display:block;
-    filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9)); 
-    transition: opacity .6s ease, transform .6s ease, filter .3s ease; /* Transição suave para o blur */
-    border:none;
-    max-width: 210%; /* Ajuste fino */
-    transform: translateX(10%) translateY(15%); /* Ajuste fino para centrar/tocar a base */
-  }
-
-  /* ghost big SAMOT behind (subtle parallax) */
-  .hero-ghost{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:10; pointer-events:none;
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(80px,20vw,220px); color:rgba(255,255,255,0.06); text-transform:uppercase; letter-spacing:5px;
-    mix-blend-mode: screen; transform: translateY(-4%);
-  }
-
-  /* ---------- MAIN / SECTIONS ---------- */
-  main{ position:relative; z-index:30 }
-
-  .section{
-    padding:6rem 6% 6rem 6%; display:flex; flex-direction:column; gap:2.4rem; background: transparent;
-  }
-  /* Títulos das Secções: Spacing mantido no valor ideal */
-  .section h2{
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(32px,5vw,50px);
-    text-transform:uppercase; text-align:center; margin-bottom:.6rem;
-    letter-spacing: 2px; /* Mantido em 2px */
-  }
-  .section h2::after{ content:""; display:block; width:72px;height:4px;background:#fff;margin:12px auto 0;border-radius:4px }
-
-  /* ========================================= */
-  /* LAYOUT DE GRID COM OVERLAY (Todas as secções) */
-  /* ========================================= */
-  .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 3rem; 
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-  }
-
-  /* Card de Projeto (Container) */
-  .project-card {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border: 1px solid rgba(255,255,255,0.04);
-      transition: all 0.3s cubic-bezier(.2,.9,.3,1);
-      /* Para o efeito de reveal ao scroll */
-      transform:translateY(28px); opacity:0; transition: all .75s cubic-bezier(.2,.9,.3,1);
-  }
-  .project-card.in-view{ transform:none; opacity:1 }
-
-
-  .project-card:hover {
-      box-shadow: 0 30px 60px rgba(2,6,23,0.8);
-      transform: translateY(-4px) scale(1.02);
-  }
-  
-  /* Esconder título fixo no hover */
-  .project-card:hover .project-title-top {
-      opacity: 0;
-  }
-
-  /* Imagem/Thumbnail - CORREÇÃO DE TAMANHO */
-  .project-card .project-media {
-      width: 100%;
-      height: 250px; 
-      position: relative;
-      overflow: hidden;
-  }
-  .project-card .project-media img {
-      width: 100%;
-      height: 100%; 
-      display: block;
-      object-fit: cover; 
-  }
-  
-  /* TÍTULO POR CIMA DA THUMBNAIL: Spacing ligeiramente aumentado */
-  .project-card .project-title-top {
-      position: absolute;
-      top: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family:"BBH Sans Bogle",sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-      text-transform: uppercase;
-      letter-spacing: 3px; /* Aumentado de 2px para 3px */
-      z-index: 10;
-      pointer-events: none;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
-      transition: opacity 0.3s ease; 
-  }
-
-  /* Overlay de Texto (Estilo iOS Glass 26) */
-  .project-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 2.5rem;
-      text-align: center;
-      
-      /* Estilo Glassmorphism */
-      background: rgba(255, 255, 255, 0.08); 
-      backdrop-filter: blur(20px) saturate(150%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-
-      opacity: 0; 
-      transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  /* O CSS original continua a funcionar para o hover do PC */
-  .project-card:hover .project-overlay {
-      opacity: 1;
-      transform: scale(1.0);
-  }
-  /* CLASSE para abrir no toque (mobile) */
-  .project-card.active .project-overlay { 
-      opacity: 1;
-      transform: scale(1.0);
-  }
-  
-  .project-overlay .role {
-      font-size: 1rem;
-      color: #ffd25a;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      font-weight: 700;
-  }
-  /* TÍTULO DENTRO DO OVERLAY: Spacing ligeiramente aumentado */
-  .project-overlay h3 {
-      font-family:"BBH Sans Bogle",sans-serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-      line-height: 1.1;
-      letter-spacing: 3px; /* Aumentado de 2px para 3px */
-  }
-  /* TEXTO DE DESCRIÇÃO DO OVERLAY: Fonte reduzida */
-  .project-overlay p {
-      font-family:"Lexend Deca",sans-serif;
-      font-size: 1rem; /* Reduzido de 1.1rem para 1rem */
-      line-height: 1.4;
-      max-width: 55ch;
-  }
-  
-  /* ========================================= */
-  /* CONTACTOS (Manter layout simples) */
-  /* ========================================= */
-  .contact-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
-  .contact-grid a{
-    font-family:"Lexend Deca",sans-serif;
-    display:inline-flex; align-items:center; gap:8px; background: rgba(255,255,255,0.03); border-radius:10px; font-weight:700;
-    /* Adicionar transição para o texto do e-mail */
-    padding:8px 12px;
-    transition: background 0.2s, color 0.2s, padding 0.2s; 
-  }
-
-  footer{
-    font-family:"Lexend Deca",sans-serif;
-    padding:48px 6%; text-align:center; color:rgba(255,255,255,0.8)
-  }
-
-  /* ---------- MODAL for video ---------- */
-  .modal{
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:999;
-    background: rgba(0,0,0,0.7); padding:24px;
-  }
-  .modal.open{ display:flex }
-  .modal .frame{
-    width:min(1100px,96%); aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,0.8)
-  }
-  .modal .close{
-    position:absolute; top:18px; right:18px; z-index:1000; background:rgba(255,255,255,0.06); color:#fff; border-radius:8px; width:44px; height:44px; display:grid; place-items:center; font-size:1.05rem; cursor:pointer;
-  }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:1100px){
-    .hero-card{ padding:3rem }
-    /* Ajuste responsivo para a imagem eu.png */
-    .hero-portrait{ max-width: 180%; transform: translateX(8%) translateY(10%); } /* Ajuste para écrans intermédios */
-  }
-  @media (max-width:880px){
-    .hero-card{ flex-direction:column-reverse; gap:1.2rem; padding:2.5rem }
-    .hero-left{text-align:center; align-items:center}
-    .hero-right{ width:100% }
-    .hero-portrait{ width:100%; max-width:85vw; transform: none; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)); } 
-    .hero-ghost{ font-size:18vw; transform: translateY(-12%) }
-    
-    .projects-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    /* Ajuste da altura do card em mobile */
-    .project-card .project-media {
-      height: 200px;
-    }
-    /* CORREÇÃO: Fonte ainda mais pequena em mobile */
-    .project-overlay p {
-      font-size: 0.9rem; /* Ajustado para mobile */
-    }
-  }
-  @media (max-width:480px){
-    /* Pequenos ajustes para os novos tamanhos ultra-compactos */
-    header{ right:10px; top:10px; gap:6px }
-    .socials{ left:6px; top:10px; gap:4px }
-    
-    .hero-portrait{ width:100%; max-width:90vw; }
-    .hero-ghost{ font-size:22vw }
-    
-    .project-overlay {
-      padding: 2rem 1.5rem;
-    }
-    .project-overlay h3 {
-      font-size: 1.5rem;
-    }
-  }
-</style>
-</head>
-<body>
-
-  <div class="socials" aria-hidden="true">
-    <a href="https://www.instagram.com/samot_____/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.youtube.com/@samot____" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-    <a href="mailto:tomasvieira04@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
-  </div>
-
-  <header role="banner" aria-label="menu">
-    <a href="#videografo">Videógrafo</a>
-    <a href="#projetos">Projetos</a>
-    <a href="#editor">Editor</a>
-    <a href="#contactos">Contactos</a>
-  </header>
-
-  <div class="mini-samot" id="miniSamot" title="Voltar ao topo" aria-hidden="true">SAMOT</div>
-
-  <section class="hero" id="hero">
-    <div class="hero-card" role="region" aria-label="intro" id="heroCard">
-      <div class="hero-left">
-        <div class="hero-sub">VIDEÓGRAFO</div>
-        <div class="hero-title">SAMOT</div>
-        <div class="hero-desc">Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.</div>
-      </div>
-
-      <div class="hero-right">
-        <img src="eu.png" alt="Samot portrait" class="hero-portrait" id="portrait">
-      </div>
-
-      <div class="hero-ghost" aria-hidden="true">SAMOT</div>
-    </div>
-  </section>
-
-  <main>
-
-    <section class="section" id="videografo">
-      <h2>Trabalhos como Videógrafo</h2>
-      <div class="projects-grid">
-        
-        <div class="project-card" data-id="gZWty7tHZlg">
-          <div class="project-title-top">ADEPTOS FC PORTO VS VITÓRIA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/gZWty7tHZlg/maxresdefault.jpg" alt="Clip FC Porto vs Vitória SC">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Clip de Cobertura (2025)</div>
-            <h3>COBERTURA ADEPTOS</h3>
-            <p>Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="EfF95Yf0vxU">
-          <div class="project-title-top">COMPILAÇÃO DE CLIPES</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/EfF95Yf0vxU/maxresdefault.jpg" alt="Compilação de Clips Porto Canal">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Porto Canal (2025)</div>
-            <h3>TRABALHO EM BROADCAST</h3>
-            <p>Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="EsjzYQ1qLhg">
-          <div class="project-title-top">KOTARO NAGATA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/EsjzYQ1qLhg/maxresdefault.jpg" alt="Kotaro Nagata Raw Footage">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Raw Footage (2025)</div>
-            <h3>CONTRATAÇÃO (CÂMERA)</h3>
-            <p>Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="DUMMY_3">
-          <div class="project-title-top">HIGHLIGHTS DE JOGO DO PORTO</div>
-          <div class="project-media">
-             <img src="7.jpg" alt="Highlights Jogo FC Porto">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Highlights de Jogo (2025)</div>
-            <h3>JOGO FC PORTO VS VITÓRIA</h3>
-            <p>Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="1O0X5esNQv4">
-          <div class="project-title-top">RENOVAÇÃO RODRIGO MORA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/1O0X5esNQv4/maxresdefault.jpg" alt="Renovação Rodrigo Mora">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Clip Oficial (2025)</div>
-            <h3>EDIÇÃO DE COMUNICAÇÃO</h3>
-            <p>Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual.</p>
-          </div>
-        </div>
-
-      </div>
-    </section>
-    
-    <section class="section" id="projetos">
-      <h2>Projetos Pessoais (Realizador)</h2>
-
-      <div class="projects-grid">
-        
-        <div class="project-card" data-id="RU6TjLccPsU">
-          <div class="project-title-top">JOVENS ADULTOS</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/RU6TjLccPsU/maxresdefault.jpg" alt="Jovens Adultos Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Documentário (2023)</div>
-            <h3>CULTURA E MODA</h3>
-            <p>Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="rZnV_EgftCo">
-          <div class="project-title-top">BRUNO NUNO</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/rZnV_EgftCo/maxresdefault.jpg" alt="Bruno Nuno Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Curta-metragem (2024)</div>
-            <h3>COMÉDIA SATÍRICA</h3>
-            <p>Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="zwHU_jOtvtE">
-          <div class="project-title-top">WHY STOP NOW?</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/zwHU_jOtvtE/maxresdefault.jpg" alt="Why Stop Now Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Documentário (2025)</div>
-            <h3>CENTRO COMERCIAL STOP</h3>
-            <p>Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="Zj2FeeNroTc">
-          <div class="project-title-top">FUMAR MATA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/Zj2FeeNroTc/maxresdefault.jpg" alt="Fumar Mata Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Curta-metragem (2025)</div>
-            <h3>DRAMA EXPERIMENTAL</h3>
-            <p>Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="FucYalKzpRs">
-          <div class="project-title-top">VIVER EM PART-TIME</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Projeto Experimental (2023)</div>
-            <h3>ROMANCE VISUAL</h3>
-            <p>Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="JfjUF5nuwd0">
-          <div class="project-title-top">PINGUINS</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/JfjUF5nuwd0/maxresdefault.jpg" alt="Pinguins Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Sketch (2024)</div>
-            <h3>COMÉDIA</h3>
-            <p>Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="DUMMY_2">
-          <div class="project-title-top">SAMOT21</div>
-          <div class="project-media">
-             <img src="4.jpg" alt="Samot21 Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Documentário Pessoal (2025)</div>
-            <h3>DOCUMENTÁRIO CAÓTICO</h3>
-            <p>Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva.</p>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-    
-    <section class="section" id="editor">
-      <h2>Trabalhos como Editor</h2>
-      <div class="projects-grid">
-
-        <div class="project-card" data-id="P4YQVZSMGjo">
-          <div class="project-title-top">CLIPES ADEPTOS FUTEBOL CLUBE</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/P4YQVZSMGjo/maxresdefault.jpg" alt="Clipes Adeptos Futebol Clube">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Edição de Clips (2025)</div>
-            <h3>ADEPTOS EM DESTAQUE</h3>
-            <p>Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="GUck3Raa4D4">
-          <div class="project-title-top">CLIP CONTRATAÇÃO JOGADORA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/GUck3Raa4D4/maxresdefault.jpg" alt="Clip contratação jogadora">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Comunicação Oficial (2025)</div>
-            <h3>FUTEBOL FEMININO FC PORTO</h3>
-            <p>Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="FucYalKzpRs">
-          <div class="project-title-top">VIVER PART-TIME (TIKTOK)</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time TikTok">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Edição Vertical (2025)</div>
-            <h3>REEDIÇÃO PARA REDES SOCIAIS</h3>
-            <p>Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="54ELYGuWrPw">
-          <div class="project-title-top">FUMAR MATA (TIKTOK)</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/54ELYGuWrPw/maxresdefault.jpg" alt="Fumar Mata TikTok">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Edição Vertical (2025)</div>
-            <h3>ADAPTAÇÃO PARA TIKTOK</h3>
-            <p>Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok.</p>
-          </div>
-        </div>
-
-        <div class="project-card" data-id="m_3-wbV15Tk">
-          <div class="project-title-top">CLIP EDIT “SUCCESSION”</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/m_3-wbV15Tk/maxresdefault.jpg" alt="Succession clip edit">
-          </div>
-          <div class="project-overlay">
-            <div class="role">Clip de Tendência (2025)</div>
-            <h3>EDIÇÃO 2D DE LETRAS</h3>
-            <p>Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico.</p>
-          </div>
-        </div>
-        
-      </div>
-    </section>
-
-    <section class="section" id="contactos">
-      <h2>Contactos</h2>
-      <div class="contact-grid">
-        <a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-        <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-        <a href="mailto:tomasvieira04@gmail.com" id="contactEmail" data-email="tomasvieira04@gmail.com"><i class="fas fa-envelope"></i> Email</a>
-      </div>
-    </section>
-
-    <footer>© 2025 SAMOT — Todos os direitos reservados</footer>
-
-  </main>
-
-  <div class="modal" id="modal" role="dialog" aria-hidden="true">
-    <button class="close" id="modalClose" aria-label="Fechar">✕</button>
-    <div class="frame" id="modalFrame"></div>
-  </div>
-
-<script>
-  /* ---------- portrait / hero behavior (inclui blur on scroll) ---------- */
-  const portrait = document.getElementById('portrait');
-  const heroGhost = document.querySelector('.hero-ghost');
-  const heroTitle = document.querySelector('.hero-title');
-  const heroCard = document.getElementById('heroCard'); 
-  const mini = document.getElementById('miniSamot');
-
-  // Valores iniciais de translateY e translateX (ajustados no CSS)
-  const initialTranslateY = 15; 
-  const initialTranslateX = 10;  
-
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    
-    // 1. A imagem de perfil desaparece suavemente (opacity) e faz parallax
-    const fade = Math.max(0, 1 - (y / 160));
-    if (portrait) {
-      portrait.style.opacity = fade;
-      
-      const currentTranslateY = initialTranslateY + Math.min(0, -y/80);
-      portrait.style.transform = `scale(${0.98 + fade*0.02}) translateX(${initialTranslateX}%) translateY(${currentTranslateY}%)`; 
-      
-      // EFEITO BLUR NO SCROLL
-      const blurAmount = Math.min(3, y / 80); 
-      portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(${blurAmount}px)`;
-
-      // Aplicar blur no CARD (backdrop-filter)
-      const cardBlurAmount = 8 + Math.min(2, y / 100); 
-      heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
-    }
-    
-    // Hero title fades and ghost shifts
-    if (heroGhost) heroGhost.style.transform = `translateY(${Math.max(-60, -y/6)}px)`;
-    if (heroTitle) heroTitle.style.opacity = Math.max(0, 1 - (y / 220));
-
-    // 2. Mostrar/esconder mini-samot
-    if (y > 120) mini.classList.add('visible'); else mini.classList.remove('visible');
-  });
-
-  // 2. Corrigir o clique do mini-samot para rolar para o topo
-  mini.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (portrait) {
-        portrait.style.opacity = 1;
-        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`;
-    }
-    if (heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`;
-  });
-
-  // clicking a top menu anchor also hide portrait for UX
-  document.querySelectorAll('header a').forEach(a => a.addEventListener('click', ()=> {
-    if (portrait) {
-        portrait.style.opacity = 0;
-        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(3px)`; 
-    }
-    if (heroCard) heroCard.style.backdropFilter = `blur(10px) saturate(140%)`; 
-    
-    setTimeout(()=>{ 
-      if(window.scrollY < 60 && portrait) {
-        portrait.style.opacity = 1; 
-        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`; 
-      }
-      if(window.scrollY < 60 && heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`; 
-    }, 900);
-  }));
-
-  /* ---------- widgets reveal with intersection observer ---------- */
-  const widgets = document.querySelectorAll('.project-card');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('in-view');
-    });
-  }, { threshold: 0.16 });
-
-  widgets.forEach(w => io.observe(w));
-
-
-  /* ---------- MODAL for video & MOBILE/TOUCH LOGIC (Novo Comportamento) ---------- */
-  const modal = document.getElementById('modal');
-  const modalFrame = document.getElementById('modalFrame');
-  const modalClose = document.getElementById('modalClose');
-  let activeCard = null; // Para rastrear qual cartão está com o overlay aberto
-
-  // open modal helper (in-place)
-  function openVideo(id){
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden','false');
-    
-    const dummyIds = ['DUMMY_1', 'DUMMY_2', 'DUMMY_3']; 
-
-    if (id && !dummyIds.includes(id)) {
-      const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
-      iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = '0';
-      modalFrame.innerHTML = '';
-      modalFrame.appendChild(iframe);
-    } else {
-      modalFrame.innerHTML = '<p style="color:white; text-align:center; padding:20px; font-family: \'Lexend Deca\', sans-serif;">Vídeo em breve!</p>';
-    }
-    document.body.style.overflow = 'hidden';
-  }
-
-  // function to close all overlays
-  function closeAllOverlays() {
-      document.querySelectorAll('.project-card.active').forEach(card => {
-          card.classList.remove('active');
-      });
-      activeCard = null;
-  }
-
-  // NOVA LÓGICA DE CLIQUE/TOQUE: 1º toque mostra overlay, 2º toque abre vídeo
-  function handleProjectClick(e) {
-      const clickedCard = e.currentTarget;
-      const vid = clickedCard.dataset.id;
-      
-      if (!vid) return;
-
-      // Se o cartão clicado JÁ estiver ativo (overlay visível)
-      if (clickedCard.classList.contains('active')) {
-          // 2º toque: Abrir o vídeo
-          openVideo(vid);
-          closeAllOverlays(); // Fechar todos os overlays após abrir o vídeo
-      } else {
-          // 1º toque: Mostrar o overlay
-          closeAllOverlays(); // Fechar qualquer outro overlay que possa estar aberto
-          clickedCard.classList.add('active'); // Abrir o overlay deste cartão
-          activeCard = clickedCard;
-      }
-  }
-
-  // Attach listener to ALL .project-card elements
-  document.querySelectorAll('.project-card[data-id]').forEach(el => {
-    el.addEventListener('click', handleProjectClick);
-  });
-  
-  // Fechar overlays se clicar fora de um cartão de projeto (UX mobile)
-  document.addEventListener('click', (e) => {
-      if (!e.target.closest('.project-card')) {
-          closeAllOverlays();
-      }
-  });
-
-  // Corrigir o modalClose
-  modalClose.addEventListener('click', () => {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      modalFrame.innerHTML = '';
-      document.body.style.overflow = '';
-  });
-
-  /* ---------- NOVO COMPORTAMENTO DO LINK DE E-MAIL (REVELAR ENDEREÇO) ---------- */
-  const emailLink = document.getElementById('contactEmail'); 
-  const initialText = ' Email';
-  const initialHTML = '<i class="fas fa-envelope"></i>' + initialText;
-  const revealedHTML = `<i class="fas fa-envelope"></i> ${emailLink ? emailLink.dataset.email : ''}`;
-  
-  if (emailLink) {
-      // Garantir o estado inicial
-      emailLink.innerHTML = initialHTML;
-
-      // Desktop: Mouse enter/leave para revelar/ocultar
-      emailLink.addEventListener('mouseenter', () => {
-          emailLink.innerHTML = revealedHTML;
-      });
-      emailLink.addEventListener('mouseleave', () => {
-          emailLink.innerHTML = initialHTML;
-      });
-
-      // Clique/Toque (Mobile/Desktop): Controla a ação mailto
-      emailLink.addEventListener('click', (e) => {
-          // Se o texto for 'Email', o primeiro clique/toque REVELA o endereço (e impede a ação mailto)
-          if (emailLink.innerHTML === initialHTML) {
-              e.preventDefault(); 
-              emailLink.innerHTML = revealedHTML;
-          } 
-          // Se o texto for o endereço completo, o segundo clique/toque (ou qualquer clique seguinte) permite a ação mailto padrão.
-      });
-      
-      // Perder o foco (ex: tabbing ou toque fora do elemento) reverte para o texto inicial
-      emailLink.addEventListener('blur', () => {
-          emailLink.innerHTML = initialHTML;
-      });
-      
-      // Lógica de fechar o e-mail se tocar noutra parte do ecrã (Mobile UX)
-      document.addEventListener('click', (e) => {
-          // Se o clique foi fora do link de e-mail e o endereço completo está visível
-          if (e.target !== emailLink && !emailLink.contains(e.target) && emailLink.innerHTML === revealedHTML) {
-              emailLink.innerHTML = initialHTML;
-          }
-      });
-  }
-</script>
+<html lang="pt">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SAMOT — Videógrafo & Realizador</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton:wght@400&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    :root {
+      --bg: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+      --card: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.15);
+      --text: #ffffff;
+      --muted: #ffffff;
+      --accent: #60a5fa;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    @font-face {
+      font-family: 'BBH Sans Bogle';
+      src: url('BBHSansBogle-Bold.woff2') format('woff2');
+      font-weight: bold;
+      font-display: swap;
+    }
+
+    html { 
+      scroll-behavior: smooth; 
+      height: 100%;
+    }
+    
+    body {
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 700;
+      background: var(--bg);
+      background-attachment: fixed;
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.5;
+      height: 100%;
+    }
+
+    /* Cursor personalizado */
+    * {
+      cursor: none;
+    }
+    
+    .cursor {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.1s ease;
+      mix-blend-mode: difference;
+    }
+    
+    .cursor.hover {
+      transform: scale(2);
+      background: rgba(79,70,229,0.8);
+      mix-blend-mode: normal;
+    }
+
+    /* Socials */
+    .socials {
+      position: fixed;
+      top: 50%;
+      right: 2rem;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      z-index: 100;
+      opacity: 0;
+      animation: slideInRight 1s ease 2s forwards;
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateY(-50%) translateX(50px); }
+      to { opacity: 1; transform: translateY(-50%) translateX(0); }
+    }
+
+    .socials a {
+      color: var(--muted);
+      font-size: 1.2rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 0.5rem;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .socials a:hover {
+      color: var(--text);
+      transform: translateX(-5px) scale(1.1);
+      background: rgba(79,70,229,0.2);
+      box-shadow: 0 10px 30px rgba(79,70,229,0.3);
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 2rem 6%;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      z-index: 100;
+      background: transparent;
+      backdrop-filter: none;
+      border-bottom: none;
+      transform: translateY(-100%);
+      animation: slideDown 1s ease 1s forwards;
+    }
+
+    @keyframes slideDown {
+      to { transform: translateY(0); }
+    }
+
+    header a {
+      color: var(--muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+    }
+
+    header a::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: all 0.3s ease;
+      transform: translateX(-50%);
+    }
+
+    header a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+    }
+
+    header a:hover::before {
+      width: 80%;
+    }
+
+    /* Mini SAMOT */
+    .mini-samot {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      padding: 0.8rem;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      z-index: 100;
+      opacity: 0;
+      transform: translateY(100px);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(96,165,250,0.4); }
+      50% { box-shadow: 0 0 0 15px rgba(96,165,250,0); }
+    }
+
+    .mini-samot.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .mini-samot:hover {
+      background: rgba(79,70,229,0.3);
+      transform: translateY(-8px) scale(1.1);
+      box-shadow: 0 25px 50px rgba(79,70,229,0.4);
+      animation: none;
+    }
+
+    #miniLogo {
+      width: 35px;
+      height: 35px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      transition: all 0.3s ease;
+    }
+
+    .mini-samot:hover #miniLogo {
+      transform: scale(1.2) rotate(360deg);
+      filter: brightness(0) invert(1) drop-shadow(0 0 15px rgba(255,255,255,0.8));
+    }
+
+    /* Language Selector */
+    .language-selector {
+      position: fixed;
+      top: 50%;
+      left: 2rem;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 100;
+      opacity: 0;
+      animation: slideInLeft 1s ease 2.5s forwards;
+    }
+
+    .lang-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lang-btn:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--accent);
+      transform: scale(1.1);
+      box-shadow: 0 10px 20px rgba(96,165,250,0.3);
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(96,165,250,0.4);
+    }
+
+    /* Particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(96,165,250,0.6);
+      border-radius: 50%;
+      animation: float-particle 15s linear infinite;
+    }
+
+    @keyframes float-particle {
+      0% {
+        transform: translateY(100vh) translateX(0) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) translateX(100px) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Hero */
+    .hero {
+      height: 100%;
+      width: 100%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 6vh 6%;
+    }
+
+    .hero-card {
+      width: min(1200px, 96%);
+      display: flex;
+      gap: 3.2rem;
+      align-items: center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: 20px;
+      padding: 4rem;
+      box-shadow: 0 40px 80px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      backdrop-filter: blur(8px) saturate(140%);
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 40;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInUp 1.5s ease 0.5s forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-left {
+      flex: 1 1 56%;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .hero-sub {
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: slideInLeft 1s ease 1.2s forwards;
+    }
+
+    @keyframes slideInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .hero-title {
+      font-family: "Anton", Arial, sans-serif;
+      font-size: clamp(48px, 10vw, 140px);
+      line-height: 0.9;
+      text-transform: uppercase;
+      color: #ffffff;
+      letter-spacing: 2px;
+      opacity: 0;
+      transform: translateX(-50px);
+      animation: slideInLeft 1s ease 1.5s forwards;
+    }
+
+    .hero-desc {
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 700;
+      font-size: clamp(1rem, 1.3vw, 1.15rem);
+      max-width: 52ch;
+      color: rgba(255,255,255,0.9);
+      opacity: 0;
+      transform: translateX(-30px);
+      animation: slideInLeft 1s ease 1.8s forwards;
+    }
+
+    .hero-right {
+      flex: 0 0 44%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero-portrait {
+      width: 100%;
+      height: auto;
+      border-radius: 0;
+      overflow: visible;
+      display: block;
+      filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9));
+      transition: all 0.6s ease;
+      border: none;
+      max-width: 180%;
+      transform: translateX(15%) translateY(8%);
+      opacity: 0;
+      animation: fadeIn 1.5s ease 2s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .hero-ghost {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      pointer-events: none;
+      font-family: "Anton", Arial, sans-serif;
+      font-size: clamp(70px, 18vw, 200px);
+      color: rgba(255,255,255,0.05);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      mix-blend-mode: screen;
+      transform: translateY(-4%);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(-4%); }
+      50% { transform: translateY(-6%); }
+    }
+
+    /* Main sections */
+    main {
+      position: relative;
+      z-index: 30;
+    }
+
+    .section {
+      padding: 6rem 6% 6rem 6%;
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+      background: transparent;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease;
+    }
+
+    .section.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section h2 {
+      font-family: "Anton", Arial, sans-serif;
+      font-size: clamp(28px, 4.5vw, 44px);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 0.6rem;
+      letter-spacing: 2px;
+      position: relative;
+      color: #ffffff;
+    }
+
+    .section h2::after {
+      content: "";
+      display: block;
+      width: 72px;
+      height: 4px;
+      background: var(--accent);
+      margin: 12px auto 0;
+      border-radius: 4px;
+      animation: expandWidth 0.8s ease forwards;
+    }
+
+    @keyframes expandWidth {
+      from { width: 0; }
+      to { width: 72px; }
+    }
+
+    /* Projects grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 3rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: all 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+      transform: translateY(50px);
+      opacity: 0;
+    }
+
+    .project-card.in-view {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .project-card:hover {
+      box-shadow: 0 30px 60px rgba(2,6,23,0.8), 0 0 30px rgba(96,165,250,0.3);
+      transform: translateY(-12px) scale(1.05);
+      border-color: rgba(96,165,250,0.5);
+      background: linear-gradient(180deg, rgba(96,165,250,0.08), rgba(96,165,250,0.04));
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(96,165,250,0.1) 50%, transparent 70%);
+      opacity: 0;
+      transition: all 0.6s ease;
+      pointer-events: none;
+      border-radius: 20px;
+    }
+
+    .project-card:hover::before {
+      opacity: 1;
+      animation: shimmer 1.5s ease-in-out;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .project-card:hover .project-title-top {
+      opacity: 0;
+      transform: translateX(-50%) translateY(-10px);
+    }
+
+    .project-card:hover .project-overlay {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .project-card:hover .project-media img {
+      transform: scale(1.1);
+      filter: blur(2px) brightness(0.7);
+    }
+
+    .project-media {
+      width: 100%;
+      height: 250px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .project-media img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      transition: all 0.4s ease;
+    }
+
+    .project-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(96,165,250,0.3) 0%, rgba(59,130,246,0.5) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+    }
+
+    .project-card:hover .project-placeholder {
+      transform: scale(1.1);
+      filter: blur(2px) brightness(0.7);
+    }
+
+    .project-title-top {
+      position: absolute;
+      top: 1.2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Anton", Arial, sans-serif;
+      font-size: clamp(1.3rem, 2.5vw, 1.9rem);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      z-index: 10;
+      pointer-events: none;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+      transition: all 0.3s ease;
+      color: #ffffff;
+    }
+
+    .project-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3rem 2.5rem;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px) saturate(150%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .project-overlay .role {
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+    }
+
+    .project-overlay h3 {
+      font-family: "Anton", Arial, sans-serif;
+      font-size: 1.6rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #ffffff;
+    }
+
+    .project-overlay p {
+      font-family: "Inter", Arial, sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* Contact section */
+    .contact-grid {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .contact-grid a {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 2rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 15px;
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-grid a:hover {
+      background: rgba(79,70,229,0.2);
+      border-color: var(--accent);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(79,70,229,0.3);
+    }
+
+    .contact-grid a i {
+      font-size: 1.2rem;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 3rem 6%;
+      color: var(--muted);
+      font-size: 0.9rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 4rem;
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    .modal.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal .close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text);
+      font-size: 1.5rem;
+      padding: 1rem;
+      border-radius: 50%;
+      z-index: 1001;
+      transition: all 0.3s ease;
+    }
+
+    .modal .close:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+
+    .modal .frame {
+      width: 90%;
+      max-width: 800px;
+      aspect-ratio: 16/9;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .modal.show .frame {
+      transform: scale(1);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+        padding: 2rem;
+      }
+
+      .hero-right {
+        flex: none;
+      }
+
+      .hero-portrait {
+        max-width: 80%;
+        transform: translateX(0) translateY(0);
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .contact-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .socials {
+        right: 1rem;
+        gap: 1rem;
+      }
+
+      header {
+        gap: 1.5rem;
+        padding: 1rem 4%;
+      }
+
+      header a {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+      }
+    }
+
+    /* Loading animation */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.5s ease;
+    }
+
+    .loading-text {
+      font-family: "Anton", Arial, sans-serif;
+      font-size: 2.8rem;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Advanced interactive effects */
+    .magnetic-effect {
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .glitch-effect {
+      position: relative;
+    }
+
+    .glitch-effect::before,
+    .glitch-effect::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .glitch-effect::before {
+      color: #ff0040;
+      animation: glitch-1 0.3s ease-in-out;
+      clip-path: polygon(0 0, 100% 0, 100% 45%, 0 45%);
+    }
+
+    .glitch-effect::after {
+      color: #00ffff;
+      animation: glitch-2 0.3s ease-in-out;
+      clip-path: polygon(0 55%, 100% 55%, 100% 100%, 0 100%);
+    }
+
+    @keyframes glitch-1 {
+      0%, 100% { transform: translateX(0); opacity: 0; }
+      50% { transform: translateX(-2px); opacity: 1; }
+    }
+
+    @keyframes glitch-2 {
+      0%, 100% { transform: translateX(0); opacity: 0; }
+      50% { transform: translateX(2px); opacity: 1; }
+    }
+
+    .typewriter {
+      overflow: hidden;
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: var(--accent); }
+    }
+
+    .neon-glow {
+      text-shadow: 
+        0 0 5px var(--accent),
+        0 0 10px var(--accent),
+        0 0 15px var(--accent),
+        0 0 20px var(--accent);
+      animation: neon-flicker 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes neon-flicker {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .parallax-layer {
+      transform-style: preserve-3d;
+      transition: transform 0.1s ease-out;
+    }
+
+    .floating-element {
+      animation: float-gentle 6s ease-in-out infinite;
+    }
+
+    @keyframes float-gentle {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .scale-on-scroll {
+      transition: transform 0.3s ease-out;
+    }
+
+    .blur-on-scroll {
+      transition: filter 0.3s ease-out;
+    }
+
+    .color-shift {
+      transition: color 0.5s ease, text-shadow 0.5s ease;
+    }
+
+    .morphing-shape {
+      transition: border-radius 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .morphing-shape:hover {
+      border-radius: 50% 20% 80% 30%;
+    }
+
+    .elastic-hover {
+      transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .elastic-hover:hover {
+      transform: scale(1.1) rotate(2deg);
+    }
+
+    .text-reveal {
+      background: linear-gradient(90deg, transparent 0%, var(--text) 50%, transparent 100%);
+      background-size: 200% 100%;
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: text-reveal 2s ease-in-out;
+    }
+
+    @keyframes text-reveal {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .stagger-animation {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: stagger-in 0.6s ease-out forwards;
+    }
+
+    @keyframes stagger-in {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .interactive-border {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .interactive-border::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .interactive-border:hover::before {
+      left: 100%;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>  <div class="loading-overlay" id="loadingOverlay">
+   <div class="loading-text" id="loadingText">
+    SAMOT
+   </div>
+  </div>  <div class="cursor" id="cursor"></div>  <div class="particles" id="particles"></div>
+  <div class="socials" aria-hidden="true"><a href="https://www.instagram.com/samot_____/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a> <a href="https://www.youtube.com/@samot____" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a> <a href="mailto:tomasvieira04@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+  </div>
+  <header role="banner" aria-label="menu"><a href="#videografo" id="navVideographer" class="interactive-border magnetic-effect">Videógrafo</a> <a href="#projetos" id="navProjects" class="interactive-border magnetic-effect">Projetos</a> <a href="#editor" id="navEditor" class="interactive-border magnetic-effect">Editor</a> <a href="#contactos" id="navContacts" class="interactive-border magnetic-effect">Contactos</a>
+  </header>
+  <div class="mini-samot" id="miniSamot" title="Voltar ao topo" aria-hidden="true"><img src="https://lh3.googleusercontent.com/d/16wZAW0OJ8jkUTMivHALqJ940OKee8Fgk" alt="SAMOT Logo" id="miniLogo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iOCIgZmlsbD0iIzYwYTVmYSIvPgo8dGV4dCB4PSIyMCIgeT0iMjYiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj5TPC90ZXh0Pgo8L3N2Zz4K'">
+  </div>  <div class="language-selector" id="languageSelector"><button class="lang-btn active" data-lang="pt" id="langPt">PT</button> <button class="lang-btn" data-lang="en" id="langEn">EN</button>
+  </div>
+  <section class="hero" id="hero">
+   <div class="hero-card" role="region" aria-label="intro" id="heroCard">
+    <div class="hero-left">
+     <div class="hero-sub" id="heroSubtitle">
+      VIDEÓGRAFO
+     </div>
+     <div class="hero-title glitch-effect neon-glow" id="heroTitle" data-text="SAMOT">
+      SAMOT
+     </div>
+     <div class="hero-desc" id="heroDescription">
+      Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.
+     </div>
+    </div>
+    <div class="hero-right"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop&crop=face" alt="Samot portrait" class="hero-portrait" id="portrait">
+    </div>
+    <div class="hero-ghost" aria-hidden="true" id="heroGhost">
+     SAMOT
+    </div>
+   </div>
+  </section>
+  <main>
+   <section class="section" id="videografo">
+    <h2 id="videographerTitle">Trabalhos como Videógrafo</h2>
+    <div class="projects-grid">
+     <div class="project-card morphing-shape elastic-hover parallax-layer" data-id="gZWty7tHZlg">
+      <div class="project-title-top floating-element">
+       ADEPTOS FC PORTO VS VITÓRIA
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/gZWty7tHZlg/maxresdefault.jpg" alt="Adeptos FC Porto vs Vitória" onerror="this.src='https://img.youtube.com/vi/gZWty7tHZlg/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Clip de Cobertura (2025)
+       </div>
+       <h3>COBERTURA ADEPTOS</h3>
+       <p>Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
+      </div>
+     </div>
+     <div class="project-card morphing-shape elastic-hover parallax-layer" data-id="EfF95Yf0vxU">
+      <div class="project-title-top floating-element">
+       COMPILAÇÃO DE CLIPES
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/EfF95Yf0vxU/maxresdefault.jpg" alt="Compilação de Clipes" onerror="this.src='https://img.youtube.com/vi/EfF95Yf0vxU/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Porto Canal (2025)
+       </div>
+       <h3>TRABALHO EM BROADCAST</h3>
+       <p>Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="EsjzYQ1qLhg">
+      <div class="project-title-top">
+       KOTARO NAGATA
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/EsjzYQ1qLhg/maxresdefault.jpg" alt="Kotaro Nagata" onerror="this.src='https://img.youtube.com/vi/EsjzYQ1qLhg/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Raw Footage (2025)
+       </div>
+       <h3>CONTRATAÇÃO (CÂMERA)</h3>
+       <p>Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="DUMMY_3">
+      <div class="project-title-top">
+       HIGHLIGHTS DE JOGO DO PORTO
+      </div>
+      <div class="project-media">
+       <div class="project-placeholder"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Highlights de Jogo (2025)
+       </div>
+       <h3>JOGO FC PORTO VS VITÓRIA</h3>
+       <p>Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="1O0X5esNQv4">
+      <div class="project-title-top">
+       RENOVAÇÃO RODRIGO MORA
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/1O0X5esNQv4/maxresdefault.jpg" alt="Renovação Rodrigo Mora" onerror="this.src='https://img.youtube.com/vi/1O0X5esNQv4/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Clip Oficial (2025)
+       </div>
+       <h3>EDIÇÃO DE COMUNICAÇÃO</h3>
+       <p>Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual.</p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="section" id="projetos">
+    <h2 id="projectsTitle">Projetos Pessoais (Realizador)</h2>
+    <div class="projects-grid">
+     <div class="project-card" data-id="RU6TjLccPsU">
+      <div class="project-title-top">
+       JOVENS ADULTOS
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/RU6TjLccPsU/maxresdefault.jpg" alt="Jovens Adultos" onerror="this.src='https://img.youtube.com/vi/RU6TjLccPsU/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Documentário (2023)
+       </div>
+       <h3>CULTURA E MODA</h3>
+       <p>Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="rZnV_EgftCo">
+      <div class="project-title-top">
+       BRUNO NUNO
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/rZnV_EgftCo/maxresdefault.jpg" alt="Bruno Nuno" onerror="this.src='https://img.youtube.com/vi/rZnV_EgftCo/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Curta-metragem (2024)
+       </div>
+       <h3>COMÉDIA SATÍRICA</h3>
+       <p>Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="zwHU_jOtvtE">
+      <div class="project-title-top">
+       WHY STOP NOW?
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/zwHU_jOtvtE/maxresdefault.jpg" alt="Why Stop Now?" onerror="this.src='https://img.youtube.com/vi/zwHU_jOtvtE/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Documentário (2025)
+       </div>
+       <h3>CENTRO COMERCIAL STOP</h3>
+       <p>Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="Zj2FeeNroTc">
+      <div class="project-title-top">
+       FUMAR MATA
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/Zj2FeeNroTc/maxresdefault.jpg" alt="Fumar Mata" onerror="this.src='https://img.youtube.com/vi/Zj2FeeNroTc/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Curta-metragem (2025)
+       </div>
+       <h3>DRAMA EXPERIMENTAL</h3>
+       <p>Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="FucYalKzpRs">
+      <div class="project-title-top">
+       VIVER EM PART-TIME
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time" onerror="this.src='https://img.youtube.com/vi/FucYalKzpRs/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Projeto Experimental (2023)
+       </div>
+       <h3>ROMANCE VISUAL</h3>
+       <p>Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="JfjUF5nuwd0">
+      <div class="project-title-top">
+       PINGUINS
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/JfjUF5nuwd0/maxresdefault.jpg" alt="Pinguins" onerror="this.src='https://img.youtube.com/vi/JfjUF5nuwd0/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Sketch (2024)
+       </div>
+       <h3>COMÉDIA</h3>
+       <p>Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="DUMMY_2">
+      <div class="project-title-top">
+       SAMOT21
+      </div>
+      <div class="project-media">
+       <div class="project-placeholder"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Documentário Pessoal (2025)
+       </div>
+       <h3>DOCUMENTÁRIO CAÓTICO</h3>
+       <p>Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva.</p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="section" id="editor">
+    <h2 id="editorTitle">Trabalhos como Editor</h2>
+    <div class="projects-grid">
+     <div class="project-card" data-id="P4YQVZSMGjo">
+      <div class="project-title-top">
+       CLIPES ADEPTOS FUTEBOL CLUBE
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/P4YQVZSMGjo/maxresdefault.jpg" alt="Clipes Adeptos Futebol Clube" onerror="this.src='https://img.youtube.com/vi/P4YQVZSMGjo/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Edição de Clips (2025)
+       </div>
+       <h3>ADEPTOS EM DESTAQUE</h3>
+       <p>Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="GUck3Raa4D4">
+      <div class="project-title-top">
+       CLIP CONTRATAÇÃO JOGADORA
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/GUck3Raa4D4/maxresdefault.jpg" alt="Clip Contratação Jogadora" onerror="this.src='https://img.youtube.com/vi/GUck3Raa4D4/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Comunicação Oficial (2025)
+       </div>
+       <h3>FUTEBOL FEMININO FC PORTO</h3>
+       <p>Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="FucYalKzpRs">
+      <div class="project-title-top">
+       VIVER PART-TIME (TIKTOK)
+      </div>
+      <div class="project-media">
+       <div class="project-placeholder"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Edição Vertical (2025)
+       </div>
+       <h3>REEDIÇÃO PARA REDES SOCIAIS</h3>
+       <p>Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="54ELYGuWrPw">
+      <div class="project-title-top">
+       FUMAR MATA (TIKTOK)
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/54ELYGuWrPw/maxresdefault.jpg" alt="Fumar Mata TikTok" onerror="this.src='https://img.youtube.com/vi/54ELYGuWrPw/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Edição Vertical (2025)
+       </div>
+       <h3>ADAPTAÇÃO PARA TIKTOK</h3>
+       <p>Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok.</p>
+      </div>
+     </div>
+     <div class="project-card" data-id="m_3-wbV15Tk">
+      <div class="project-title-top">
+       CLIP EDIT "SUCCESSION"
+      </div>
+      <div class="project-media"><img src="https://img.youtube.com/vi/m_3-wbV15Tk/maxresdefault.jpg" alt="Clip Edit Succession" onerror="this.src='https://img.youtube.com/vi/m_3-wbV15Tk/hqdefault.jpg'; if(this.src.includes('hqdefault') && this.naturalWidth === 120) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
+       <div class="project-placeholder" style="display: none;"></div>
+      </div>
+      <div class="project-overlay">
+       <div class="role">
+        Clip de Tendência (2025)
+       </div>
+       <h3>EDIÇÃO 2D DE LETRAS</h3>
+       <p>Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico.</p>
+      </div>
+     </div>
+    </div>
+   </section>
+   <section class="section" id="contactos">
+    <h2 id="contactTitle">Contactos</h2>
+    <div class="contact-grid"><a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a> <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i> YouTube</a> <a href="mailto:tomasvieira04@gmail.com" id="contactEmail" data-email="tomasvieira04@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+    </div>
+   </section>
+   <footer id="footerText">
+    © 2025 SAMOT — Todos os direitos reservados
+   </footer>
+  </main>
+  <div class="modal" id="modal" role="dialog" aria-hidden="true"><button class="close" id="modalClose" aria-label="Fechar">✕</button>
+   <div class="frame" id="modalFrame"></div>
+  </div>
+  <script>
+    // Translations
+    const translations = {
+      pt: {
+        main_title: "SAMOT",
+        subtitle: "VIDEÓGRAFO",
+        description: "Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.",
+        videographer_title: "Trabalhos como Videógrafo",
+        projects_title: "Projetos Pessoais (Realizador)",
+        editor_title: "Trabalhos como Editor",
+        contact_title: "Contactos",
+        footer_text: "© 2025 SAMOT — Todos os direitos reservados",
+        nav_videographer: "Videógrafo",
+        nav_projects: "Projetos",
+        nav_editor: "Editor",
+        nav_contacts: "Contactos",
+        // Video translations
+        videos: {
+          "gZWty7tHZlg": {
+            title: "ADEPTOS FC PORTO VS VITÓRIA",
+            role: "Clip de Cobertura (2025)",
+            subtitle: "COBERTURA ADEPTOS",
+            description: "Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão."
+          },
+          "EfF95Yf0vxU": {
+            title: "COMPILAÇÃO DE CLIPES",
+            role: "Porto Canal (2025)",
+            subtitle: "TRABALHO EM BROADCAST",
+            description: "Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção."
+          },
+          "EsjzYQ1qLhg": {
+            title: "KOTARO NAGATA",
+            role: "Raw Footage (2025)",
+            subtitle: "CONTRATAÇÃO (CÂMERA)",
+            description: "Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação."
+          },
+          "DUMMY_3": {
+            title: "HIGHLIGHTS DE JOGO DO PORTO",
+            role: "Highlights de Jogo (2025)",
+            subtitle: "JOGO FC PORTO VS VITÓRIA",
+            description: "Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave."
+          },
+          "1O0X5esNQv4": {
+            title: "RENOVAÇÃO RODRIGO MORA",
+            role: "Clip Oficial (2025)",
+            subtitle: "EDIÇÃO DE COMUNICAÇÃO",
+            description: "Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual."
+          },
+          "RU6TjLccPsU": {
+            title: "JOVENS ADULTOS",
+            role: "Documentário (2023)",
+            subtitle: "CULTURA E MODA",
+            description: "Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto."
+          },
+          "rZnV_EgftCo": {
+            title: "BRUNO NUNO",
+            role: "Curta-metragem (2024)",
+            subtitle: "COMÉDIA SATÍRICA",
+            description: "Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas."
+          },
+          "zwHU_jOtvtE": {
+            title: "WHY STOP NOW?",
+            role: "Documentário (2025)",
+            subtitle: "CENTRO COMERCIAL STOP",
+            description: "Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto."
+          },
+          "Zj2FeeNroTc": {
+            title: "FUMAR MATA",
+            role: "Curta-metragem (2025)",
+            subtitle: "DRAMA EXPERIMENTAL",
+            description: "Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas."
+          },
+          "FucYalKzpRs": {
+            title: "VIVER EM PART-TIME",
+            role: "Projeto Experimental (2023)",
+            subtitle: "ROMANCE VISUAL",
+            description: "Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes."
+          },
+          "JfjUF5nuwd0": {
+            title: "PINGUINS",
+            role: "Sketch (2024)",
+            subtitle: "COMÉDIA",
+            description: "Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas."
+          },
+          "DUMMY_2": {
+            title: "SAMOT21",
+            role: "Documentário Pessoal (2025)",
+            subtitle: "DOCUMENTÁRIO CAÓTICO",
+            description: "Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva."
+          },
+          "P4YQVZSMGjo": {
+            title: "CLIPES ADEPTOS FUTEBOL CLUBE",
+            role: "Edição de Clips (2025)",
+            subtitle: "ADEPTOS EM DESTAQUE",
+            description: "Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição."
+          },
+          "GUck3Raa4D4": {
+            title: "CLIP CONTRATAÇÃO JOGADORA",
+            role: "Comunicação Oficial (2025)",
+            subtitle: "FUTEBOL FEMININO FC PORTO",
+            description: "Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional."
+          },
+          "FucYalKzpRs_tiktok": {
+            title: "VIVER PART-TIME (TIKTOK)",
+            role: "Edição Vertical (2025)",
+            subtitle: "REEDIÇÃO PARA REDES SOCIAIS",
+            description: "Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels."
+          },
+          "54ELYGuWrPw": {
+            title: "FUMAR MATA (TIKTOK)",
+            role: "Edição Vertical (2025)",
+            subtitle: "ADAPTAÇÃO PARA TIKTOK",
+            description: "Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok."
+          },
+          "m_3-wbV15Tk": {
+            title: "CLIP EDIT \"SUCCESSION\"",
+            role: "Clip de Tendência (2025)",
+            subtitle: "EDIÇÃO 2D DE LETRAS",
+            description: "Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico."
+          }
+        }
+      },
+      en: {
+        main_title: "SAMOT",
+        subtitle: "VIDEOGRAPHER",
+        description: "Tomás Vieira, young adult, part-time artist. Videographer and editor with experience at Porto Canal / FC Porto, student of Audiovisual and Multimedia Communication at ULP.",
+        videographer_title: "Work as Videographer",
+        projects_title: "Personal Projects (Director)",
+        editor_title: "Work as Editor",
+        contact_title: "Contacts",
+        footer_text: "© 2025 SAMOT — All rights reserved",
+        nav_videographer: "Videographer",
+        nav_projects: "Projects",
+        nav_editor: "Editor",
+        nav_contacts: "Contacts",
+        // Video translations
+        videos: {
+          "gZWty7tHZlg": {
+            title: "FC PORTO VS VITÓRIA FANS",
+            role: "Coverage Clip (2025)",
+            subtitle: "FAN COVERAGE",
+            description: "FC Porto vs Vitória fan clip. Filmed and edited by me, focusing on emotion and the stadium experience. High-pressure work environment."
+          },
+          "EfF95Yf0vxU": {
+            title: "CLIPS COMPILATION",
+            role: "Porto Canal (2025)",
+            subtitle: "BROADCAST WORK",
+            description: "Clips mostly filmed by me for Porto Canal and all edited by me. Covers various areas of field work and post-production."
+          },
+          "EsjzYQ1qLhg": {
+            title: "KOTARO NAGATA",
+            role: "Raw Footage (2025)",
+            subtitle: "SIGNING (CAMERA)",
+            description: "Raw footage from Kotaro Nagata's signing day. Entirely filmed by me as videographer, focusing on capture quality."
+          },
+          "DUMMY_3": {
+            title: "PORTO MATCH HIGHLIGHTS",
+            role: "Match Highlights (2025)",
+            subtitle: "FC PORTO VS VITÓRIA MATCH",
+            description: "FC Porto vs Vitória match highlights. Filmed and edited by me. Demonstration of high-pressure capture and key moment editing."
+          },
+          "1O0X5esNQv4": {
+            title: "RODRIGO MORA RENEWAL",
+            role: "Official Clip (2025)",
+            subtitle: "COMMUNICATION EDITING",
+            description: "Editing of Rodrigo Mora's renewal clip. Institutional communication work requiring rhythm and clarity in visual messaging."
+          },
+          "RU6TjLccPsU": {
+            title: "JOVENS ADULTOS",
+            role: "Documentary (2023)",
+            subtitle: "CULTURE AND FASHION",
+            description: "Role: Co-Director and Editor. Documentary made by young adults about young adults. Experimental work about fashion and skateboarding in Porto city."
+          },
+          "rZnV_EgftCo": {
+            title: "BRUNO NUNO",
+            role: "Short Film (2024)",
+            subtitle: "SATIRICAL COMEDY",
+            description: "Role: Director / Script. In his chaotic world, Bruno Nuno is a man who gets lost between daily absurdities, small failures and exaggerated ambitions."
+          },
+          "zwHU_jOtvtE": {
+            title: "WHY STOP NOW?",
+            role: "Documentary (2025)",
+            subtitle: "STOP SHOPPING CENTER",
+            description: "Role: Research / Post-production. Presented at Multiplex Cinema Batalha. Documentary about STOP Shopping Center, symbolizing Porto's cultural and musical resistance."
+          },
+          "Zj2FeeNroTc": {
+            title: "SMOKING KILLS",
+            role: "Short Film (2025)",
+            subtitle: "EXPERIMENTAL DRAMA",
+            description: "Role: Director / Director of Photography. Presented at Multiplex Cinema Batalha. An intimate look at a relationship, exploring tension and human fragilities."
+          },
+          "FucYalKzpRs": {
+            title: "PART-TIME LIVING",
+            role: "Experimental Project (2023)",
+            subtitle: "VISUAL ROMANCE",
+            description: "Role: Director / Editor. A romance without dialogue or ending. Experimental short film focused on visual narrative and environment building."
+          },
+          "JfjUF5nuwd0": {
+            title: "PENGUINS",
+            role: "Sketch (2024)",
+            subtitle: "COMEDY",
+            description: "Role: Actor / Director / Writer. An unpretentious comedy sketch about penguins, focused on humorous and absurd situations."
+          },
+          "DUMMY_2": {
+            title: "SAMOT21",
+            role: "Personal Documentary (2025)",
+            subtitle: "CHAOTIC DOCUMENTARY",
+            description: "Role: Director / Editor. Chaotic and immersive documentary about my 21st birthday party. An exploration of fast and immersive documentary narrative."
+          },
+          "P4YQVZSMGjo": {
+            title: "FOOTBALL CLUB FAN CLIPS",
+            role: "Clip Editing (2025)",
+            subtitle: "FANS IN FOCUS",
+            description: "Fan clips edited by me, focusing on dynamics and energy of the audience in high competition context."
+          },
+          "GUck3Raa4D4": {
+            title: "FEMALE PLAYER SIGNING CLIP",
+            role: "Official Communication (2025)",
+            subtitle: "FC PORTO WOMEN'S FOOTBALL",
+            description: "Official clip of FC Porto Women's Football signing, filmed and edited by me. Demonstration of editing for institutional communication."
+          },
+          "FucYalKzpRs_tiktok": {
+            title: "PART-TIME LIVING (TIKTOK)",
+            role: "Vertical Editing (2025)",
+            subtitle: "SOCIAL MEDIA RE-EDIT",
+            description: "Re-edit of my Part-time Living project for a more current and vertical format, adapted for platforms like TikTok and Reels."
+          },
+          "54ELYGuWrPw": {
+            title: "SMOKING KILLS (TIKTOK)",
+            role: "Vertical Editing (2025)",
+            subtitle: "TIKTOK ADAPTATION",
+            description: "Re-edit of my Smoking Kills project for a more current tone and vertical format optimized for TikTok audience."
+          },
+          "m_3-wbV15Tk": {
+            title: "\"SUCCESSION\" EDIT CLIP",
+            role: "Trending Clip (2025)",
+            subtitle: "2D LETTER EDITING",
+            description: "2D letter edit, demonstrating mastery in a clip format widely used currently on social media, focusing on rhythm and graphic design."
+          }
+        }
+      }
+    };
+
+    let currentLanguage = 'pt';
+
+    // Default configuration
+    const defaultConfig = {
+      main_title: "SAMOT",
+      subtitle: "VIDEÓGRAFO", 
+      description: "Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.",
+      videographer_title: "Trabalhos como Videógrafo",
+      projects_title: "Projetos Pessoais (Realizador)",
+      editor_title: "Trabalhos como Editor",
+      contact_title: "Contactos",
+      profile_image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=600&fit=crop&crop=face",
+      footer_text: "© 2025 SAMOT — Todos os direitos reservados",
+      background_color: "linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%)",
+      surface_color: "rgba(255,255,255,0.08)",
+      text_color: "#ffffff",
+      accent_color: "#60a5fa",
+      secondary_color: "#ffffff",
+      font_family: "Inter",
+      font_size: 16
+    };
+
+    // Element SDK implementation
+    const element = {
+      defaultConfig: defaultConfig,
+      
+      onConfigChange: async (config) => {
+        // Update main title
+        const heroTitle = document.getElementById('heroTitle');
+        const heroGhost = document.getElementById('heroGhost');
+        const loadingText = document.getElementById('loadingText');
+        if (heroTitle) heroTitle.textContent = config.main_title || defaultConfig.main_title;
+        if (heroGhost) heroGhost.textContent = config.main_title || defaultConfig.main_title;
+        if (loadingText) loadingText.textContent = config.main_title || defaultConfig.main_title;
+
+        // Update subtitle
+        const heroSubtitle = document.getElementById('heroSubtitle');
+        if (heroSubtitle) heroSubtitle.textContent = config.subtitle || defaultConfig.subtitle;
+
+        // Update description
+        const heroDescription = document.getElementById('heroDescription');
+        if (heroDescription) heroDescription.textContent = config.description || defaultConfig.description;
+
+        // Update section titles
+        const videographerTitle = document.getElementById('videographerTitle');
+        if (videographerTitle) videographerTitle.textContent = config.videographer_title || defaultConfig.videographer_title;
+
+        const projectsTitle = document.getElementById('projectsTitle');
+        if (projectsTitle) projectsTitle.textContent = config.projects_title || defaultConfig.projects_title;
+
+        const editorTitle = document.getElementById('editorTitle');
+        if (editorTitle) editorTitle.textContent = config.editor_title || defaultConfig.editor_title;
+
+        const contactTitle = document.getElementById('contactTitle');
+        if (contactTitle) contactTitle.textContent = config.contact_title || defaultConfig.contact_title;
+
+        // Update footer
+        const footerText = document.getElementById('footerText');
+        if (footerText) footerText.textContent = config.footer_text || defaultConfig.footer_text;
+
+        // Update profile image
+        const portrait = document.getElementById('portrait');
+        if (portrait && config.profile_image) {
+          portrait.src = config.profile_image;
+        }
+
+        // Update colors
+        const root = document.documentElement;
+        if (config.background_color) root.style.setProperty('--bg', config.background_color);
+        if (config.surface_color) root.style.setProperty('--card', config.surface_color);
+        if (config.text_color) root.style.setProperty('--text', config.text_color);
+        if (config.accent_color) root.style.setProperty('--accent', config.accent_color);
+        if (config.secondary_color) root.style.setProperty('--muted', config.secondary_color);
+
+        // Update font family
+        const customFont = config.font_family || defaultConfig.font_family;
+        const baseFontStack = 'Arial, sans-serif';
+        document.body.style.fontFamily = `${customFont}, ${baseFontStack}`;
+        
+        // Update all text elements with custom font
+        const textElements = document.querySelectorAll('.hero-desc, .section p, .contact-grid a, footer');
+        textElements.forEach(el => {
+          el.style.fontFamily = `${customFont}, ${baseFontStack}`;
+        });
+
+        // Update font size
+        const baseSize = config.font_size || defaultConfig.font_size;
+        document.body.style.fontSize = `${baseSize}px`;
+        
+        // Scale text proportionally
+        const heroDesc = document.getElementById('heroDescription');
+        if (heroDesc) heroDesc.style.fontSize = `${baseSize * 1.15}px`;
+        
+        const sectionTexts = document.querySelectorAll('.section p, .project-overlay p');
+        sectionTexts.forEach(el => {
+          el.style.fontSize = `${baseSize * 0.95}px`;
+        });
+        
+        const contactLinks = document.querySelectorAll('.contact-grid a');
+        contactLinks.forEach(el => {
+          el.style.fontSize = `${baseSize}px`;
+        });
+      },
+
+      mapToCapabilities: (config) => ({
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.surface_color || defaultConfig.surface_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ surface_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ text_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ accent_color: value });
+              }
+            }
+          },
+          {
+            get: () => config.secondary_color || defaultConfig.secondary_color,
+            set: (value) => {
+              if (window.elementSdk) {
+                window.elementSdk.setConfig({ secondary_color: value });
+              }
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            if (window.elementSdk) {
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            if (window.elementSdk) {
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }
+      }),
+
+      mapToEditPanelValues: (config) => new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["subtitle", config.subtitle || defaultConfig.subtitle],
+        ["description", config.description || defaultConfig.description],
+        ["videographer_title", config.videographer_title || defaultConfig.videographer_title],
+        ["projects_title", config.projects_title || defaultConfig.projects_title],
+        ["editor_title", config.editor_title || defaultConfig.editor_title],
+        ["contact_title", config.contact_title || defaultConfig.contact_title],
+        ["profile_image", config.profile_image || defaultConfig.profile_image],
+        ["footer_text", config.footer_text || defaultConfig.footer_text]
+      ])
+    };
+
+    // Language switching function
+    function updateLanguage(lang) {
+      currentLanguage = lang;
+      const t = translations[lang];
+      
+      // Update navigation
+      document.getElementById('navVideographer').textContent = t.nav_videographer;
+      document.getElementById('navProjects').textContent = t.nav_projects;
+      document.getElementById('navEditor').textContent = t.nav_editor;
+      document.getElementById('navContacts').textContent = t.nav_contacts;
+      
+      // Update main content
+      document.getElementById('heroSubtitle').textContent = t.subtitle;
+      document.getElementById('heroDescription').textContent = t.description;
+      document.getElementById('videographerTitle').textContent = t.videographer_title;
+      document.getElementById('projectsTitle').textContent = t.projects_title;
+      document.getElementById('editorTitle').textContent = t.editor_title;
+      document.getElementById('contactTitle').textContent = t.contact_title;
+      document.getElementById('footerText').textContent = t.footer_text;
+      
+      // Update video content
+      document.querySelectorAll('.project-card').forEach(card => {
+        const videoId = card.dataset.id;
+        const videoData = t.videos[videoId];
+        
+        if (videoData) {
+          // Update title (except for film titles)
+          const titleElement = card.querySelector('.project-title-top');
+          if (titleElement && !isFilmTitle(videoId)) {
+            titleElement.textContent = videoData.title;
+          }
+          
+          // Update role
+          const roleElement = card.querySelector('.role');
+          if (roleElement) {
+            roleElement.textContent = videoData.role;
+          }
+          
+          // Update subtitle
+          const subtitleElement = card.querySelector('.project-overlay h3');
+          if (subtitleElement) {
+            subtitleElement.textContent = videoData.subtitle;
+          }
+          
+          // Update description
+          const descElement = card.querySelector('.project-overlay p');
+          if (descElement) {
+            descElement.textContent = videoData.description;
+          }
+        }
+      });
+      
+      // Update language buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      document.getElementById(`lang${lang.charAt(0).toUpperCase() + lang.slice(1)}`).classList.add('active');
+    }
+
+    // Helper function to check if it's a film title that shouldn't be translated
+    function isFilmTitle(videoId) {
+      const filmTitles = ['RU6TjLccPsU', 'rZnV_EgftCo', 'Zj2FeeNroTc', 'FucYalKzpRs', 'JfjUF5nuwd0'];
+      return filmTitles.includes(videoId);
+    }
+
+    // Initialize Element SDK - Simple
+    function initializeSDK() {
+      if (window.elementSdk && typeof window.elementSdk.init === 'function') {
+        try {
+          window.elementSdk.init(element);
+        } catch (error) {
+          // Silent error handling
+        }
+      }
+    }
+
+    // Simple initialization
+    setTimeout(initializeSDK, 500);
+
+    // Simple particle system
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      document.getElementById('particles').appendChild(particle);
+      
+      setTimeout(() => {
+        if (particle.parentNode) {
+          particle.parentNode.removeChild(particle);
+        }
+      }, 15000);
+    }
+
+    // Create particles less frequently
+    setInterval(createParticle, 2000);
+
+    // Loading screen - Fixed
+    function hideLoadingScreen() {
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      if (loadingOverlay) {
+        loadingOverlay.style.opacity = '0';
+        setTimeout(() => {
+          loadingOverlay.style.display = 'none';
+        }, 500);
+      }
+    }
+
+    // Correção: Timeout muito curto para garantir que o loading screen desaparece
+    setTimeout(hideLoadingScreen, 10);
+
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const interactiveElements = document.querySelectorAll('a, button, .project-card');
+
+    document.addEventListener('mousemove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    interactiveElements.forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Portrait and hero behavior
+    const portrait = document.getElementById('portrait');
+    const heroGhost = document.querySelector('.hero-ghost');
+    const heroTitle = document.querySelector('.hero-title');
+    const heroCard = document.getElementById('heroCard');
+    const mini = document.getElementById('miniSamot');
+
+    const initialTranslateY = 8;
+    const initialTranslateX = 15;
+
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      
+      // Portrait fade and parallax
+      const fade = Math.max(0, 1 - (y / 160));
+      if (portrait) {
+        portrait.style.opacity = fade;
+        
+        const currentTranslateY = initialTranslateY + Math.min(0, -y/80);
+        portrait.style.transform = `scale(${0.98 + fade*0.02}) translateX(${initialTranslateX}%) translateY(${currentTranslateY}%)`;
+        
+        const blurAmount = Math.min(3, y / 80);
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(${blurAmount}px)`;
+
+        const cardBlurAmount = 8 + Math.min(2, y / 100);
+        heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
+      }
+      
+      // Hero title and ghost effects
+      if (heroGhost) heroGhost.style.transform = `translateY(${Math.max(-60, -y/6)}px)`;
+      if (heroTitle) heroTitle.style.opacity = Math.max(0, 1 - (y / 220));
+
+      // Mini SAMOT visibility
+      if (y > 120) mini.classList.add('visible'); 
+      else mini.classList.remove('visible');
+    });
+
+    // Mini SAMOT click
+    mini.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (portrait) {
+        portrait.style.opacity = 1;
+        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9))`;
+      }
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+
+    // Observe sections and project cards
+    document.querySelectorAll('.section, .project-card').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Staggered animation for project cards
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card, index) => {
+      card.style.transitionDelay = `${index * 0.1}s`;
+      
+      // 3D tilt effect
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 10;
+        const rotateY = (centerX - x) / 10;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px) scale(1.05)`;
+      });
+      
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
+      });
+    });
+
+    // Simple click feedback
+    function createRipple(e, element) {
+      // Simple visual feedback without complex animations
+      element.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        element.style.transform = '';
+      }, 150);
+    }
+
+    // Modal functionality - Fixed
+    const modal = document.getElementById('modal');
+    const modalFrame = document.getElementById('modalFrame');
+    const modalClose = document.getElementById('modalClose');
+
+    // Simple modal events
+    function setupModalEvents() {
+      document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          
+          const videoId = card.dataset.id;
+          if (videoId && !videoId.startsWith('DUMMY')) {
+            const modal = document.getElementById('modal');
+            const modalFrame = document.getElementById('modalFrame');
+            
+            modalFrame.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+          }
+        });
+      });
+    }
+
+    // Setup events
+    setTimeout(setupModalEvents, 1000);
+
+    // Modal close events
+    function setupModalCloseEvents() {
+      const modal = document.getElementById('modal');
+      const modalClose = document.getElementById('modalClose');
+      const modalFrame = document.getElementById('modalFrame');
+      
+      if (modalClose) {
+        modalClose.addEventListener('click', closeModal);
+      }
+      
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) closeModal();
+        });
+      }
+      
+      // ESC key to close
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && modal.classList.contains('show')) {
+          closeModal();
+        }
+      });
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('modal');
+      const modalFrame = document.getElementById('modalFrame');
+      
+      if (modal) {
+        modal.classList.remove('show');
+      }
+      if (modalFrame) {
+        modalFrame.innerHTML = '';
+      }
+      document.body.style.overflow = 'auto';
+    }
+
+    // Setup close events
+    setupModalCloseEvents();
+
+    // Simple navigation
+    function setupNavigation() {
+      document.querySelectorAll('header a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('href');
+          const targetSection = document.querySelector(targetId);
+          
+          if (targetSection) {
+            targetSection.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    }
+
+    // Setup navigation
+    setTimeout(setupNavigation, 500);
+
+    // Parallax effect for ghost text
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const parallax = document.querySelector('.hero-ghost');
+      if (parallax) {
+        const speed = scrolled * 0.5;
+        parallax.style.transform = `translateY(${-4 - speed}%)`;
+      }
+    });
+
+    // Enhanced social links
+    document.querySelectorAll('.socials a, .contact-grid a').forEach(link => {
+      link.addEventListener('click', (e) => {
+        createRipple(e, link);
+        if (navigator.vibrate) {
+          navigator.vibrate(30);
+        }
+      });
+      
+      link.addEventListener('mouseenter', () => {
+        link.style.transform = 'translateX(-8px) scale(1.15) rotate(5deg)';
+      });
+      
+      link.addEventListener('mouseleave', () => {
+        link.style.transform = 'translateX(-5px) scale(1.1) rotate(0deg)';
+      });
+    });
+
+    // Enhanced navigation with magnetic effect
+    document.querySelectorAll('header a').forEach(navLink => {
+      navLink.addEventListener('click', (e) => {
+        createRipple(e, navLink);
+        if (navigator.vibrate) {
+          navigator.vibrate(25);
+        }
+      });
+      
+      navLink.addEventListener('mouseenter', () => {
+        navLink.style.transform = 'translateY(-2px)';
+        navLink.style.boxShadow = '0 5px 15px rgba(96,165,250,0.3)';
+      });
+      
+      navLink.addEventListener('mouseleave', () => {
+        navLink.style.transform = 'translateY(0)';
+        navLink.style.boxShadow = 'none';
+      });
+      
+      // Magnetic effect
+      navLink.addEventListener('mousemove', (e) => {
+        const rect = navLink.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const distance = Math.sqrt(x * x + y * y);
+        const maxDistance = 50;
+        
+        if (distance < maxDistance) {
+          const strength = (maxDistance - distance) / maxDistance;
+          const moveX = (x / distance) * strength * 8;
+          const moveY = (y / distance) * strength * 8;
+          navLink.style.transform = `translate(${moveX}px, ${moveY - 2}px)`;
+        }
+      });
+    });
+
+    // Simple language selector
+    setTimeout(() => {
+      const langPt = document.getElementById('langPt');
+      const langEn = document.getElementById('langEn');
+      
+      if (langPt) {
+        langPt.addEventListener('click', () => updateLanguage('pt'));
+      }
+      
+      if (langEn) {
+        langEn.addEventListener('click', () => updateLanguage('en'));
+      }
+    }, 500);
+
+    // Email copy functionality
+    const emailLink = document.getElementById('contactEmail');
+    if (emailLink) {
+      emailLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        const email = emailLink.dataset.email;
+        navigator.clipboard.writeText(email).then(() => {
+          const originalText = emailLink.innerHTML;
+          const copyText = currentLanguage === 'pt' ? 'Email Copiado!' : 'Email Copied!';
+          emailLink.innerHTML = `<i class="fas fa-check"></i> ${copyText}`;
+          setTimeout(() => {
+            emailLink.innerHTML = originalText;
+          }, 2000);
+        });
+      });
+    }
+
+    // Advanced interactive effects
+    
+    // Glitch effect on title click
+    const heroTitle = document.getElementById('heroTitle');
+    if (heroTitle) {
+      heroTitle.addEventListener('click', () => {
+        heroTitle.style.animation = 'none';
+        heroTitle.offsetHeight; // Trigger reflow
+        heroTitle.style.animation = 'glitch-1 0.3s ease-in-out, glitch-2 0.3s ease-in-out 0.1s';
+        
+        setTimeout(() => {
+          heroTitle.style.animation = '';
+        }, 600);
+      });
+    }
+
+    // Parallax effect for project cards
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      
+      document.querySelectorAll('.parallax-layer').forEach((element, index) => {
+        const speed = 0.5 + (index * 0.1);
+        const yPos = -(scrolled * speed);
+        element.style.transform = `translateY(${yPos}px)`;
+      });
+      
+      // Scale and blur effects on scroll
+      document.querySelectorAll('.scale-on-scroll').forEach(element => {
+        const rect = element.getBoundingClientRect();
+        const elementTop = rect.top;
+        const elementHeight = rect.height;
+        const windowHeight = window.innerHeight;
+        
+        if (elementTop < windowHeight && elementTop + elementHeight > 0) {
+          const scrollProgress = (windowHeight - elementTop) / (windowHeight + elementHeight);
+          const scale = 0.8 + (scrollProgress * 0.4);
+          element.style.transform = `scale(${Math.min(scale, 1.2)})`;
+        }
+      });
+    });
+
+    // Staggered animations for sections
+    const observer2 = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const children = entry.target.querySelectorAll('.stagger-animation');
+          children.forEach((child, index) => {
+            child.style.animationDelay = `${index * 0.1}s`;
+            child.classList.add('animate');
+          });
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section').forEach(section => {
+      observer2.observe(section);
+    });
+
+    // Color shifting text on hover
+    document.querySelectorAll('.color-shift').forEach(element => {
+      element.addEventListener('mouseenter', () => {
+        element.style.color = '#60a5fa';
+        element.style.textShadow = '0 0 10px rgba(96,165,250,0.5)';
+      });
+      
+      element.addEventListener('mouseleave', () => {
+        element.style.color = '';
+        element.style.textShadow = '';
+      });
+    });
+
+    // Basic initialization complete
+    console.log('Portfolio SAMOT carregado com sucesso!');
+  </script>
 </body>
 </html>
