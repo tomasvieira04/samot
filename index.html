@@ -7,158 +7,276 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=BBH+Sans+Bogle&family=Bowlby+One&family=Climate+Crisis:YEAR@2008&family=Dorsa&family=Lexend+Deca:wght@100..900&family=Notable&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Notable&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&family=Notable&display=swap" rel="stylesheet">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
 <style>
-  /* ---------- RESET & NEW FONT (updated body/html font-family and weight) ---------- */
+  /* ---------- CORES & FONTES NOVAS ---------- */
+  :root{
+    --color-text-main: #F4E4A5; /* Nova cor principal do texto */
+    --color-accent: #5aa6ff; 
+    --glass-bg: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.06);
+    --muted: rgba(244, 228, 165, 0.85); /* Versão muted da nova cor */
+    --social-hover-color-rgb: 90, 166, 255;
+  }
+
+  /* ---------- RESET & NEW FONT ---------- */
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{
     height:100%;
-    /* Nova fonte Lexend Deca com peso 748 (ou o mais próximo) */
-    font-family:"Lexend Deca",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    font-weight: 700; /* 748 não existe diretamente, usamos 700 ou ajustamos no CSS */
-    color:#f4f4f2;
+    /* TEXTO GERAL: Lexend Giga */
+    font-family:"Lexend Giga",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    font-weight: 400; 
+    color: var(--color-text-main); 
     overflow-x:hidden;
     scroll-behavior:smooth
   }
   a{color:inherit;text-decoration:none}
-
-  /* Font-weight 748 for Lexend Deca */
   body, .project-overlay p, .contact-grid a {
-      font-weight: 700; /* closest to 748 as per standard weights */
+      font-weight: 400;
+  }
+  /* TÍTULOS: Fonte Notable */
+  .new-hero-title, .hero-title, .section h2, .project-title-top, .project-overlay h3 {
+      font-family: "Notable", sans-serif;
+      text-transform: uppercase;
   }
 
-  /* ---------- BACKGROUND (image full-screen) ---------- */
-  :root{
-    --glass-bg: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.06);
-    --muted: rgba(255,255,255,0.85);
-    /* Nova cor para o hover social: Azul */
-    --social-hover-color: #5aa6ff; 
-  }
+
+  /* ---------- BACKGROUND (FIX: fixed attachment) ---------- */
   body{
     background-image: url('back.jpg');
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-attachment: fixed; /* FIX: Mantém o fundo fixo */
     background-color: #0b254a;
   }
 
-  /* ---------- SOCIALS top-left (DIMINUÍDO MAIS) ---------- */
-  .socials{
-    position:fixed; left:14px; top:14px; display:flex; gap:6px; z-index:260; 
+  /* ---------- LOADING SCREEN / BARRA DE PROGRESSO (MANTIDO) ---------- */
+  .loading-screen {
+      position: fixed;
+      inset: 0;
+      background-color: #0b254a; 
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      opacity: 1;
+      transition: opacity 0.8s ease-out, visibility 0s 0.8s;
   }
-  .socials a{
-    width:32px;height:32px; /* Tamanho ainda mais reduzido (de 36px) */
-    display:inline-grid;place-items:center;border-radius:8px; /* Reduzido de 10px */
-    background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03);
-    color:#fff; font-size:0.8rem; /* Tamanho do ícone reduzido */
-    transition:transform .16s ease, background .16s;
+  .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
   }
-  .socials a:hover{ 
-    transform:translateY(-4px) scale(1.08); /* Ajustado para ser mais subtil */
-    background: rgba(255,255,255,0.12); 
-    color:var(--social-hover-color); 
+  .loading-text {
+      font-family:"Notable",sans-serif; 
+      font-size: clamp(40px, 10vw, 100px);
+      color: var(--color-text-main);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: pulse 1.5s infinite alternate, fadeIn 0.8s ease-in forwards;
+  }
+  @keyframes pulse {
+      from { transform: scale(1.0); }
+      to { transform: scale(1.05); }
+  }
+  @keyframes fadeIn {
+      to { opacity: 1; }
+  }
+  
+  #progressBar {
+      position: fixed;
+      bottom: 0; 
+      left: 0;
+      width: 0; 
+      height: 6px; 
+      background: var(--color-accent); 
+      z-index: 900; 
+      transition: width 0.1s linear, opacity 0.3s ease-out; 
+      box-shadow: 0 0 10px rgba(var(--social-hover-color-rgb), 0.8);
+      opacity: 0; 
   }
 
-  /* ---------- TOP MENU top-right (DIMINUÍDO MAIS) ---------- */
+  #progressBar.visible {
+      opacity: 1;
+  }
+
+
+  /* ---------- SOCIALS / MENU / MINI SAMOT ---------- */
+  .socials{ position:fixed; left:14px; top:14px; display:flex; gap:6px; z-index:260; }
+  .socials a{
+    width:32px;height:32px;
+    display:inline-grid;place-items:center;border-radius:8px;
+    background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03);
+    color: var(--color-text-main);
+    font-size:0.8rem;
+    transition: all .2s ease;
+  }
+  /* Brilho no Hover */
+  .socials a:hover, .socials a:focus { 
+    transform:translateY(-4px) scale(1.08);
+    background: rgba(255,255,255,0.12); 
+    color:var(--color-accent); 
+    box-shadow: 0 0 8px var(--color-accent); 
+  }
+
   header{
-    position:fixed; right:14px; top:14px; z-index:270; display:flex; gap:8px; align-items:center; /* Gap reduzido */
+    position:fixed; right:14px; top:14px; z-index:270; display:flex; gap:4px; 
     background:transparent;
   }
+  /* Redução da Barra de Navegação e Estilo Boxed/Subtil */
   header a{
-    font-family:"Lexend Deca",sans-serif;
-    font-weight:700; font-size:0.85rem; /* Tamanho da fonte reduzido (de 0.9rem) */
-    text-transform:uppercase; letter-spacing:1px; 
-    padding:.25rem .45rem; /* Padding reduzido (de .3rem .5rem) */
-    border-radius:6px; /* Reduzido de 8px */
-    color:#fff; opacity:0.95; transition:opacity .14s ease, transform .14s;
+    font-family:"Lexend Giga",sans-serif; 
+    font-weight:400; 
+    font-size:0.75rem; 
+    text-transform:uppercase; letter-spacing:0.5px; 
+    padding:.15rem .4rem; 
+    border-radius:4px; 
+    border: 1px solid rgba(255, 255, 255, 0.15); 
+    color: var(--color-text-main); opacity:0.95; 
+    transition: all .2s ease;
   }
-  header a:hover{ opacity:1; transform:translateY(-3px) } /* Movimento de hover reduzido */
-
-  /* ---------- MINI SAMOT (top center) - appears on scroll) ---------- */
+  /* Animação de Brilho no Menu */
+  header a:hover, header a:focus{ 
+    opacity:1; 
+    transform:translateY(0); 
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-accent); 
+    text-shadow: 0 0 5px var(--color-accent); 
+  }
+  .lang-toggle {
+      border: 1px solid rgba(244, 228, 165, 0.3); 
+  }
   .mini-samot{
     position:fixed; left:50%; transform:translateX(-50%); top:16px; z-index:280;
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(14px, 2.2vw, 22px);
-    color:#fff; opacity:0.06; cursor:pointer; transition:opacity .25s ease, transform .25s ease;
+    font-family:"Notable",sans-serif; 
+    font-size:clamp(14px, 2.2vw, 22px);
+    color: var(--color-text-main); opacity:0.06; cursor:pointer; transition:opacity .25s ease, transform .25s ease;
     padding:.2rem .6rem; border-radius:6px;
   }
   .mini-samot.visible{ opacity:0.9; background: rgba(0,0,0,0.18); box-shadow:0 6px 18px rgba(0,0,0,0.45); transform:translateX(-50%) translateY(0) }
 
-  /* ---------- HERO (very large) ---------- */
-  .hero{
-    height:100vh; width:100%; display:grid; place-items:center; position:relative; overflow:hidden; padding:6vh 6%;
-  }
-
+  /* ---------- HERO (CENTRALIZADO) ---------- */
+  .hero{ height:100vh; width:100%; display:grid; place-items:center; position:relative; overflow:hidden; padding:6vh 6%; }
   .hero-card{
-    width:min(1200px,96%); display:flex; gap:3.2rem; align-items:center;
+    width:min(1200px,96%); 
+    display:grid; 
+    place-items: center; 
+    min-height: 550px; 
+    
     background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border-radius:20px; padding:4rem; box-shadow: 0 40px 80px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
-    /* Blur inicial para manter o efeito glass */
     backdrop-filter: blur(8px) saturate(140%); 
-    transition: backdrop-filter .3s ease; 
+    
+    transition: transform 0.4s ease-out, backdrop-filter .3s ease; 
+    transform-style: preserve-3d; 
+    
     position:relative; z-index:40;
   }
-
-  /* Left: hero text */
-  .hero-left{ flex:1 1 56%; display:flex; flex-direction:column; gap:1.2rem; align-items:flex-start; }
-  .hero-sub{
-    font-family:"Lexend Deca",sans-serif;
-    font-size:0.95rem; text-transform:uppercase; letter-spacing:1px; color:var(--muted)
+  .hero-content-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center;
   }
-  /* TÍTULO PRINCIPAL: Letter-spacing revertido para o valor original */
-  .hero-title{
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(54px, 12vw, 160px); line-height:0.9; text-transform:uppercase;
-    color: #fff; letter-spacing:2px; 
+  .new-hero-title {
+      font-family:"Notable",sans-serif; 
+      font-size: clamp(24px, 4vw, 40px);
+      color: var(--color-text-main);
+      text-transform: uppercase;
+      opacity: 0; 
+      transition: opacity 1.2s ease;
+      z-index: 100;
+      text-align: center;
+      margin-bottom: 0.5rem; 
   }
-  .hero-desc{
-    font-family:"Lexend Deca",sans-serif;
-    font-size:clamp(1.15rem, 1.5vw, 1.3rem);
-    max-width:56ch;
-    color: rgba(255,255,255,0.94)
-  }
-
-  /* Right: portrait */
-  .hero-right{ flex:0 0 44%; display:flex; justify-content:center; align-items:center }
-  /* Ajustes da Imagem: Sombra com blur para disfarçar o recorte */
-  /* IMAGEM EU.PNG: AJUSTES FINAIS PARA TAMANHO E POSIÇÃO */
-  .hero-portrait{
-    width: 100%;
-    height: auto;
-    border-radius:0;
-    overflow:visible; display:block;
-    filter: drop-shadow(0 40px 140px rgba(0,0,0,0.9)); 
-    transition: opacity .6s ease, transform .6s ease, filter .3s ease; /* Transição suave para o blur */
-    border:none;
-    max-width: 210%; /* Ajuste fino */
-    transform: translateX(10%) translateY(15%); /* Ajuste fino para centrar/tocar a base */
+  .hero-card.loaded .new-hero-title { opacity: 1; }
+  .hero-sub-title { 
+      font-family:"Lexend Giga",sans-serif; 
+      font-size: 1.1rem;
+      color: var(--muted);
+      text-transform: uppercase; 
+      text-align: center; 
+      margin-bottom: 2rem;
   }
 
-  /* ghost big SAMOT behind (subtle parallax) */
-  .hero-ghost{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:10; pointer-events:none;
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(80px,20vw,220px); color:rgba(255,255,255,0.06); text-transform:uppercase; letter-spacing:5px;
-    mix-blend-mode: screen; transform: translateY(-4%);
+
+  /* Card Stack (FIXADO) */
+  .card-stack {
+      position: relative;
+      width: 320px; 
+      height: 480px; 
+      display: block; 
+      transition: transform 0.6s cubic-bezier(.25,.75,.5,1); 
+  }
+  .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      
+      /* Removida a transformação inicial do CSS. O JS controla as posições */
+      
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      
+      transition: all 0.25s cubic-bezier(.25,.75,.5,1); 
+      cursor: grab;
+      
+      z-index: 1; 
+  }
+  .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: saturate(1.1) brightness(0.95);
+      display: block;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  
+  .card.is-centered {
+      transform: scale(1.1); /* A escala de foco também é controlada aqui */
+      z-index: 1001; 
+      box-shadow: 0 20px 60px rgba(var(--social-hover-color-rgb), 0.7); 
+  }
+  
+  /* ---------- SECÇÕES E TÍTULOS (REDUÇÃO E CENTRAGEM) ---------- */
+  .section{ 
+      padding: 6rem 6% 3rem 6%;
+      max-width: 1200px;
+      margin: 0 auto;
+      text-align: center; 
+  }
+  .section h2{ 
+    font-family:"Notable",sans-serif; 
+    font-size:clamp(2rem, 5vw, 3rem); 
+    text-transform:uppercase; 
+    text-align:center; 
+    margin-bottom: 2rem;
+    color: var(--color-text-main); 
   }
 
-  /* ---------- MAIN / SECTIONS ---------- */
-  main{ position:relative; z-index:30 }
-
-  .section{
-    padding:6rem 6% 6rem 6%; display:flex; flex-direction:column; gap:2.4rem; background: transparent;
+  /* NOVO HERO 'SOBRE MIM' */
+  .about-hero-content {
+      text-align: center; 
+      max-width: 800px;
   }
-  /* Títulos das Secções: Spacing mantido no valor ideal */
-  .section h2{
-    font-family:"BBH Sans Bogle",sans-serif; font-size:clamp(32px,5vw,50px);
-    text-transform:uppercase; text-align:center; margin-bottom:.6rem;
-    letter-spacing: 2px; /* Mantido em 2px */
+  .about-hero-content h2 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      margin-bottom: 1.5rem;
+      color: var(--color-text-main); 
   }
-  .section h2::after{ content:""; display:block; width:72px;height:4px;background:#fff;margin:12px auto 0;border-radius:4px }
+  .about-hero-content p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      line-height: 1.6;
+      color: var(--muted);
+  }
 
   /* ========================================= */
-  /* LAYOUT DE GRID COM OVERLAY (Todas as secções) */
+  /* PROJECT WIDGETS (INTERATIVIDADE E BRILHO) */
   /* ========================================= */
   .projects-grid {
       display: grid;
@@ -169,7 +287,7 @@
       padding: 0 1rem;
   }
 
-  /* Card de Projeto (Container) */
+  /* Card de Projeto (Container) - GLASS MORPHISM LIMPO */
   .project-card {
       position: relative;
       cursor: pointer;
@@ -180,220 +298,168 @@
       align-items: center;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border: 1px solid rgba(255,255,255,0.04);
+      background: linear-gradient(180deg, var(--glass-bg), rgba(255,255,255,0.01));
+      border: 1px solid var(--glass-border);
       transition: all 0.3s cubic-bezier(.2,.9,.3,1);
-      /* Para o efeito de reveal ao scroll */
       transform:translateY(28px); opacity:0; transition: all .75s cubic-bezier(.2,.9,.3,1);
   }
   .project-card.in-view{ transform:none; opacity:1 }
-
-
-  .project-card:hover {
-      box-shadow: 0 30px 60px rgba(2,6,23,0.8);
-      transform: translateY(-4px) scale(1.02);
+  /* Adicionar brilho ao hover do card */
+  .project-card:hover { 
+      box-shadow: 0 30px 60px rgba(2,6,23,0.8),
+                  0 0 15px rgba(var(--social-hover-color-rgb), 0.6); 
+      transform: translateY(-4px) scale(1.02); 
   }
   
-  /* Esconder título fixo no hover */
-  .project-card:hover .project-title-top {
-      opacity: 0;
-  }
-
-  /* Imagem/Thumbnail - CORREÇÃO DE TAMANHO */
-  .project-card .project-media {
-      width: 100%;
-      height: 250px; 
-      position: relative;
-      overflow: hidden;
-  }
-  .project-card .project-media img {
-      width: 100%;
-      height: 100%; 
-      display: block;
-      object-fit: cover; 
-  }
+  .project-card:hover .project-title-top { opacity: 0; }
+  .project-card .project-media { width: 100%; height: 250px; position: relative; overflow: hidden; }
+  .project-card .project-media img { width: 100%; height: 100%; display: block; object-fit: cover; transition: none; transform: none; opacity: 1; }
   
-  /* TÍTULO POR CIMA DA THUMBNAIL: Spacing ligeiramente aumentado */
+  /* TÍTULO POR CIMA DA THUMBNAIL: REDUÇÃO DE FONTE */
   .project-card .project-title-top {
-      position: absolute;
-      top: 1.5rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family:"BBH Sans Bogle",sans-serif;
-      font-size: clamp(1.5rem, 3vw, 2.2rem);
-      text-transform: uppercase;
-      letter-spacing: 3px; /* Aumentado de 2px para 3px */
-      z-index: 10;
-      pointer-events: none;
-      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
-      transition: opacity 0.3s ease; 
+      position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); font-family:"Notable",sans-serif; 
+      font-size: clamp(1rem, 2vw, 1.5rem); 
+      text-transform: uppercase; letter-spacing: 3px; z-index: 10; pointer-events: none; text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8); transition: opacity 0.3s ease; 
   }
 
-  /* Overlay de Texto (Estilo iOS Glass 26) */
+  /* Overlay de Texto (Estilo Glassmorphism Original) */
   .project-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 3rem 2.5rem;
-      text-align: center;
-      
-      /* Estilo Glassmorphism */
-      background: rgba(255, 255, 255, 0.08); 
+      position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 2.5rem; text-align: center;
+      background: rgba(255, 255, 255, 0.06); 
       backdrop-filter: blur(20px) saturate(150%);
       border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 20px;
-
       opacity: 0; 
       transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: scale(0.95); /* Animação de entrada suave */
   }
-  /* O CSS original continua a funcionar para o hover do PC */
-  .project-card:hover .project-overlay {
-      opacity: 1;
-      transform: scale(1.0);
-  }
-  /* CLASSE para abrir no toque (mobile) */
-  .project-card.active .project-overlay { 
-      opacity: 1;
-      transform: scale(1.0);
-  }
+  .project-card:hover .project-overlay { opacity: 1; transform: scale(1.0); }
+  .project-card.active .project-overlay { opacity: 1; transform: scale(1.0); }
+  .project-overlay .role { font-size: 1rem; color: #ffd25a; margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 400; }
   
-  .project-overlay .role {
-      font-size: 1rem;
-      color: #ffd25a;
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      font-weight: 700;
+  /* TÍTULO DENTRO DO OVERLAY: REDUÇÃO DE FONTE */
+  .project-overlay h3 { 
+      font-family:"Notable",sans-serif; 
+      font-size: clamp(1.2rem, 2.5vw, 1.8rem); 
+      text-transform: uppercase; margin-bottom: 0.8rem; line-height: 1.1; letter-spacing: 3px; 
   }
-  /* TÍTULO DENTRO DO OVERLAY: Spacing ligeiramente aumentado */
-  .project-overlay h3 {
-      font-family:"BBH Sans Bogle",sans-serif;
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      text-transform: uppercase;
-      margin-bottom: 0.8rem;
-      line-height: 1.1;
-      letter-spacing: 3px; /* Aumentado de 2px para 3px */
-  }
-  /* TEXTO DE DESCRIÇÃO DO OVERLAY: Fonte reduzida */
-  .project-overlay p {
-      font-family:"Lexend Deca",sans-serif;
-      font-size: 1rem; /* Reduzido de 1.1rem para 1rem */
-      line-height: 1.4;
-      max-width: 55ch;
-  }
+  .project-overlay p { font-family:"Lexend Giga",sans-serif; font-size: 0.9rem; line-height: 1.4; max-width: 55ch; }
   
-  /* ========================================= */
-  /* CONTACTOS (Manter layout simples) */
-  /* ========================================= */
+  /* Contact Grid Links - Brilho no Hover */
   .contact-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
   .contact-grid a{
-    font-family:"Lexend Deca",sans-serif;
-    display:inline-flex; align-items:center; gap:8px; background: rgba(255,255,255,0.03); border-radius:10px; font-weight:700;
-    /* Adicionar transição para o texto do e-mail */
-    padding:8px 12px;
-    transition: background 0.2s, color 0.2s, padding 0.2s; 
+    font-family:"Lexend Giga",sans-serif; color: var(--color-text-main); padding:8px 12px; transition: all 0.2s; 
+  }
+  .contact-grid a:hover, .contact-grid a:focus {
+    background: rgba(255,255,255,0.06); 
+    color: var(--color-accent); 
+    text-shadow: 0 0 4px var(--color-accent); 
+    border-radius: 4px;
+  }
+  footer{ 
+      font-family:"Lexend Giga",sans-serif; 
+      padding:48px 6%; 
+      text-align:center; 
+      color: var(--muted);
+  }
+  
+  /* FIX RESPONSIVO FINAL - Evitar sobreposição do Menu em Mobile */
+  @media (max-width: 650px) {
+    header {
+        right: 8px; 
+        top: 8px;
+        gap: 2px; 
+    }
+    header a {
+        font-size: 0.65rem; 
+        padding: 0.1rem 0.3rem; 
+    }
+    .socials {
+        left: 8px; 
+        top: 8px;
+        gap: 4px;
+    }
   }
 
-  footer{
-    font-family:"Lexend Deca",sans-serif;
-    padding:48px 6%; text-align:center; color:rgba(255,255,255,0.8)
+  /* ESTILOS DO MODAL (Não foram alterados, mas são cruciais) */
+  .modal {
+      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000;
+      display: grid; place-items: center; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s ease;
   }
-
-  /* ---------- MODAL for video ---------- */
-  .modal{
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:999;
-    background: rgba(0,0,0,0.7); padding:24px;
+  .modal.open {
+      opacity: 1; visibility: visible;
   }
-  .modal.open{ display:flex }
-  .modal .frame{
-    width:min(1100px,96%); aspect-ratio:16/9; background:#000; border-radius:12px; overflow:hidden; box-shadow:0 40px 100px rgba(0,0,0,0.8)
+  .modal .close {
+      position: absolute; top: 20px; right: 20px; background: none; border: none;
+      color: white; font-size: 2rem; cursor: pointer; z-index: 2001; opacity: 0.7;
+      transition: opacity 0.2s;
   }
-  .modal .close{
-    position:absolute; top:18px; right:18px; z-index:1000; background:rgba(255,255,255,0.06); color:#fff; border-radius:8px; width:44px; height:44px; display:grid; place-items:center; font-size:1.05rem; cursor:pointer;
+  .modal .close:hover {
+      opacity: 1;
   }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width:1100px){
-    .hero-card{ padding:3rem }
-    /* Ajuste responsivo para a imagem eu.png */
-    .hero-portrait{ max-width: 180%; transform: translateX(8%) translateY(10%); } /* Ajuste para écrans intermédios */
-  }
-  @media (max-width:880px){
-    .hero-card{ flex-direction:column-reverse; gap:1.2rem; padding:2.5rem }
-    .hero-left{text-align:center; align-items:center}
-    .hero-right{ width:100% }
-    .hero-portrait{ width:100%; max-width:85vw; transform: none; filter: drop-shadow(0 20px 60px rgba(0,0,0,0.8)); } 
-    .hero-ghost{ font-size:18vw; transform: translateY(-12%) }
-    
-    .projects-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    /* Ajuste da altura do card em mobile */
-    .project-card .project-media {
-      height: 200px;
-    }
-    /* CORREÇÃO: Fonte ainda mais pequena em mobile */
-    .project-overlay p {
-      font-size: 0.9rem; /* Ajustado para mobile */
-    }
-  }
-  @media (max-width:480px){
-    /* Pequenos ajustes para os novos tamanhos ultra-compactos */
-    header{ right:10px; top:10px; gap:6px }
-    .socials{ left:6px; top:10px; gap:4px }
-    
-    .hero-portrait{ width:100%; max-width:90vw; }
-    .hero-ghost{ font-size:22vw }
-    
-    .project-overlay {
-      padding: 2rem 1.5rem;
-    }
-    .project-overlay h3 {
-      font-size: 1.5rem;
-    }
+  .modal .frame {
+      width: min(90vw, 1000px); height: min(70vh, 560px);
+      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+      border-radius: 8px; overflow: hidden;
   }
 </style>
 </head>
 <body>
 
+  <div id="progressBar"></div>
+
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loading-text">SAMOT</div>
+  </div>
+
   <div class="socials" aria-hidden="true">
     <a href="https://www.instagram.com/samot_____/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
     <a href="https://www.youtube.com/@samot____" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+    <a href="https://www.linkedin.com/in/tom%C3%A1s-vieira-b6b92134b/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
     <a href="mailto:tomasvieira04@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
   </div>
 
   <header role="banner" aria-label="menu">
-    <a href="#videografo">Videógrafo</a>
-    <a href="#projetos">Projetos</a>
-    <a href="#editor">Editor</a>
-    <a href="#contactos">Contactos</a>
+    <a href="#aboutHero" id="menuSobre">Sobre Mim</a>
+    <a href="#videografo" id="menuVideografo">Videógrafo</a>
+    <a href="#projetos" id="menuProjetos">Projetos</a>
+    <a href="#editor" id="menuEditor">Editor</a>
+    <a href="#contactos" id="menuContactos">Contactos</a>
+    <a id="langToggle" class="lang-toggle" data-lang="pt">PT / EN</a>
   </header>
 
   <div class="mini-samot" id="miniSamot" title="Voltar ao topo" aria-hidden="true">SAMOT</div>
 
   <section class="hero" id="hero">
     <div class="hero-card" role="region" aria-label="intro" id="heroCard">
-      <div class="hero-left">
-        <div class="hero-sub">VIDEÓGRAFO</div>
-        <div class="hero-title">SAMOT</div>
-        <div class="hero-desc">Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.</div>
+      <div class="hero-content-center">
+        <div class="new-hero-title">SAMOT</div>
+        <div class="hero-sub-title" id="heroSubtitle">Videographer / Editor</div>
+        
+        <div class="card-stack" id="cardStack">
+            <div class="card" style="--i:1;" data-project-id="1" tabindex="0"> <img src="hero1.jpg" alt="Foto 1 de Samot"> </div>
+            <div class="card" style="--i:2;" data-project-id="2" tabindex="0"> <img src="hero2.jpg" alt="Foto 2 de Samot"> </div>
+            <div class="card" style="--i:3;" data-project-id="3" tabindex="0"> <img src="hero3.jpg" alt="Foto 3 de Samot"> </div>
+            <div class="card" style="--i:4;" data-project-id="4" tabindex="0"> <img src="hero4.jpg" alt="Foto 4 de Samot"> </div>
+            <div class="card" style="--i:5;" data-project-id="5" tabindex="0"> <img src="hero5.jpg" alt="Foto 5 de Samot"> </div>
+            <div class="card" style="--i:6;" data-project-id="6" tabindex="0"> <img src="hero6.jpg" alt="Foto 6 de Samot"> </div>
+            <div class="card" style="--i:7;" data-project-id="7" tabindex="0"> <img src="hero7.jpg" alt="Foto 7 de Samot"> </div>
+        </div>
       </div>
-
-      <div class="hero-right">
-        <img src="eu.png" alt="Samot portrait" class="hero-portrait" id="portrait">
-      </div>
-
-      <div class="hero-ghost" aria-hidden="true">SAMOT</div>
     </div>
   </section>
 
   <main>
-
+    <section class="section" id="aboutHero">
+      <h2 id="titleSobre">Sobre Mim</h2>
+      <div class="about-hero-content">
+          <p id="pSobre">Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.</p>
+      </div>
+    </section>
+    
     <section class="section" id="videografo">
-      <h2>Trabalhos como Videógrafo</h2>
+      <h2 id="titleVideografo">Trabalhos como Videógrafo</h2>
       <div class="projects-grid">
         
         <div class="project-card" data-id="gZWty7tHZlg">
@@ -402,9 +468,9 @@
              <img src="https://img.youtube.com/vi/gZWty7tHZlg/maxresdefault.jpg" alt="Clip FC Porto vs Vitória SC">
           </div>
           <div class="project-overlay">
-            <div class="role">Clip de Cobertura (2025)</div>
+            <div class="role" data-key="gZWty7tHZlg_role">Clip de Cobertura (2025)</div>
             <h3>COBERTURA ADEPTOS</h3>
-            <p>Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
+            <p data-key="gZWty7tHZlg">Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
           </div>
         </div>
         
@@ -414,9 +480,9 @@
              <img src="https://img.youtube.com/vi/EfF95Yf0vxU/maxresdefault.jpg" alt="Compilação de Clips Porto Canal">
           </div>
           <div class="project-overlay">
-            <div class="role">Porto Canal (2025)</div>
+            <div class="role" data-key="EfF95Yf0vxU_role">Porto Canal (2025)</div>
             <h3>TRABALHO EM BROADCAST</h3>
-            <p>Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção.</p>
+            <p data-key="EfF95Yf0vxU">Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção.</p>
           </div>
         </div>
 
@@ -426,9 +492,9 @@
              <img src="https://img.youtube.com/vi/EsjzYQ1qLhg/maxresdefault.jpg" alt="Kotaro Nagata Raw Footage">
           </div>
           <div class="project-overlay">
-            <div class="role">Raw Footage (2025)</div>
+            <div class="role" data-key="EsjzYQ1qLhg_role">Raw Footage (2025)</div>
             <h3>CONTRATAÇÃO (CÂMERA)</h3>
-            <p>Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação.</p>
+            <p data-key="EsjzYQ1qLhg">Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação.</p>
           </div>
         </div>
         
@@ -438,9 +504,9 @@
              <img src="7.jpg" alt="Highlights Jogo FC Porto">
           </div>
           <div class="project-overlay">
-            <div class="role">Highlights de Jogo (2025)</div>
+            <div class="role" data-key="DUMMY_3_role">Highlights de Jogo (2025)</div>
             <h3>JOGO FC PORTO VS VITÓRIA</h3>
-            <p>Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave.</p>
+            <p data-key="DUMMY_3">Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave.</p>
           </div>
         </div>
 
@@ -450,9 +516,9 @@
              <img src="https://img.youtube.com/vi/1O0X5esNQv4/maxresdefault.jpg" alt="Renovação Rodrigo Mora">
           </div>
           <div class="project-overlay">
-            <div class="role">Clip Oficial (2025)</div>
+            <div class="role" data-key="1O0X5esNQv4_role">Clip Oficial (2025)</div>
             <h3>EDIÇÃO DE COMUNICAÇÃO</h3>
-            <p>Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual.</p>
+            <p data-key="1O0X5esNQv4">Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual.</p>
           </div>
         </div>
 
@@ -460,8 +526,7 @@
     </section>
     
     <section class="section" id="projetos">
-      <h2>Projetos Pessoais (Realizador)</h2>
-
+      <h2 id="titleProjetos">Projetos Pessoais (Realizador)</h2>
       <div class="projects-grid">
         
         <div class="project-card" data-id="RU6TjLccPsU">
@@ -470,9 +535,9 @@
              <img src="https://img.youtube.com/vi/RU6TjLccPsU/maxresdefault.jpg" alt="Jovens Adultos Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Documentário (2023)</div>
+            <div class="role" data-key="RU6TjLccPsU_role">Documentário (2023)</div>
             <h3>CULTURA E MODA</h3>
-            <p>Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto.</p>
+            <p data-key="RU6TjLccPsU">Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto.</p>
           </div>
         </div>
 
@@ -482,9 +547,9 @@
              <img src="https://img.youtube.com/vi/rZnV_EgftCo/maxresdefault.jpg" alt="Bruno Nuno Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Curta-metragem (2024)</div>
+            <div class="role" data-key="rZnV_EgftCo_role">Curta-metragem (2024)</div>
             <h3>COMÉDIA SATÍRICA</h3>
-            <p>Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas.</p>
+            <p data-key="rZnV_EgftCo">Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas.</p>
           </div>
         </div>
 
@@ -494,9 +559,9 @@
              <img src="https://img.youtube.com/vi/zwHU_jOtvtE/maxresdefault.jpg" alt="Why Stop Now Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Documentário (2025)</div>
+            <div class="role" data-key="zwHU_jOtvtE_role">Documentário (2025)</div>
             <h3>CENTRO COMERCIAL STOP</h3>
-            <p>Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto.</p>
+            <p data-key="zwHU_jOtvtE">Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto.</p>
           </div>
         </div>
 
@@ -506,9 +571,9 @@
              <img src="https://img.youtube.com/vi/Zj2FeeNroTc/maxresdefault.jpg" alt="Fumar Mata Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Curta-metragem (2025)</div>
+            <div class="role" data-key="Zj2FeeNroTc_role">Curta-metragem (2025)</div>
             <h3>DRAMA EXPERIMENTAL</h3>
-            <p>Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas.</p>
+            <p data-key="Zj2FeeNroTc">Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas.</p>
           </div>
         </div>
 
@@ -518,9 +583,9 @@
              <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Projeto Experimental (2023)</div>
+            <div class="role" data-key="FucYalKzpRs_role">Projeto Experimental (2023)</div>
             <h3>ROMANCE VISUAL</h3>
-            <p>Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes.</p>
+            <p data-key="FucYalKzpRs">Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes.</p>
           </div>
         </div>
 
@@ -530,9 +595,9 @@
              <img src="https://img.youtube.com/vi/JfjUF5nuwd0/maxresdefault.jpg" alt="Pinguins Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Sketch (2024)</div>
+            <div class="role" data-key="JfjUF5nuwd0_role">Sketch (2024)</div>
             <h3>COMÉDIA</h3>
-            <p>Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
+            <p data-key="JfjUF5nuwd0">Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
           </div>
         </div>
         
@@ -542,9 +607,9 @@
              <img src="4.jpg" alt="Samot21 Thumbnail">
           </div>
           <div class="project-overlay">
-            <div class="role">Documentário Pessoal (2025)</div>
+            <div class="role" data-key="DUMMY_2_role">Documentário Pessoal (2025)</div>
             <h3>DOCUMENTÁRIO CAÓTICO</h3>
-            <p>Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva.</p>
+            <p data-key="DUMMY_2">Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva.</p>
           </div>
         </div>
         
@@ -552,7 +617,7 @@
     </section>
     
     <section class="section" id="editor">
-      <h2>Trabalhos como Editor</h2>
+      <h2 id="titleEditor">Trabalhos como Editor</h2>
       <div class="projects-grid">
 
         <div class="project-card" data-id="P4YQVZSMGjo">
@@ -561,9 +626,9 @@
              <img src="https://img.youtube.com/vi/P4YQVZSMGjo/maxresdefault.jpg" alt="Clipes Adeptos Futebol Clube">
           </div>
           <div class="project-overlay">
-            <div class="role">Edição de Clips (2025)</div>
+            <div class="role" data-key="P4YQVZSMGjo_role">Edição de Clips (2025)</div>
             <h3>ADEPTOS EM DESTAQUE</h3>
-            <p>Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição.</p>
+            <p data-key="P4YQVZSMGjo">Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição.</p>
           </div>
         </div>
 
@@ -573,21 +638,21 @@
              <img src="https://img.youtube.com/vi/GUck3Raa4D4/maxresdefault.jpg" alt="Clip contratação jogadora">
           </div>
           <div class="project-overlay">
-            <div class="role">Comunicação Oficial (2025)</div>
+            <div class="role" data-key="GUck3Raa4D4_role">Comunicação Oficial (2025)</div>
             <h3>FUTEBOL FEMININO FC PORTO</h3>
-            <p>Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
+            <p data-key="GUck3Raa4D4">Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
           </div>
         </div>
         
-        <div class="project-card" data-id="FucYalKzpRs">
+        <div class="project-card" data-id="FucYalKzpRs_editor">
           <div class="project-title-top">VIVER PART-TIME (TIKTOK)</div>
           <div class="project-media">
              <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time TikTok">
           </div>
           <div class="project-overlay">
-            <div class="role">Edição Vertical (2025)</div>
+            <div class="role" data-key="FucYalKzpRs_role_2">Edição Vertical (2025)</div>
             <h3>REEDIÇÃO PARA REDES SOCIAIS</h3>
-            <p>Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels.</p>
+            <p data-key="FucYalKzpRs_2">Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels.</p>
           </div>
         </div>
         
@@ -597,9 +662,9 @@
              <img src="https://img.youtube.com/vi/54ELYGuWrPw/maxresdefault.jpg" alt="Fumar Mata TikTok">
           </div>
           <div class="project-overlay">
-            <div class="role">Edição Vertical (2025)</div>
+            <div class="role" data-key="54ELYGuWrPw_role">Edição Vertical (2025)</div>
             <h3>ADAPTAÇÃO PARA TIKTOK</h3>
-            <p>Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok.</p>
+            <p data-key="54ELYGuWrPw">Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok.</p>
           </div>
         </div>
 
@@ -609,9 +674,9 @@
              <img src="https://img.youtube.com/vi/m_3-wbV15Tk/maxresdefault.jpg" alt="Succession clip edit">
           </div>
           <div class="project-overlay">
-            <div class="role">Clip de Tendência (2025)</div>
+            <div class="role" data-key="m_3-wbV15Tk_role">Clip de Tendência (2025)</div>
             <h3>EDIÇÃO 2D DE LETRAS</h3>
-            <p>Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico.</p>
+            <p data-key="m_3-wbV15Tk">Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico.</p>
           </div>
         </div>
         
@@ -619,15 +684,16 @@
     </section>
 
     <section class="section" id="contactos">
-      <h2>Contactos</h2>
+      <h2 id="titleContactos">Contactos</h2>
       <div class="contact-grid">
         <a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
         <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+        <a href="https://www.linkedin.com/in/tom%C3%A1s-vieira-b6b92134b/" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
         <a href="mailto:tomasvieira04@gmail.com" id="contactEmail" data-email="tomasvieira04@gmail.com"><i class="fas fa-envelope"></i> Email</a>
       </div>
     </section>
 
-    <footer>© 2025 SAMOT — Todos os direitos reservados</footer>
+    <footer id="footerText">© 2025 SAMOT — Todos os direitos reservados</footer>
 
   </main>
 
@@ -637,100 +703,368 @@
   </div>
 
 <script>
-  /* ---------- portrait / hero behavior (inclui blur on scroll) ---------- */
-  const portrait = document.getElementById('portrait');
-  const heroGhost = document.querySelector('.hero-ghost');
-  const heroTitle = document.querySelector('.hero-title');
+  /* ---------- Variáveis Globais ---------- */
   const heroCard = document.getElementById('heroCard'); 
   const mini = document.getElementById('miniSamot');
+  const loadingScreen = document.getElementById('loadingScreen');
+  const cardStack = document.getElementById('cardStack'); 
+  const cards = document.querySelectorAll('#cardStack .card'); 
+  
+  // Variáveis do idioma
+  const langToggle = document.getElementById('langToggle');
+  let currentLang = 'pt'; 
+  const progressBar = document.getElementById('progressBar');
 
-  // Valores iniciais de translateY e translateX (ajustados no CSS)
-  const initialTranslateY = 15; 
-  const initialTranslateX = 10;  
+  /* ---------- DADOS DE TRADUÇÃO (MANTIDOS) ---------- */
+  const translations = {
+      'en': {
+          'menuSobre': 'About Me',
+          'menuVideografo': 'Videographer',
+          'menuProjetos': 'Projects',
+          'menuEditor': 'Editor',
+          'menuContactos': 'Contact',
+          'heroSubtitle': 'Videographer / Editor',
+          'titleSobre': 'About Me',
+          'titleVideografo': 'Work as Videographer',
+          'titleProjetos': 'Personal Projects (Director)', 
+          'titleEditor': 'Work as Editor',
+          'titleContactos': 'Contact',
+          'pSobre': 'Tomás Vieira, young adult, part-time artist. Videographer and editor with experience at Porto Canal / FC Porto, student of Audiovisual and Multimedia Communication at ULP.',
+          'footerText': '© 2025 SAMOT — All rights reserved',
+          
+          'p_roles': {
+              'gZWty7tHZlg_role': 'Coverage Clip (2025)',
+              'EfF95Yf0vxU_role': 'Porto Canal (2025)',
+              'EsjzYQ1qLhg_role': 'Raw Footage (2025)',
+              'DUMMY_3_role': 'Game Highlights (2025)',
+              '1O0X5esNQv4_role': 'Official Clip (2025)',
+              'RU6TjLccPsU_role': 'Documentary (2023)',
+              'rZnV_EgftCo_role': 'Short Film (2024)',
+              'zwHU_jOtvtE_role': 'Documentary (2025)',
+              'Zj2FeeNroTc_role': 'Short Film (2025)',
+              'FucYalKzpRs_role': 'Experimental Project (2023)',
+              'JfjUF5nuwd0_role': 'Sketch (2024)',
+              'DUMMY_2_role': 'Personal Documentary (2025)',
+              'P4YQVZSMGjo_role': 'Clips Editing (2025)',
+              'GUck3Raa4D4_role': 'Official Communication (2025)',
+              'FucYalKzpRs_role_2': 'Vertical Edit (2025)',
+              '54ELYGuWrPw_role': 'Vertical Edit (2025)',
+              'm_3-wbV15Tk_role': 'Trend Clip (2025)',
+          },
+          'p_descs': {
+              'gZWty7tHZlg': 'Clip of FC Porto vs Vitória fans. Filmed and edited by me, focusing on the emotion and experience of the stands. High-pressure work.',
+              'EfF95Yf0vxU': 'Clips mostly filmed by me for Porto Canal and all edited by me. Covers various areas of field work and post-production.',
+              'EsjzYQ1qLhg': 'Raw footage of the signing day images of Kotaro Nagata. Entirely filmed by me as a videographer, focusing on capture quality.',
+              'DUMMY_3': 'Moments from the FC Porto vs Vitória game. Filmed and edited by me. Demonstration of high-pressure capture and key moment editing.',
+              '1O0X5esNQv4': 'Editing of Rodrigo Mora\'s renewal clip. Institutional communication work that requires rhythm and clarity in the visual message.',
+              'RU6TjLccPsU': 'Role: Co-Director and Editor. Documentary made by young adults about young adults. Experimental work about fashion and skateboarding in Porto.',
+              'rZnV_EgftCo': 'Role: Director / Script. In his chaotic world, Bruno Nuno is a man lost between the absurdities of the daily life, small failures, and exaggerated ambitions.',
+              'zwHU_jOtvtE': 'Role: Research / Post-production. Presented at Multiplex Cinema Batalha. Documentary about the STOP Commercial Center, which symbolizes the cultural and musical resistance of Porto.',
+              'Zj2FeeNroTc': 'Role: Director / Director of Photography. Presented at Multiplex Cinema Batalha. An intimate look at a relationship, exploring tension and human fragility.',
+              'FucYalKzpRs': 'Role: Director / Editor. A romance without words or ending. Experimental short film focused on visual narrative and environment building.',
+              'JfjUF5nuwd0': 'Role: Actor / Director / Scriptwriter. A casual comedy sketch about penguins, focused on humorous and absurd situations.',
+              'DUMMY_2': 'Role: Director / Editor. Chaotic and immersive documentary about my 21st birthday party. An exploration of fast and immersive documentary narrative.',
+              'P4YQVZSMGjo': 'Fan clips edited by me, focusing on the dynamism and energy of the public in a high-competition context.',
+              'GUck3Raa4D4': 'Official clip of the signing of the FC Porto Women\'s Football player, filmed and edited by me. Demonstration of editing for institutional communication.',
+              'FucYalKzpRs_2': 'Re-editing of my project Living Part-time into a more current, vertical format, adapted for platforms like TikTok and Reels.',
+              '54ELYGuWrPw': 'Re-editing of my project Fumar Mata into a more current, vertical format, adapted for platforms like TikTok and Reels.',
+              'm_3-wbV15Tk': 'Edit de letras 2D, demonstrating mastery of a clip format widely used today on social media, focusing on rhythm and graphic design.',
+          }
+      }
+  };
 
-  window.addEventListener('scroll', () => {
-    const y = window.scrollY;
-    
-    // 1. A imagem de perfil desaparece suavemente (opacity) e faz parallax
-    const fade = Math.max(0, 1 - (y / 160));
-    if (portrait) {
-      portrait.style.opacity = fade;
-      
-      const currentTranslateY = initialTranslateY + Math.min(0, -y/80);
-      portrait.style.transform = `scale(${0.98 + fade*0.02}) translateX(${initialTranslateX}%) translateY(${currentTranslateY}%)`; 
-      
-      // EFEITO BLUR NO SCROLL
-      const blurAmount = Math.min(3, y / 80); 
-      portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(${blurAmount}px)`;
 
-      // Aplicar blur no CARD (backdrop-filter)
-      const cardBlurAmount = 8 + Math.min(2, y / 100); 
-      heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
-    }
-    
-    // Hero title fades and ghost shifts
-    if (heroGhost) heroGhost.style.transform = `translateY(${Math.max(-60, -y/6)}px)`;
-    if (heroTitle) heroTitle.style.opacity = Math.max(0, 1 - (y / 220));
-
-    // 2. Mostrar/esconder mini-samot
-    if (y > 120) mini.classList.add('visible'); else mini.classList.remove('visible');
+  /* ---------- LOADING SCREEN & INITIALIZATION ---------- */
+  window.addEventListener('load', () => {
+      // 1. Simulação da Barra de Carregamento (Animada)
+      if (progressBar) {
+          progressBar.classList.add('visible');
+          let width = 0;
+          const interval = setInterval(() => {
+              if (width >= 100) {
+                  clearInterval(interval);
+                  // 2. Transiciona para o modo Scroll Indicator
+                  setTimeout(() => {
+                      if (loadingScreen) loadingScreen.classList.add('hidden');
+                      if (heroCard) heroCard.classList.add('loaded');
+                      if (langToggle) updateLanguageDisplay();
+                      initializeCardStack(); // Inicializa a posição das cartas
+                      
+                      // Adiciona listener de scroll APÓS o carregamento
+                      window.addEventListener('scroll', updateScrollIndicator);
+                      
+                      // Remove o visible para que a barra de scroll tracking comece invisível
+                      if (progressBar) progressBar.classList.remove('visible');
+                  }, 300); // Dá um tempo para o fade do loading screen
+              } else {
+                  width += 5; // Aumenta 5% por frame simulado
+                  progressBar.style.width = width + '%';
+              }
+          }, 30); // 30ms para uma animação suave
+      } else {
+          // Fallback
+          if (loadingScreen) loadingScreen.classList.add('hidden');
+          if (heroCard) heroCard.classList.add('loaded');
+          if (langToggle) updateLanguageDisplay();
+          initializeCardStack();
+          window.addEventListener('scroll', updateScrollIndicator);
+      }
   });
 
-  // 2. Corrigir o clique do mini-samot para rolar para o topo
+  /* ---------- SCROLL INDICATOR FUNCTION ---------- */
+  function updateScrollIndicator() {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      
+      let scrolled = 0;
+      if (scrollHeight !== 0) {
+          scrolled = (scrollTop / scrollHeight) * 100;
+      }
+      
+      if (progressBar) {
+          progressBar.style.width = scrolled + '%';
+          
+          if (scrollTop > 10) {
+               progressBar.classList.add('visible');
+          } else {
+               progressBar.classList.remove('visible');
+          }
+      }
+  }
+
+
+  /* ---------- FUNÇÃO DE TRADUÇÃO PRINCIPAL (MANTIDA) ---------- */
+  function translateContent(lang) {
+      const data = translations[lang];
+
+      // 1. Menu e Títulos de Seção (por ID)
+      document.getElementById('menuSobre').textContent = data.menuSobre;
+      document.getElementById('menuVideografo').textContent = data.menuVideografo;
+      document.getElementById('menuProjetos').textContent = data.menuProjetos;
+      document.getElementById('menuEditor').textContent = data.menuEditor;
+      document.getElementById('menuContactos').textContent = data.menuContactos;
+      
+      document.getElementById('titleSobre').textContent = data.titleSobre;
+      document.getElementById('titleVideografo').textContent = data.titleVideografo;
+      document.getElementById('titleProjetos').textContent = data.titleProjetos;
+      document.getElementById('titleEditor').textContent = data.titleEditor;
+      document.getElementById('titleContactos').textContent = data.titleContactos;
+      
+      // Hero Subtitle
+      document.getElementById('heroSubtitle').textContent = data.heroSubtitle; 
+
+      // Sobre Mim e Footer
+      document.getElementById('pSobre').textContent = data.pSobre;
+      document.getElementById('footerText').textContent = data.footerText;
+      
+      // 2. Overlays (Roles e Descrições)
+      document.querySelectorAll('.project-card').forEach(card => {
+          const roleElement = card.querySelector('.role');
+          const descElement = card.querySelector('p');
+          const roleKey = roleElement ? roleElement.getAttribute('data-key') : null;
+          const descKey = descElement ? descElement.getAttribute('data-key') : null;
+
+          if (roleElement && roleKey && data.p_roles[roleKey]) {
+              roleElement.textContent = data.p_roles[roleKey];
+          }
+          if (descElement && descKey && data.p_descs[descKey]) {
+              descElement.textContent = data.p_descs[descKey];
+          }
+      });
+  }
+
+  function updateLanguageDisplay() {
+      if (currentLang === 'pt') {
+          langToggle.textContent = 'PT / EN';
+          langToggle.classList.remove('active');
+      } else {
+          langToggle.textContent = 'EN / PT';
+          langToggle.classList.add('active');
+      }
+      translateContent(currentLang);
+  }
+
+  if (langToggle) {
+      langToggle.addEventListener('click', () => {
+          currentLang = (currentLang === 'pt' ? 'en' : 'pt');
+          updateLanguageDisplay();
+      });
+  }
+
+
+  /* ---------- STACK INTERACTION (FIXADO) ---------- */
+  const maxInitialOffset = 4; // Offset inicial em px por carta (sutil)
+  const maxInitialRotation = 2; // Rotação inicial em graus por carta (sutil)
+  const maxSeparation = 150; // Distância de separação para o card 1 (em px)
+
+  function initializeCardStack() {
+      // Estado Inicial: Cartas sobrepostas com separação sutil (apenas para borda)
+      cards.forEach((card, index) => {
+          const i = index + 1;
+          const offset = i - ((cards.length + 1) / 2); // Centraliza a stack
+
+          card.style.transform = `
+              rotate(${maxInitialRotation * offset}deg) 
+              translateX(${maxInitialOffset * offset}px)
+          `;
+          card.style.zIndex = 100 - i;
+          card.classList.remove('is-centered');
+      });
+  }
+
+  /**
+   * Aplica o layout de leque (fan-out) com base no card focado/centrado.
+   * @param {number|null} focusedId - ID (1 a 7) do card focado. Null para voltar ao estado inicial.
+   */
+  function applyFanOut(focusedId) {
+      const isInitialState = (focusedId === null);
+      
+      cards.forEach(card => {
+          const i = parseInt(card.dataset.projectId);
+          
+          let rotation, translationX, zIndex;
+          let scale = 1.0;
+          
+          if (isInitialState) {
+              // Estado Inicial (Chamada à função de inicialização)
+              const offset = i - ((cards.length + 1) / 2);
+              rotation = maxInitialRotation * offset;
+              translationX = maxInitialOffset * offset;
+              zIndex = 100 - i;
+              card.classList.remove('is-centered');
+          } else if (i === focusedId) {
+              // CARTA FOCADA (Centrada e Escalada)
+              rotation = 0;
+              translationX = 0;
+              zIndex = 1001;
+              scale = 1.1; 
+              card.classList.add('is-centered');
+          } else {
+              // CARTA LATERAL (Fan-Out Simétrico)
+              const delta = i - focusedId;
+              const side = Math.sign(delta); // -1 para esquerda, 1 para direita
+              const distance = Math.abs(delta); // 1, 2, 3...
+              
+              const baseRotation = 10; 
+              
+              // Aumenta a distância de separação para FORÇAR GAPS VISÍVEIS
+              const finalTranslation = side * (maxSeparation + (distance - 1) * 60);
+              rotation = side * (baseRotation + (distance - 1) * 3);
+              scale = 1.0 - (distance * 0.05); 
+              
+              zIndex = 1000 - distance; 
+              card.classList.remove('is-centered');
+              
+              translationX = finalTranslation;
+          }
+          
+          // Aplicar as transformações
+          card.style.transform = `rotate(${rotation}deg) translateX(${translationX}px) scale(${scale})`;
+          card.style.zIndex = zIndex;
+          card.setAttribute('aria-selected', i === focusedId ? 'true' : 'false');
+      });
+  }
+
+
+  if (cardStack) {
+      const heroSection = document.getElementById('hero');
+
+      // 3D Parallax Tilt Logic (Mantido)
+      if (heroCard && heroSection) {
+          heroSection.addEventListener('mousemove', (e) => {
+              const rect = heroSection.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const y = e.clientY - rect.top;
+
+              const rotY = (x / rect.width - 0.5) * 2; 
+              const rotX = (y / rect.height - 0.5) * 2; 
+              const maxTilt = 4; 
+              
+              heroCard.style.transform = `
+                  rotateX(${rotX * -maxTilt}deg) 
+                  rotateY(${rotY * maxTilt}deg)
+              `;
+          });
+
+          heroSection.addEventListener('mouseleave', () => {
+              heroCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
+          });
+      }
+
+
+      cardStack.addEventListener('mouseenter', () => {
+          applyFanOut(4); // Foca no cartão central por padrão
+      });
+
+      cardStack.addEventListener('mouseleave', () => {
+          applyFanOut(null); // Volta ao estado inicial
+      });
+      
+      cards.forEach(card => {
+          const cardId = parseInt(card.dataset.projectId);
+          
+          card.addEventListener('mouseenter', () => applyFanOut(cardId));
+          
+          // Suporte a teclado
+          card.addEventListener('focus', (e) => applyFanOut(cardId));
+          card.addEventListener('blur', () => {
+              if (!cardStack.contains(document.activeElement)) {
+                  applyFanOut(null);
+              }
+          });
+      });
+  }
+
+
+  /* ---------- SCROLL BEHAVIOR (MANTIDO) ---------- */
+  window.addEventListener('scroll', () => {
+    const y = document.documentElement.scrollTop || document.body.scrollTop;
+    
+    const cardBlurAmount = 8 + Math.min(2, y / 100); 
+    if(heroCard) heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
+
+    if (y > 120) mini.classList.add('visible'); else mini.classList.remove('visible');
+    
+    updateScrollIndicator();
+  });
+
   mini.addEventListener('click', (e) => {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (portrait) {
-        portrait.style.opacity = 1;
-        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`;
-    }
     if (heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`;
   });
 
-  // clicking a top menu anchor also hide portrait for UX
   document.querySelectorAll('header a').forEach(a => a.addEventListener('click', ()=> {
-    if (portrait) {
-        portrait.style.opacity = 0;
-        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(3px)`; 
-    }
     if (heroCard) heroCard.style.backdropFilter = `blur(10px) saturate(140%)`; 
     
     setTimeout(()=>{ 
-      if(window.scrollY < 60 && portrait) {
-        portrait.style.opacity = 1; 
-        portrait.style.filter = `drop-shadow(0 40px 140px rgba(0,0,0,0.9)) blur(0px)`; 
-      }
       if(window.scrollY < 60 && heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`; 
     }, 900);
   }));
 
-  /* ---------- widgets reveal with intersection observer ---------- */
+  /* ---------- PROJECT WIDGETS & VIDEO PLAYER (FIXADO) ---------- */
   const widgets = document.querySelectorAll('.project-card');
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('in-view');
     });
   }, { threshold: 0.16 });
-
   widgets.forEach(w => io.observe(w));
-
-
-  /* ---------- MODAL for video & MOBILE/TOUCH LOGIC (Novo Comportamento) ---------- */
+  
   const modal = document.getElementById('modal');
   const modalFrame = document.getElementById('modalFrame');
   const modalClose = document.getElementById('modalClose');
-  let activeCard = null; // Para rastrear qual cartão está com o overlay aberto
-
-  // open modal helper (in-place)
+  let activeCard = null; 
+  
   function openVideo(id){
     modal.classList.add('open');
     modal.setAttribute('aria-hidden','false');
-    
     const dummyIds = ['DUMMY_1', 'DUMMY_2', 'DUMMY_3']; 
-
+    
     if (id && !dummyIds.includes(id)) {
       const iframe = document.createElement('iframe');
-      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+      // Adicionado rel=0 para evitar vídeos relacionados no final
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`; 
       iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
       iframe.style.width = '100%';
       iframe.style.height = '100%';
@@ -738,52 +1072,54 @@
       modalFrame.innerHTML = '';
       modalFrame.appendChild(iframe);
     } else {
-      modalFrame.innerHTML = '<p style="color:white; text-align:center; padding:20px; font-family: \'Lexend Deca\', sans-serif;">Vídeo em breve!</p>';
+      modalFrame.innerHTML = '<p style="color:white; text-align:center; padding:20px; font-family: \'Lexend Giga\', sans-serif;">Vídeo em breve!</p>';
     }
     document.body.style.overflow = 'hidden';
   }
-
-  // function to close all overlays
+  
   function closeAllOverlays() {
       document.querySelectorAll('.project-card.active').forEach(card => {
           card.classList.remove('active');
       });
       activeCard = null;
   }
-
-  // NOVA LÓGICA DE CLIQUE/TOQUE: 1º toque mostra overlay, 2º toque abre vídeo
+  
   function handleProjectClick(e) {
       const clickedCard = e.currentTarget;
       const vid = clickedCard.dataset.id;
       
       if (!vid) return;
 
-      // Se o cartão clicado JÁ estiver ativo (overlay visível)
+      // FIX CRÍTICO: Impede que o document listener feche o overlay imediatamente
+      // se o clique for dentro do project-card (1º ou 2º clique).
+      e.stopPropagation(); 
+
       if (clickedCard.classList.contains('active')) {
-          // 2º toque: Abrir o vídeo
+          // 2º Click: O card já está ativo, abre o vídeo
           openVideo(vid);
-          closeAllOverlays(); // Fechar todos os overlays após abrir o vídeo
+          closeAllOverlays();
       } else {
-          // 1º toque: Mostrar o overlay
-          closeAllOverlays(); // Fechar qualquer outro overlay que possa estar aberto
-          clickedCard.classList.add('active'); // Abrir o overlay deste cartão
+          // 1º Click: Ativa o overlay
+          closeAllOverlays(); 
+          clickedCard.classList.add('active');
           activeCard = clickedCard;
       }
   }
 
-  // Attach listener to ALL .project-card elements
+  // Atribui o novo (e agora fixo) handler a todos os cartões de projeto
   document.querySelectorAll('.project-card[data-id]').forEach(el => {
+    el.removeEventListener('click', handleProjectClick); // Remove o antigo se houver
     el.addEventListener('click', handleProjectClick);
   });
   
-  // Fechar overlays se clicar fora de um cartão de projeto (UX mobile)
+  // O document listener só fecha se o clique for FORA de qualquer project-card
   document.addEventListener('click', (e) => {
       if (!e.target.closest('.project-card')) {
           closeAllOverlays();
       }
   });
 
-  // Corrigir o modalClose
+  // Fechar Modal
   modalClose.addEventListener('click', () => {
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden','true');
@@ -791,44 +1127,31 @@
       document.body.style.overflow = '';
   });
 
-  /* ---------- NOVO COMPORTAMENTO DO LINK DE E-MAIL (REVELAR ENDEREÇO) ---------- */
+  // Funcionalidade de Email (Mantida)
   const emailLink = document.getElementById('contactEmail'); 
   const initialText = ' Email';
   const initialHTML = '<i class="fas fa-envelope"></i>' + initialText;
   const revealedHTML = `<i class="fas fa-envelope"></i> ${emailLink ? emailLink.dataset.email : ''}`;
-  
   if (emailLink) {
-      // Garantir o estado inicial
       emailLink.innerHTML = initialHTML;
-
-      // Desktop: Mouse enter/leave para revelar/ocultar
       emailLink.addEventListener('mouseenter', () => {
           emailLink.innerHTML = revealedHTML;
       });
       emailLink.addEventListener('mouseleave', () => {
-          emailLink.innerHTML = initialHTML;
+          emailLink.innerHTML = initialText;
       });
-
-      // Clique/Toque (Mobile/Desktop): Controla a ação mailto
       emailLink.addEventListener('click', (e) => {
-          // Se o texto for 'Email', o primeiro clique/toque REVELA o endereço (e impede a ação mailto)
           if (emailLink.innerHTML === initialHTML) {
               e.preventDefault(); 
               emailLink.innerHTML = revealedHTML;
           } 
-          // Se o texto for o endereço completo, o segundo clique/toque (ou qualquer clique seguinte) permite a ação mailto padrão.
       });
-      
-      // Perder o foco (ex: tabbing ou toque fora do elemento) reverte para o texto inicial
       emailLink.addEventListener('blur', () => {
-          emailLink.innerHTML = initialHTML;
+          emailLink.innerHTML = initialText; 
       });
-      
-      // Lógica de fechar o e-mail se tocar noutra parte do ecrã (Mobile UX)
       document.addEventListener('click', (e) => {
-          // Se o clique foi fora do link de e-mail e o endereço completo está visível
-          if (e.target !== emailLink && !emailLink.contains(e.target) && emailLink.innerHTML === revealedHTML) {
-              emailLink.innerHTML = initialHTML;
+          if (e.target !== emailLink && !e.target.closest('.contact-grid') && emailLink.innerHTML === revealedHTML) {
+              emailLink.innerHTML = initialText; 
           }
       });
   }
