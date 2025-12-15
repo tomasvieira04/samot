@@ -8,443 +8,656 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Notable&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&family=Notable&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap" rel="stylesheet">
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 
 <style>
-  /* ---------- CORES & FONTES NOVAS ---------- */
+  /* ========================================= */
+  /* 1. VARIÁVEIS & RESET GERAL */
+  /* ========================================= */
   :root{
-    --color-text-main: #F4E4A5; /* Nova cor principal do texto */
+    --color-text-main: #F4E4A5; 
     --color-accent: #5aa6ff; 
     --glass-bg: rgba(255,255,255,0.04);
-    --glass-border: rgba(255,255,255,0.06);
-    --muted: rgba(244, 228, 165, 0.85); /* Versão muted da nova cor */
+    --glass-border: rgba(255,255,255,0.08);
+    --muted: rgba(244, 228, 165, 0.7);
     --social-hover-color-rgb: 90, 166, 255;
+    --font-title: "Notable", sans-serif;
+    --font-body: "Lexend Giga", sans-serif;
   }
 
-  /* ---------- RESET & NEW FONT ---------- */
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{
-    height:100%;
-    /* TEXTO GERAL: Lexend Giga */
-    font-family:"Lexend Giga",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    font-weight: 400; 
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  html, body {
+    width: 100%;
+    min-height: 100vh;
+    font-family: var(--font-body);
+    font-weight: 300; 
     color: var(--color-text-main); 
-    overflow-x:hidden;
-    scroll-behavior:smooth
-  }
-  a{color:inherit;text-decoration:none}
-  body, .project-overlay p, .contact-grid a {
-      font-weight: 400;
-  }
-  /* TÍTULOS: Fonte Notable */
-  .new-hero-title, .hero-title, .section h2, .project-title-top, .project-overlay h3 {
-      font-family: "Notable", sans-serif;
-      text-transform: uppercase;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
   }
 
-
-  /* ---------- BACKGROUND (FIX: fixed attachment) ---------- */
-  body{
-    background-image: url('back.jpg');
+  /* FIX: Fundo Infinito (Background fixo que não corta) */
+  body {
+    background-image: url('back.jpg'); 
     background-size: cover;
-    background-position: center;
-    background-attachment: fixed; /* FIX: Mantém o fundo fixo */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-color: #0b254a;
   }
 
-  /* ---------- LOADING SCREEN / BARRA DE PROGRESSO (MANTIDO) ---------- */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  h1, h2, h3 { 
+    font-family: var(--font-title); 
+    text-transform: uppercase; 
+    font-weight: 400; 
+  }
+  
+  p { 
+    line-height: 1.6; 
+    letter-spacing: -0.02em; 
+  }
+
+  /* ========================================= */
+  /* 2. LOADING SCREEN & PROGRESS BAR */
+  /* ========================================= */
   .loading-screen {
-      position: fixed;
-      inset: 0;
+      position: fixed; 
+      inset: 0; 
       background-color: #0b254a; 
       z-index: 1000;
-      display: grid;
-      place-items: center;
-      opacity: 1;
+      display: grid; 
+      place-items: center; 
       transition: opacity 0.8s ease-out, visibility 0s 0.8s;
   }
-  .loading-screen.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
+  
+  .loading-screen.hidden { 
+      opacity: 0; 
+      visibility: hidden; 
+      pointer-events: none; 
   }
+  
   .loading-text {
-      font-family:"Notable",sans-serif; 
+      font-family: var(--font-title); 
       font-size: clamp(40px, 10vw, 100px);
-      color: var(--color-text-main);
+      color: var(--color-text-main); 
       text-transform: uppercase;
-      opacity: 0;
-      animation: pulse 1.5s infinite alternate, fadeIn 0.8s ease-in forwards;
+      animation: pulse 1.5s infinite alternate;
   }
-  @keyframes pulse {
-      from { transform: scale(1.0); }
-      to { transform: scale(1.05); }
-  }
-  @keyframes fadeIn {
-      to { opacity: 1; }
+  
+  @keyframes pulse { 
+      from { transform: scale(1.0); opacity:0.7; } 
+      to { transform: scale(1.05); opacity:1; } 
   }
   
   #progressBar {
-      position: fixed;
+      position: fixed; 
       bottom: 0; 
-      left: 0;
-      width: 0; 
-      height: 6px; 
+      left: 0; 
+      height: 4px; 
       background: var(--color-accent); 
       z-index: 900; 
       transition: width 0.1s linear, opacity 0.3s ease-out; 
-      box-shadow: 0 0 10px rgba(var(--social-hover-color-rgb), 0.8);
-      opacity: 0; 
+      opacity: 0;
+      box-shadow: 0 0 10px var(--color-accent);
+  }
+  
+  #progressBar.visible { 
+      opacity: 1; 
   }
 
-  #progressBar.visible {
-      opacity: 1;
+  /* ========================================= */
+  /* 3. NAVEGAÇÃO & SOCIAIS (DESKTOP) */
+  /* ========================================= */
+  .socials { 
+      position: fixed; 
+      left: 20px; 
+      top: 20px; 
+      display: flex; 
+      gap: 8px; 
+      z-index: 260; 
   }
-
-
-  /* ---------- SOCIALS / MENU / MINI SAMOT ---------- */
-  .socials{ position:fixed; left:14px; top:14px; display:flex; gap:6px; z-index:260; }
-  .socials a{
-    width:32px;height:32px;
-    display:inline-grid;place-items:center;border-radius:8px;
-    background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.03);
-    color: var(--color-text-main);
-    font-size:0.8rem;
-    transition: all .2s ease;
-  }
-  /* Brilho no Hover */
-  .socials a:hover, .socials a:focus { 
-    transform:translateY(-4px) scale(1.08);
-    background: rgba(255,255,255,0.12); 
-    color:var(--color-accent); 
-    box-shadow: 0 0 8px var(--color-accent); 
-  }
-
-  header{
-    position:fixed; right:14px; top:14px; z-index:270; display:flex; gap:4px; 
-    background:transparent;
-  }
-  /* Redução da Barra de Navegação e Estilo Boxed/Subtil */
-  header a{
-    font-family:"Lexend Giga",sans-serif; 
-    font-weight:400; 
-    font-size:0.75rem; 
-    text-transform:uppercase; letter-spacing:0.5px; 
-    padding:.15rem .4rem; 
-    border-radius:4px; 
-    border: 1px solid rgba(255, 255, 255, 0.15); 
-    color: var(--color-text-main); opacity:0.95; 
-    transition: all .2s ease;
-  }
-  /* Animação de Brilho no Menu */
-  header a:hover, header a:focus{ 
-    opacity:1; 
-    transform:translateY(0); 
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-accent); 
-    text-shadow: 0 0 5px var(--color-accent); 
-  }
-  .lang-toggle {
-      border: 1px solid rgba(244, 228, 165, 0.3); 
-  }
-  .mini-samot{
-    position:fixed; left:50%; transform:translateX(-50%); top:16px; z-index:280;
-    font-family:"Notable",sans-serif; 
-    font-size:clamp(14px, 2.2vw, 22px);
-    color: var(--color-text-main); opacity:0.06; cursor:pointer; transition:opacity .25s ease, transform .25s ease;
-    padding:.2rem .6rem; border-radius:6px;
-  }
-  .mini-samot.visible{ opacity:0.9; background: rgba(0,0,0,0.18); box-shadow:0 6px 18px rgba(0,0,0,0.45); transform:translateX(-50%) translateY(0) }
-
-  /* ---------- HERO (CENTRALIZADO) ---------- */
-  .hero{ height:100vh; width:100%; display:grid; place-items:center; position:relative; overflow:hidden; padding:6vh 6%; }
-  .hero-card{
-    width:min(1200px,96%); 
-    display:grid; 
+  
+  .socials a {
+    width: 36px; 
+    height: 36px; 
+    display: grid; 
     place-items: center; 
-    min-height: 550px; 
-    
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    border-radius:20px; padding:4rem; box-shadow: 0 40px 80px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);
-    backdrop-filter: blur(8px) saturate(140%); 
-    
-    transition: transform 0.4s ease-out, backdrop-filter .3s ease; 
-    transform-style: preserve-3d; 
-    
-    position:relative; z-index:40;
-  }
-  .hero-content-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center; 
-      justify-content: center;
-  }
-  .new-hero-title {
-      font-family:"Notable",sans-serif; 
-      font-size: clamp(24px, 4vw, 40px);
-      color: var(--color-text-main);
-      text-transform: uppercase;
-      opacity: 0; 
-      transition: opacity 1.2s ease;
-      z-index: 100;
-      text-align: center;
-      margin-bottom: 0.5rem; 
-  }
-  .hero-card.loaded .new-hero-title { opacity: 1; }
-  .hero-sub-title { 
-      font-family:"Lexend Giga",sans-serif; 
-      font-size: 1.1rem;
-      color: var(--muted);
-      text-transform: uppercase; 
-      text-align: center; 
-      margin-bottom: 2rem;
-  }
-
-
-  /* Card Stack (FIXADO) */
-  .card-stack {
-      position: relative;
-      width: 320px; 
-      height: 480px; 
-      display: block; 
-      transition: transform 0.6s cubic-bezier(.25,.75,.5,1); 
-  }
-  .card {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      overflow: hidden;
-      
-      /* Removida a transformação inicial do CSS. O JS controla as posições */
-      
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      
-      transition: all 0.25s cubic-bezier(.25,.75,.5,1); 
-      cursor: grab;
-      
-      z-index: 1; 
-  }
-  .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(1.1) brightness(0.95);
-      display: block;
-      transition: transform 0.4s ease, opacity 0.4s ease;
-  }
-  
-  .card.is-centered {
-      transform: scale(1.1); /* A escala de foco também é controlada aqui */
-      z-index: 1001; 
-      box-shadow: 0 20px 60px rgba(var(--social-hover-color-rgb), 0.7); 
-  }
-  
-  /* ---------- SECÇÕES E TÍTULOS (REDUÇÃO E CENTRAGEM) ---------- */
-  .section{ 
-      padding: 6rem 6% 3rem 6%;
-      max-width: 1200px;
-      margin: 0 auto;
-      text-align: center; 
-  }
-  .section h2{ 
-    font-family:"Notable",sans-serif; 
-    font-size:clamp(2rem, 5vw, 3rem); 
-    text-transform:uppercase; 
-    text-align:center; 
-    margin-bottom: 2rem;
+    border-radius: 8px;
+    background: var(--glass-bg); 
+    border: 1px solid var(--glass-border);
     color: var(--color-text-main); 
-  }
-
-  /* NOVO HERO 'SOBRE MIM' */
-  .about-hero-content {
-      text-align: center; 
-      max-width: 800px;
-  }
-  .about-hero-content h2 {
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      margin-bottom: 1.5rem;
-      color: var(--color-text-main); 
-  }
-  .about-hero-content p {
-      font-size: clamp(1rem, 2vw, 1.2rem);
-      line-height: 1.6;
-      color: var(--muted);
-  }
-
-  /* ========================================= */
-  /* PROJECT WIDGETS (INTERATIVIDADE E BRILHO) */
-  /* ========================================= */
-  .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 3rem; 
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 1rem;
-  }
-
-  /* Card de Projeto (Container) - GLASS MORPHISM LIMPO */
-  .project-card {
-      position: relative;
-      cursor: pointer;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      background: linear-gradient(180deg, var(--glass-bg), rgba(255,255,255,0.01));
-      border: 1px solid var(--glass-border);
-      transition: all 0.3s cubic-bezier(.2,.9,.3,1);
-      transform:translateY(28px); opacity:0; transition: all .75s cubic-bezier(.2,.9,.3,1);
-  }
-  .project-card.in-view{ transform:none; opacity:1 }
-  /* Adicionar brilho ao hover do card */
-  .project-card:hover { 
-      box-shadow: 0 30px 60px rgba(2,6,23,0.8),
-                  0 0 15px rgba(var(--social-hover-color-rgb), 0.6); 
-      transform: translateY(-4px) scale(1.02); 
+    font-size: 0.9rem; 
+    transition: all .2s ease;
   }
   
-  .project-card:hover .project-title-top { opacity: 0; }
-  .project-card .project-media { width: 100%; height: 250px; position: relative; overflow: hidden; }
-  .project-card .project-media img { width: 100%; height: 100%; display: block; object-fit: cover; transition: none; transform: none; opacity: 1; }
-  
-  /* TÍTULO POR CIMA DA THUMBNAIL: REDUÇÃO DE FONTE */
-  .project-card .project-title-top {
-      position: absolute; top: 1.5rem; left: 50%; transform: translateX(-50%); font-family:"Notable",sans-serif; 
-      font-size: clamp(1rem, 2vw, 1.5rem); 
-      text-transform: uppercase; letter-spacing: 3px; z-index: 10; pointer-events: none; text-shadow: 0 4px 8px rgba(0, 0, 0, 0.8); transition: opacity 0.3s ease; 
-  }
-
-  /* Overlay de Texto (Estilo Glassmorphism Original) */
-  .project-overlay {
-      position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3rem 2.5rem; text-align: center;
-      background: rgba(255, 255, 255, 0.06); 
-      backdrop-filter: blur(20px) saturate(150%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      opacity: 0; 
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      transform: scale(0.95); /* Animação de entrada suave */
-  }
-  .project-card:hover .project-overlay { opacity: 1; transform: scale(1.0); }
-  .project-card.active .project-overlay { opacity: 1; transform: scale(1.0); }
-  .project-overlay .role { font-size: 1rem; color: #ffd25a; margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 400; }
-  
-  /* TÍTULO DENTRO DO OVERLAY: REDUÇÃO DE FONTE */
-  .project-overlay h3 { 
-      font-family:"Notable",sans-serif; 
-      font-size: clamp(1.2rem, 2.5vw, 1.8rem); 
-      text-transform: uppercase; margin-bottom: 0.8rem; line-height: 1.1; letter-spacing: 3px; 
-  }
-  .project-overlay p { font-family:"Lexend Giga",sans-serif; font-size: 0.9rem; line-height: 1.4; max-width: 55ch; }
-  
-  /* Contact Grid Links - Brilho no Hover */
-  .contact-grid{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
-  .contact-grid a{
-    font-family:"Lexend Giga",sans-serif; color: var(--color-text-main); padding:8px 12px; transition: all 0.2s; 
-  }
-  .contact-grid a:hover, .contact-grid a:focus {
-    background: rgba(255,255,255,0.06); 
+  .socials a:hover { 
+    transform: translateY(-3px); 
+    background: rgba(255,255,255,0.1); 
     color: var(--color-accent); 
-    text-shadow: 0 0 4px var(--color-accent); 
-    border-radius: 4px;
-  }
-  footer{ 
-      font-family:"Lexend Giga",sans-serif; 
-      padding:48px 6%; 
-      text-align:center; 
-      color: var(--muted);
-  }
-  
-  /* FIX RESPONSIVO FINAL - Evitar sobreposição do Menu em Mobile */
-  @media (max-width: 650px) {
-    header {
-        right: 8px; 
-        top: 8px;
-        gap: 2px; 
-    }
-    header a {
-        font-size: 0.65rem; 
-        padding: 0.1rem 0.3rem; 
-    }
-    .socials {
-        left: 8px; 
-        top: 8px;
-        gap: 4px;
-    }
+    box-shadow: 0 0 10px rgba(var(--social-hover-color-rgb), 0.4); 
   }
 
-  /* ESTILOS DO MODAL (Não foram alterados, mas são cruciais) */
-  .modal {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); z-index: 2000;
-      display: grid; place-items: center; opacity: 0; visibility: hidden;
+  header {
+    position: fixed; 
+    right: 20px; 
+    top: 20px; 
+    z-index: 270; 
+    display: flex; 
+    gap: 6px; 
+    background: rgba(0,0,0,0.2); 
+    backdrop-filter: blur(5px);
+    padding: 6px; 
+    border-radius: 8px; 
+    border: 1px solid var(--glass-border);
+  }
+  
+  header a {
+    font-size: 0.7rem; 
+    text-transform: uppercase; 
+    letter-spacing: 1px; 
+    padding: 6px 12px; 
+    border-radius: 4px; 
+    color: var(--color-text-main); 
+    opacity: 0.8; 
+    transition: all .2s ease;
+  }
+  
+  header a:hover { 
+      opacity: 1; 
+      background: rgba(255, 255, 255, 0.1); 
+      color: var(--color-accent); 
+  }
+  
+  .lang-toggle { 
+      border-left: 1px solid rgba(255,255,255,0.1); 
+      margin-left: 4px; 
+      cursor: pointer;
+  }
+
+  /* Botão Voltar ao Topo (Mini Samot) */
+  .mini-samot {
+    position: fixed; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    top: 24px; 
+    z-index: 280;
+    font-family: var(--font-title); 
+    font-size: 18px; 
+    letter-spacing: 2px;
+    color: var(--color-text-main); 
+    opacity: 0; 
+    pointer-events: none; 
+    transition: opacity .3s ease; 
+    text-shadow: 0 0 10px rgba(0,0,0,0.5); 
+    cursor: pointer;
+  }
+  
+  .mini-samot.visible { 
+      opacity: 1; 
+      pointer-events: auto; 
+  }
+
+  /* ========================================= */
+  /* 4. HERO SECTION (HOME) */
+  /* ========================================= */
+  .hero { 
+      height: 100vh; 
+      width: 100%; 
+      display: grid; 
+      place-items: center; 
+      position: relative; 
+      padding: 0 5%; 
+  }
+  
+  .hero-card {
+    width: min(1200px, 100%); 
+    min-height: 600px;
+    display: grid; 
+    place-items: center; 
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.05));
+    border-radius: 24px; 
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6); 
+    border: 1px solid rgba(255,255,255,0.05); 
+    backdrop-filter: blur(8px); 
+    perspective: 1000px;
+  }
+  
+  .hero-content-center { 
+      text-align: center; 
+      z-index: 50; 
+  }
+  
+  .new-hero-title {
+      font-size: clamp(40px, 6vw, 80px); 
+      margin-bottom: 0.2rem;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+      opacity: 0; 
+      transition: opacity 1.5s ease;
+  }
+  
+  .hero-card.loaded .new-hero-title { 
+      opacity: 1; 
+  }
+  
+  .hero-sub-title { 
+      font-size: clamp(0.9rem, 1.5vw, 1.2rem); 
+      color: var(--muted); 
+      letter-spacing: 4px; 
+      margin-bottom: 3rem; 
+  }
+
+  /* Animação das Cartas (Stack) */
+  .card-stack { 
+      position: relative; 
+      width: 280px; 
+      height: 400px; 
+      margin-top: 20px; 
+  }
+  
+  .card {
+      position: absolute; 
+      inset: 0; 
+      border-radius: 12px; 
+      overflow: hidden;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5); 
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: all 0.4s cubic-bezier(.25,.8,.25,1); 
+      cursor: pointer;
+  }
+  
+  .card img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      filter: saturate(1.1) brightness(0.9); 
+  }
+  
+  .card.is-centered { 
+      transform: scale(1.1) !important; 
+      z-index: 1000 !important; 
+      box-shadow: 0 0 30px rgba(var(--social-hover-color-rgb), 0.4); 
+  }
+
+  /* ========================================= */
+  /* 5. SECÇÕES GERAIS */
+  /* ========================================= */
+  .section { 
+      padding: 8rem 6% 2rem 6%; 
+      max-width: 1400px; 
+      margin: 0 auto; 
+  }
+  
+  .section h2 { 
+    font-size: clamp(1.8rem, 3vw, 2.5rem); 
+    text-align: center; 
+    margin-bottom: 3rem; 
+    letter-spacing: 2px; 
+    color: var(--color-text-main); 
+    border-bottom: 1px solid rgba(255,255,255,0.05); 
+    padding-bottom: 1rem; 
+    display: inline-block; 
+    position: relative; 
+    left: 50%; 
+    transform: translateX(-50%);
+  }
+
+  /* Layout "Sobre Mim" + Jogo */
+  .about-container { 
+      display: grid; 
+      grid-template-columns: 1fr 300px; 
+      gap: 4rem; 
+      align-items: center; 
+      max-width: 1000px; 
+      margin: 0 auto; 
+  }
+  
+  .about-text p { 
+      font-size: 1.1rem; 
+      color: var(--muted); 
+      margin-bottom: 1rem; 
+      text-align: justify; 
+      text-justify: inter-word; 
+  }
+
+  /* Jogo de Reflexos */
+  .game-widget { 
+      background: rgba(0,0,0,0.3); 
+      border: 1px solid var(--glass-border); 
+      border-radius: 16px; 
+      padding: 20px; 
+      text-align: center; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+  }
+  
+  .game-screen { 
+      width: 100%; 
+      height: 150px; 
+      background: #1a1a1a; 
+      margin: 15px 0; 
+      border-radius: 8px; 
+      position: relative; 
+      cursor: pointer; 
+      display: grid; 
+      place-items: center; 
+      overflow: hidden; 
+      transition: background 0.1s; 
+  }
+  
+  .game-screen.waiting { background: #ce3838; /* Vermelho */ } 
+  .game-screen.now { background: #4caf50; /* Verde */ }
+  
+  .game-btn { 
+      padding: 8px 16px; 
+      background: rgba(255,255,255,0.1); 
+      border: none; 
+      color: white; 
+      cursor: pointer; 
+      border-radius: 4px; 
+  }
+  
+  .game-btn:hover { background: rgba(255,255,255,0.2); }
+  .game-title { font-family: var(--font-title); font-size: 0.9rem; color: var(--color-accent); }
+
+  /* ========================================= */
+  /* 6. GRID DE PROJETOS */
+  /* ========================================= */
+  .projects-grid { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+      gap: 2.5rem; 
+      padding: 1rem 0; 
+  }
+  
+  .project-card {
+      position: relative; 
+      border-radius: 16px; 
+      overflow: hidden; 
+      background: var(--glass-bg); 
+      border: 1px solid var(--glass-border);
+      transition: transform 0.3s ease, box-shadow 0.3s ease; 
+      cursor: pointer; 
+      aspect-ratio: 16/9;
+  }
+  
+  .project-card:hover { 
+      transform: translateY(-5px); 
+      box-shadow: 0 15px 30px rgba(0,0,0,0.3), 0 0 20px rgba(var(--social-hover-color-rgb), 0.2); 
+      border-color: rgba(255,255,255,0.2); 
+  }
+  
+  .project-media img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      transition: transform 0.5s ease; 
+  }
+  
+  .project-card:hover .project-media img { 
+      transform: scale(1.05); 
+  }
+
+  /* Título Estático (Antes do Hover) */
+  .project-title-static {
+      position: absolute; 
+      bottom: 0; 
+      left: 0; 
+      width: 100%; 
+      padding: 15px; 
+      background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+      font-family: var(--font-title); 
+      font-size: 0.9rem; 
+      letter-spacing: 1px; 
+      transition: opacity 0.3s;
+  }
+  
+  .project-card:hover .project-title-static { 
+      opacity: 0; 
+  }
+
+  /* Overlay (No Hover) */
+  .project-overlay {
+      position: absolute; 
+      inset: 0; 
+      background: rgba(11, 37, 74, 0.95); 
+      backdrop-filter: blur(10px);
+      display: flex; 
+      flex-direction: column; 
+      justify-content: center; 
+      align-items: center;
+      text-align: center; 
+      padding: 2rem; 
+      opacity: 0; 
       transition: opacity 0.3s ease;
   }
-  .modal.open {
-      opacity: 1; visibility: visible;
+  
+  .project-card:hover .project-overlay { 
+      opacity: 1; 
   }
-  .modal .close {
-      position: absolute; top: 20px; right: 20px; background: none; border: none;
-      color: white; font-size: 2rem; cursor: pointer; z-index: 2001; opacity: 0.7;
-      transition: opacity 0.2s;
+  
+  .project-overlay h3 { 
+      font-size: 1.2rem; 
+      margin-bottom: 0.5rem; 
+      color: var(--color-text-main); 
   }
-  .modal .close:hover {
-      opacity: 1;
+  
+  .project-overlay .role { 
+      font-size: 0.75rem; 
+      color: var(--color-accent); 
+      text-transform: uppercase; 
+      margin-bottom: 1rem; 
+      letter-spacing: 1px; 
   }
-  .modal .frame {
-      width: min(90vw, 1000px); height: min(70vh, 560px);
-      box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
-      border-radius: 8px; overflow: hidden;
+  
+  .project-overlay p { 
+      font-size: 0.8rem; 
+      color: #ccc; 
+      max-width: 40ch; 
+      line-height: 1.5; 
   }
+
+  /* ========================================= */
+  /* 7. CONTACTOS & FOOTER */
+  /* ========================================= */
+  .contact-grid { 
+      display: flex; 
+      gap: 20px; 
+      justify-content: center; 
+      flex-wrap: wrap; 
+      margin-top: 2rem;
+  }
+  
+  .contact-grid a {
+    font-size: 0.9rem; 
+    padding: 10px 20px; 
+    border: 1px solid rgba(255,255,255,0.1); 
+    border-radius: 50px;
+    transition: 0.3s; 
+    background: rgba(0,0,0,0.2);
+  }
+  
+  .contact-grid a:hover { 
+      background: var(--color-accent); 
+      color: #0b254a; 
+      border-color: var(--color-accent); 
+      box-shadow: 0 0 15px var(--color-accent); 
+  }
+  
+  footer { 
+      padding: 4rem 0; 
+      text-align: center; 
+      font-size: 0.8rem; 
+      color: rgba(255,255,255,0.3); 
+  }
+
+  /* ========================================= */
+  /* 8. MOBILE RESPONSIVE (LAYOUT IPHONE DOCK) */
+  /* ========================================= */
+  @media (max-width: 900px) {
+      .about-container { 
+          grid-template-columns: 1fr; 
+          gap: 2rem; 
+      }
+      .game-widget { 
+          max-width: 400px; 
+          margin: 0 auto; 
+      }
+      .about-text { 
+          text-align: center; 
+      } 
+      .about-text p { 
+          text-align: left; 
+      }
+  }
+  
+  @media (max-width: 768px) {
+    /* 1. Ícones Sociais (Topo) */
+    .socials {
+        left: 50%; 
+        transform: translateX(-50%); 
+        top: 15px; 
+        width: max-content;
+        padding: 5px 12px; 
+        background: rgba(11, 37, 74, 0.8); 
+        backdrop-filter: blur(10px);
+        border-radius: 50px; 
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    /* 2. Menu Navegação (Bottom Dock) */
+    header {
+        position: fixed; 
+        top: auto; 
+        right: auto; 
+        bottom: 20px; 
+        left: 50%; 
+        transform: translateX(-50%);
+        width: 92%; 
+        max-width: 400px; 
+        background: rgba(15, 23, 42, 0.9); 
+        backdrop-filter: blur(15px);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 20px; 
+        justify-content: space-between; 
+        padding: 10px;
+    }
+    
+    header a { 
+        flex: 1; 
+        text-align: center; 
+        font-size: 0.65rem; 
+        padding: 8px 2px; 
+    }
+    
+    .hero-card { 
+        min-height: 500px; 
+        padding: 2rem; 
+    }
+    
+    .new-hero-title { 
+        font-size: 3rem; 
+    }
+    
+    .mini-samot { 
+        top: 20px; 
+        right: 20px; 
+        left: auto; 
+        transform: none; 
+        font-size: 0.8rem; 
+    }
+  }
+
+  /* ========================================= */
+  /* 9. MODAL VÍDEO */
+  /* ========================================= */
+  .modal { 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0, 0, 0, 0.95); 
+      z-index: 2000; 
+      display: grid; 
+      place-items: center; 
+      opacity: 0; 
+      visibility: hidden; 
+      transition: 0.3s; 
+  }
+  
+  .modal.open { 
+      opacity: 1; 
+      visibility: visible; 
+  }
+  
+  .modal .close { 
+      position: absolute; 
+      top: 20px; 
+      right: 20px; 
+      background: none; 
+      border: none; 
+      color: white; 
+      font-size: 2rem; 
+      cursor: pointer; 
+      z-index: 2001; 
+  }
+  
+  .frame { 
+      width: 90%; 
+      max-width: 1000px; 
+      aspect-ratio: 16/9; 
+      background: #000; 
+      box-shadow: 0 0 50px rgba(255,255,255,0.1); 
+  }
+
 </style>
 </head>
 <body>
 
   <div id="progressBar"></div>
-
   <div class="loading-screen" id="loadingScreen">
     <div class="loading-text">SAMOT</div>
   </div>
 
-  <div class="socials" aria-hidden="true">
-    <a href="https://www.instagram.com/samot_____/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-    <a href="https://www.youtube.com/@samot____" target="_blank" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-    <a href="https://www.linkedin.com/in/tom%C3%A1s-vieira-b6b92134b/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-    <a href="mailto:tomasvieira04@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+  <div class="socials">
+    <a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i></a>
+    <a href="https://www.linkedin.com/in/tom%C3%A1s-vieira-b6b92134b/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+    <a href="mailto:tomasvieira04@gmail.com"><i class="fas fa-envelope"></i></a>
   </div>
 
-  <header role="banner" aria-label="menu">
-    <a href="#aboutHero" id="menuSobre">Sobre Mim</a>
+  <header>
+    <a href="#aboutHero" id="menuSobre">Sobre</a>
     <a href="#videografo" id="menuVideografo">Videógrafo</a>
-    <a href="#projetos" id="menuProjetos">Projetos</a>
+    <a href="#projetos" id="menuProjetos">Realização</a>
     <a href="#editor" id="menuEditor">Editor</a>
     <a href="#contactos" id="menuContactos">Contactos</a>
-    <a id="langToggle" class="lang-toggle" data-lang="pt">PT / EN</a>
+    <a id="langToggle" class="lang-toggle">PT</a>
   </header>
 
-  <div class="mini-samot" id="miniSamot" title="Voltar ao topo" aria-hidden="true">SAMOT</div>
+  <div class="mini-samot" id="miniSamot">SAMOT</div>
 
   <section class="hero" id="hero">
-    <div class="hero-card" role="region" aria-label="intro" id="heroCard">
+    <div class="hero-card" id="heroCard">
       <div class="hero-content-center">
         <div class="new-hero-title">SAMOT</div>
-        <div class="hero-sub-title" id="heroSubtitle">Videographer / Editor</div>
+        <div class="hero-sub-title" id="heroSubtitle">Videógrafo / Editor</div>
         
         <div class="card-stack" id="cardStack">
-            <div class="card" style="--i:1;" data-project-id="1" tabindex="0"> <img src="hero1.jpg" alt="Foto 1 de Samot"> </div>
-            <div class="card" style="--i:2;" data-project-id="2" tabindex="0"> <img src="hero2.jpg" alt="Foto 2 de Samot"> </div>
-            <div class="card" style="--i:3;" data-project-id="3" tabindex="0"> <img src="hero3.jpg" alt="Foto 3 de Samot"> </div>
-            <div class="card" style="--i:4;" data-project-id="4" tabindex="0"> <img src="hero4.jpg" alt="Foto 4 de Samot"> </div>
-            <div class="card" style="--i:5;" data-project-id="5" tabindex="0"> <img src="hero5.jpg" alt="Foto 5 de Samot"> </div>
-            <div class="card" style="--i:6;" data-project-id="6" tabindex="0"> <img src="hero6.jpg" alt="Foto 6 de Samot"> </div>
-            <div class="card" style="--i:7;" data-project-id="7" tabindex="0"> <img src="hero7.jpg" alt="Foto 7 de Samot"> </div>
+            <div class="card" style="--i:1;" data-id="1"> <img src="hero1.jpg" alt="Samot 1"> </div>
+            <div class="card" style="--i:2;" data-id="2"> <img src="hero2.jpg" alt="Samot 2"> </div>
+            <div class="card" style="--i:3;" data-id="3"> <img src="hero3.jpg" alt="Samot 3"> </div>
+            <div class="card" style="--i:4;" data-id="4"> <img src="hero4.jpg" alt="Samot 4"> </div>
+            <div class="card" style="--i:5;" data-id="5"> <img src="hero5.jpg" alt="Samot 5"> </div>
         </div>
       </div>
     </div>
@@ -453,708 +666,462 @@
   <main>
     <section class="section" id="aboutHero">
       <h2 id="titleSobre">Sobre Mim</h2>
-      <div class="about-hero-content">
-          <p id="pSobre">Tomás Vieira, jovem adulto, artista part-time. Videógrafo e editor com experiência no Porto Canal / FC Porto, estudante de Comunicação Audiovisual e Multimédia na ULP.</p>
+      <div class="about-container">
+          <div class="about-text">
+              <p id="pSobre1">Tomás Vieira, 21 anos. Navego entre o caos da juventude e a disciplina profissional. Videógrafo com percurso no Porto Canal e FC Porto, atualmente a finalizar a licenciatura em Comunicação Audiovisual na ULP.</p>
+              <p id="pSobre2">O meu foco não é apenas captar imagens, mas construir narrativas visuais que respirem. Seja na pressão do futebol ou na intimidade de um documentário experimental, procuro sempre o ângulo que ninguém está a ver.</p>
+          </div>
+          
+          <div class="game-widget">
+              <div class="game-title" id="gameTitle">Teste de Reflexos</div>
+              <p style="font-size:0.7rem; color:#aaa; margin-bottom:10px;" id="gameDesc">Videógrafos precisam de foco rápido. <br>Clica quando ficar VERDE.</p>
+              <div class="game-screen waiting" id="gameScreen"> 
+                  <span class="game-msg" id="gameMsg">Clica para começar</span> 
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:0.7rem; color:var(--color-text-main);">Best: <span id="bestTime">--</span>ms</span>
+                  <button class="game-btn" id="resetGame">Reset</button>
+              </div>
+          </div>
       </div>
     </section>
     
     <section class="section" id="videografo">
-      <h2 id="titleVideografo">Trabalhos como Videógrafo</h2>
+      <h2 id="titleVideografo">Videógrafo</h2>
       <div class="projects-grid">
         
-        <div class="project-card" data-id="gZWty7tHZlg">
-          <div class="project-title-top">ADEPTOS FC PORTO VS VITÓRIA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/gZWty7tHZlg/maxresdefault.jpg" alt="Clip FC Porto vs Vitória SC">
-          </div>
+        <div class="project-card" data-vid="gZWty7tHZlg">
+          <div class="project-media"><img src="https://img.youtube.com/vi/gZWty7tHZlg/maxresdefault.jpg"></div>
+          <div class="project-title-static">FC PORTO: BANCADA</div>
           <div class="project-overlay">
-            <div class="role" data-key="gZWty7tHZlg_role">Clip de Cobertura (2025)</div>
-            <h3>COBERTURA ADEPTOS</h3>
-            <p data-key="gZWty7tHZlg">Clip de adeptos do Futebol Clube do Porto vs Vitória. Gravado e editado por mim, com foco na emoção e na experiência da bancada. Um trabalho de alta pressão.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="EfF95Yf0vxU">
-          <div class="project-title-top">COMPILAÇÃO DE CLIPES</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/EfF95Yf0vxU/maxresdefault.jpg" alt="Compilação de Clips Porto Canal">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="EfF95Yf0vxU_role">Porto Canal (2025)</div>
-            <h3>TRABALHO EM BROADCAST</h3>
-            <p data-key="EfF95Yf0vxU">Clipes maioritariamente gravados por mim para o Porto Canal e todos editados por mim. Abrange diversas áreas do trabalho de campo e pós-produção.</p>
+            <div class="role" data-key="role_1">Cobertura (2025)</div>
+            <h3>ADEPTOS EM JOGO</h3>
+            <p data-key="desc_1">Captura da atmosfera intensa no Dragão. Foco na emoção crua.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="EsjzYQ1qLhg">
-          <div class="project-title-top">KOTARO NAGATA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/EsjzYQ1qLhg/maxresdefault.jpg" alt="Kotaro Nagata Raw Footage">
-          </div>
+        <div class="project-card" data-vid="EfF95Yf0vxU">
+          <div class="project-media"><img src="https://img.youtube.com/vi/EfF95Yf0vxU/maxresdefault.jpg"></div>
+          <div class="project-title-static">PORTO CANAL</div>
           <div class="project-overlay">
-            <div class="role" data-key="EsjzYQ1qLhg_role">Raw Footage (2025)</div>
-            <h3>CONTRATAÇÃO (CÂMERA)</h3>
-            <p data-key="EsjzYQ1qLhg">Raw footage das imagens do dia da contratação de Kotaro Nagata. Gravado integralmente por mim como videógrafo, focando na qualidade de captação.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="DUMMY_3">
-          <div class="project-title-top">HIGHLIGHTS DE JOGO DO PORTO</div>
-          <div class="project-media">
-             <img src="7.jpg" alt="Highlights Jogo FC Porto">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="DUMMY_3_role">Highlights de Jogo (2025)</div>
-            <h3>JOGO FC PORTO VS VITÓRIA</h3>
-            <p data-key="DUMMY_3">Lances do jogo Futebol Clube do Porto vs Vitória. Gravado e editado por mim. Demonstração de captação em alta pressão e edição de momentos chave.</p>
+            <div class="role" data-key="role_3">Broadcast (2025)</div>
+            <h3>REPORTAGEM TV</h3>
+            <p data-key="desc_3">Compilação de trabalhos de campo e cobertura desportiva.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="1O0X5esNQv4">
-          <div class="project-title-top">RENOVAÇÃO RODRIGO MORA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/1O0X5esNQv4/maxresdefault.jpg" alt="Renovação Rodrigo Mora">
-          </div>
+        <div class="project-card" data-vid="EsjzYQ1qLhg">
+          <div class="project-media"><img src="https://img.youtube.com/vi/EsjzYQ1qLhg/maxresdefault.jpg"></div>
+          <div class="project-title-static">KOTARO NAGATA</div>
           <div class="project-overlay">
-            <div class="role" data-key="1O0X5esNQv4_role">Clip Oficial (2025)</div>
-            <h3>EDIÇÃO DE COMUNICAÇÃO</h3>
-            <p data-key="1O0X5esNQv4">Edição do clip de renovação de Rodrigo Mora. Um trabalho de comunicação institucional que exige ritmo e clareza na mensagem visual.</p>
+            <div class="role" data-key="role_2">Raw Footage (2025)</div>
+            <h3>CHEGADA OFICIAL</h3>
+            <p data-key="desc_2">Imagens "brutas" do dia de contratação. Demonstração técnica.</p>
           </div>
+        </div>
+
+        <div class="project-card" data-vid="1O0X5esNQv4">
+            <div class="project-media"><img src="https://img.youtube.com/vi/1O0X5esNQv4/maxresdefault.jpg"></div>
+            <div class="project-title-static">RODRIGO MORA</div>
+            <div class="project-overlay">
+              <div class="role" data-key="role_vd_4">Clip Oficial (2025)</div>
+              <h3>RENOVAÇÃO</h3>
+              <p data-key="desc_vd_4">Ritmo e clareza na mensagem visual para comunicação institucional.</p>
+            </div>
         </div>
 
       </div>
     </section>
     
     <section class="section" id="projetos">
-      <h2 id="titleProjetos">Projetos Pessoais (Realizador)</h2>
+      <h2 id="titleProjetos">Realização</h2>
       <div class="projects-grid">
         
-        <div class="project-card" data-id="RU6TjLccPsU">
-          <div class="project-title-top">JOVENS ADULTOS</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/RU6TjLccPsU/maxresdefault.jpg" alt="Jovens Adultos Thumbnail">
-          </div>
+        <div class="project-card" data-vid="RU6TjLccPsU">
+            <div class="project-media"><img src="https://img.youtube.com/vi/RU6TjLccPsU/maxresdefault.jpg"></div>
+            <div class="project-title-static">JOVENS ADULTOS</div>
+            <div class="project-overlay">
+              <div class="role" data-key="role_pj_1">Documentário (2023)</div>
+              <h3>CULTURA URBANA</h3>
+              <p data-key="desc_pj_1">Moda e skate na cidade do Porto. Um olhar geracional.</p>
+            </div>
+        </div>
+
+        <div class="project-card" data-vid="rZnV_EgftCo">
+          <div class="project-media"><img src="https://img.youtube.com/vi/rZnV_EgftCo/maxresdefault.jpg"></div>
+          <div class="project-title-static">BRUNO NUNO</div>
           <div class="project-overlay">
-            <div class="role" data-key="RU6TjLccPsU_role">Documentário (2023)</div>
-            <h3>CULTURA E MODA</h3>
-            <p data-key="RU6TjLccPsU">Função: Co-Realizador e Editor. Documentário feito por jovens adultos sobre jovens adultos. Trabalho experimental sobre moda e skate na cidade do Porto.</p>
+            <div class="role" data-key="role_6">Ficção / Comédia (2024)</div>
+            <h3>O HOMEM CAOS</h3>
+            <p data-key="desc_6">A vida absurda de Bruno Nuno. Sátira sobre pequenos fracassos.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="rZnV_EgftCo">
-          <div class="project-title-top">BRUNO NUNO</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/rZnV_EgftCo/maxresdefault.jpg" alt="Bruno Nuno Thumbnail">
-          </div>
+        <div class="project-card" data-vid="zwHU_jOtvtE">
+          <div class="project-media"><img src="https://img.youtube.com/vi/zwHU_jOtvtE/maxresdefault.jpg"></div>
+          <div class="project-title-static">WHY STOP NOW?</div>
           <div class="project-overlay">
-            <div class="role" data-key="rZnV_EgftCo_role">Curta-metragem (2024)</div>
-            <h3>COMÉDIA SATÍRICA</h3>
-            <p data-key="rZnV_EgftCo">Função: Realizador / Argumento. No seu mundo caótico, Bruno Nuno é um homem que se perde entre absurdos do quotidiano, pequenos fracassos e ambições exageradas.</p>
+            <div class="role" data-key="role_5">Documentário (2025)</div>
+            <h3>RESISTÊNCIA</h3>
+            <p data-key="desc_5">A alma do Centro Comercial STOP. Um tributo à música.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="zwHU_jOtvtE">
-          <div class="project-title-top">WHY STOP NOW?</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/zwHU_jOtvtE/maxresdefault.jpg" alt="Why Stop Now Thumbnail">
-          </div>
+        <div class="project-card" data-vid="Zj2FeeNroTc">
+          <div class="project-media"><img src="https://img.youtube.com/vi/Zj2FeeNroTc/maxresdefault.jpg"></div>
+          <div class="project-title-static">FUMAR MATA</div>
           <div class="project-overlay">
-            <div class="role" data-key="zwHU_jOtvtE_role">Documentário (2025)</div>
-            <h3>CENTRO COMERCIAL STOP</h3>
-            <p data-key="zwHU_jOtvtE">Função: Pesquisa / Pós-produção. Apresentado no Multiplex Cinema Batalha. Documentário sobre o Centro Comercial STOP, que simboliza a resistência cultural e musical do Porto.</p>
+            <div class="role" data-key="role_4">Curta Experimental (2025)</div>
+            <h3>DRAMA VISUAL</h3>
+            <p data-key="desc_4">Um olhar íntimo sobre a tensão do silêncio.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="Zj2FeeNroTc">
-          <div class="project-title-top">FUMAR MATA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/Zj2FeeNroTc/maxresdefault.jpg" alt="Fumar Mata Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="Zj2FeeNroTc_role">Curta-metragem (2025)</div>
-            <h3>DRAMA EXPERIMENTAL</h3>
-            <p data-key="Zj2FeeNroTc">Função: Realizador / Diretor de Fotografia. Apresentado no Multiplex Cinema Batalha. Um olhar íntimo sobre um relacionamento, explorando a tensão e as fragilidades humanas.</p>
-          </div>
+        <div class="project-card" data-vid="FucYalKzpRs">
+            <div class="project-media"><img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg"></div>
+            <div class="project-title-static">VIVER EM PART-TIME</div>
+            <div class="project-overlay">
+              <div class="role" data-key="role_pj_5">Experimental (2023)</div>
+              <h3>ROMANCE MUDO</h3>
+              <p data-key="desc_pj_5">Curta-metragem focada exclusivamente na narrativa visual.</p>
+            </div>
         </div>
 
-        <div class="project-card" data-id="FucYalKzpRs">
-          <div class="project-title-top">VIVER EM PART-TIME</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="FucYalKzpRs_role">Projeto Experimental (2023)</div>
-            <h3>ROMANCE VISUAL</h3>
-            <p data-key="FucYalKzpRs">Função: Realizador / Editor. Um romance sem falas nem desfecho. Curta-metragem experimental focada na narrativa visual e na construção de ambientes.</p>
-          </div>
+        <div class="project-card" data-vid="JfjUF5nuwd0">
+            <div class="project-media"><img src="https://img.youtube.com/vi/JfjUF5nuwd0/maxresdefault.jpg"></div>
+            <div class="project-title-static">PINGUINS</div>
+            <div class="project-overlay">
+              <div class="role" data-key="role_pj_6">Sketch (2024)</div>
+              <h3>COMÉDIA</h3>
+              <p data-key="desc_pj_6">Situações humorísticas e absurdas. Despretensioso e cómico.</p>
+            </div>
         </div>
 
-        <div class="project-card" data-id="JfjUF5nuwd0">
-          <div class="project-title-top">PINGUINS</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/JfjUF5nuwd0/maxresdefault.jpg" alt="Pinguins Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="JfjUF5nuwd0_role">Sketch (2024)</div>
-            <h3>COMÉDIA</h3>
-            <p data-key="JfjUF5nuwd0">Função: Ator / Realizador / Argumentista. Um sketch de comédia despretensiosa sobre pinguins, focado em situações humorísticas e absurdas.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="DUMMY_2">
-          <div class="project-title-top">SAMOT21</div>
-          <div class="project-media">
-             <img src="4.jpg" alt="Samot21 Thumbnail">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="DUMMY_2_role">Documentário Pessoal (2025)</div>
-            <h3>DOCUMENTÁRIO CAÓTICO</h3>
-            <p data-key="DUMMY_2">Função: Realizador / Editor. Documentário caótico e imersivo sobre a festa do meu 21º aniversário. Uma exploração de narrativa documental rápida e imersiva.</p>
-          </div>
-        </div>
-        
       </div>
     </section>
     
     <section class="section" id="editor">
-      <h2 id="titleEditor">Trabalhos como Editor</h2>
+      <h2 id="titleEditor">Editor</h2>
       <div class="projects-grid">
 
-        <div class="project-card" data-id="P4YQVZSMGjo">
-          <div class="project-title-top">CLIPES ADEPTOS FUTEBOL CLUBE</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/P4YQVZSMGjo/maxresdefault.jpg" alt="Clipes Adeptos Futebol Clube">
-          </div>
+        <div class="project-card" data-vid="P4YQVZSMGjo">
+            <div class="project-media"><img src="https://img.youtube.com/vi/P4YQVZSMGjo/maxresdefault.jpg"></div>
+            <div class="project-title-static">ADEPTOS: CLIPS</div>
+            <div class="project-overlay">
+              <div class="role" data-key="role_ed_1">Edição Rápida (2025)</div>
+              <h3>ENERGIA PURA</h3>
+              <p data-key="desc_ed_1">Foco na dinâmica e energia do público em alta competição.</p>
+            </div>
+        </div>
+
+        <div class="project-card" data-vid="GUck3Raa4D4">
+          <div class="project-media"><img src="https://img.youtube.com/vi/GUck3Raa4D4/maxresdefault.jpg"></div>
+          <div class="project-title-static">FUTEBOL FEMININO</div>
           <div class="project-overlay">
-            <div class="role" data-key="P4YQVZSMGjo_role">Edição de Clips (2025)</div>
-            <h3>ADEPTOS EM DESTAQUE</h3>
-            <p data-key="P4YQVZSMGjo">Clipes de adeptos editados por mim, com foco na dinâmica e energia do público em contexto de alta competição.</p>
+            <div class="role" data-key="role_7">Comunicação Oficial (2025)</div>
+            <h3>PROMO</h3>
+            <p data-key="desc_7">Edição rítmica para apresentação oficial.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="GUck3Raa4D4">
-          <div class="project-title-top">CLIP CONTRATAÇÃO JOGADORA</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/GUck3Raa4D4/maxresdefault.jpg" alt="Clip contratação jogadora">
-          </div>
+        <div class="project-card" data-vid="m_3-wbV15Tk">
+          <div class="project-media"><img src="https://img.youtube.com/vi/m_3-wbV15Tk/maxresdefault.jpg"></div>
+          <div class="project-title-static">SUCCESSION EDIT</div>
           <div class="project-overlay">
-            <div class="role" data-key="GUck3Raa4D4_role">Comunicação Oficial (2025)</div>
-            <h3>FUTEBOL FEMININO FC PORTO</h3>
-            <p data-key="GUck3Raa4D4">Clip oficial da contratação do Futebol Feminino do Futebol Clube do Porto, gravado e editado por mim. Demonstração de edição para comunicação institucional.</p>
+            <div class="role" data-key="role_8">Motion Graphics (2025)</div>
+            <h3>TIPOGRAFIA 2D</h3>
+            <p data-key="desc_8">Exercício de estilo e ritmo com tipografia cinética.</p>
           </div>
         </div>
         
-        <div class="project-card" data-id="FucYalKzpRs_editor">
-          <div class="project-title-top">VIVER PART-TIME (TIKTOK)</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg" alt="Viver em Part-time TikTok">
-          </div>
+        <div class="project-card" data-vid="54ELYGuWrPw">
+          <div class="project-media"><img src="https://img.youtube.com/vi/54ELYGuWrPw/maxresdefault.jpg"></div>
+          <div class="project-title-static">FUMAR MATA (TIKTOK)</div>
           <div class="project-overlay">
-            <div class="role" data-key="FucYalKzpRs_role_2">Edição Vertical (2025)</div>
-            <h3>REEDIÇÃO PARA REDES SOCIAIS</h3>
-            <p data-key="FucYalKzpRs_2">Reedição do meu projeto Viver em Part-time para um formato mais atual e vertical, adaptado para plataformas como o TikTok e Reels.</p>
-          </div>
-        </div>
-        
-        <div class="project-card" data-id="54ELYGuWrPw">
-          <div class="project-title-top">FUMAR MATA (TIKTOK)</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/54ELYGuWrPw/maxresdefault.jpg" alt="Fumar Mata TikTok">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="54ELYGuWrPw_role">Edição Vertical (2025)</div>
-            <h3>ADAPTAÇÃO PARA TIKTOK</h3>
-            <p data-key="54ELYGuWrPw">Reedição do meu projeto Fumar Mata para um tom mais atual e um formato vertical otimizado para a audiência do TikTok.</p>
+            <div class="role" data-key="role_9">Vertical (2025)</div>
+            <h3>RE-EDIT</h3>
+            <p data-key="desc_9">Adaptação da curta para consumo rápido mobile.</p>
           </div>
         </div>
 
-        <div class="project-card" data-id="m_3-wbV15Tk">
-          <div class="project-title-top">CLIP EDIT “SUCCESSION”</div>
-          <div class="project-media">
-             <img src="https://img.youtube.com/vi/m_3-wbV15Tk/maxresdefault.jpg" alt="Succession clip edit">
-          </div>
-          <div class="project-overlay">
-            <div class="role" data-key="m_3-wbV15Tk_role">Clip de Tendência (2025)</div>
-            <h3>EDIÇÃO 2D DE LETRAS</h3>
-            <p data-key="m_3-wbV15Tk">Edit de letras 2D, demonstrando domínio num formato de clip muito usado atualmente em redes sociais, com foco em ritmo e design gráfico.</p>
-          </div>
+        <div class="project-card" data-vid="FucYalKzpRs">
+            <div class="project-media"><img src="https://img.youtube.com/vi/FucYalKzpRs/maxresdefault.jpg"></div>
+            <div class="project-title-static">PART-TIME (TIKTOK)</div>
+            <div class="project-overlay">
+              <div class="role" data-key="role_ed_5">Vertical (2025)</div>
+              <h3>RE-EDIT</h3>
+              <p data-key="desc_ed_5">Adaptação de narrativa visual para formato Reels.</p>
+            </div>
         </div>
-        
+
       </div>
     </section>
 
     <section class="section" id="contactos">
       <h2 id="titleContactos">Contactos</h2>
       <div class="contact-grid">
-        <a href="https://www.instagram.com/samot_____/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
-        <a href="https://www.youtube.com/@samot____" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
-        <a href="https://www.linkedin.com/in/tom%C3%A1s-vieira-b6b92134b/" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-        <a href="mailto:tomasvieira04@gmail.com" id="contactEmail" data-email="tomasvieira04@gmail.com"><i class="fas fa-envelope"></i> Email</a>
+        <a href="https://www.instagram.com/samot_____/" target="_blank">Instagram</a>
+        <a href="https://www.linkedin.com/in/tom%C3%A1s-vieira-b6b92134b/" target="_blank">LinkedIn</a>
+        <a href="mailto:tomasvieira04@gmail.com">tomasvieira04@gmail.com</a>
       </div>
     </section>
 
-    <footer id="footerText">© 2025 SAMOT — Todos os direitos reservados</footer>
+    <footer>
+      <span id="footerText">© 2025 SAMOT — Criado no Porto.</span>
+    </footer>
 
   </main>
 
-  <div class="modal" id="modal" role="dialog" aria-hidden="true">
-    <button class="close" id="modalClose" aria-label="Fechar">✕</button>
+  <div class="modal" id="modal">
+    <button class="close" id="modalClose">✕</button>
     <div class="frame" id="modalFrame"></div>
   </div>
 
 <script>
-  /* ---------- Variáveis Globais ---------- */
-  const heroCard = document.getElementById('heroCard'); 
-  const mini = document.getElementById('miniSamot');
-  const loadingScreen = document.getElementById('loadingScreen');
-  const cardStack = document.getElementById('cardStack'); 
-  const cards = document.querySelectorAll('#cardStack .card'); 
-  
-  // Variáveis do idioma
-  const langToggle = document.getElementById('langToggle');
-  let currentLang = 'pt'; 
-  const progressBar = document.getElementById('progressBar');
+  /* ========================================= */
+  /* 1. LÓGICA DE LOADING & SCROLL BAR */
+  /* ========================================= */
+  window.addEventListener('load', () => {
+    const bar = document.getElementById('progressBar');
+    bar.classList.add('visible'); 
+    bar.style.width = '100%';
+    
+    setTimeout(() => {
+        document.getElementById('loadingScreen').classList.add('hidden');
+        document.getElementById('heroCard').classList.add('loaded');
+        bar.classList.remove('visible');
+        initCardStack();
+    }, 600);
+  });
 
-  /* ---------- DADOS DE TRADUÇÃO (MANTIDOS) ---------- */
+  window.addEventListener('scroll', () => {
+     const scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+     const bar = document.getElementById('progressBar');
+     
+     if(scrollTop > 50) { 
+         bar.classList.add('visible'); 
+         bar.style.width = (scrollTop / scrollHeight) * 100 + "%"; 
+         document.getElementById('miniSamot').classList.add('visible'); 
+     } else { 
+         bar.classList.remove('visible'); 
+         document.getElementById('miniSamot').classList.remove('visible'); 
+     }
+  });
+
+  document.getElementById('miniSamot').addEventListener('click', () => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+  });
+
+  /* ========================================= */
+  /* 2. CARD ANIMATION (HERO) */
+  /* ========================================= */
+  function initCardStack(){
+      const cards = document.querySelectorAll('.card');
+      
+      cards.forEach((card, i) => {
+         // Define a posição inicial das cartas
+         card.style.transform = `rotate(${(i-2)*3}deg) translateX(${(i-2)*10}px)`;
+         card.style.zIndex = 10 - Math.abs(i-2);
+         
+         // Evento: Passar o rato por cima
+         card.addEventListener('mouseenter', () => {
+             card.classList.add('is-centered');
+             cards.forEach((c, j) => { 
+                 if(i !== j) {
+                     // Afasta as outras cartas
+                     c.style.transform = `translateX(${(j-i)*60}px) scale(0.9) rotate(${(j-i)*5}deg)`; 
+                 }
+             });
+         });
+
+         // Evento: Tirar o rato
+         card.addEventListener('mouseleave', () => {
+             cards.forEach(c => c.classList.remove('is-centered'));
+             // Reset posições
+             cards.forEach((c, k) => {
+                 c.style.transform = `rotate(${(k-2)*3}deg) translateX(${(k-2)*10}px)`;
+             });
+         });
+      });
+  }
+
+  /* ========================================= */
+  /* 3. LÓGICA DO JOGO (REFLEXOS) */
+  /* ========================================= */
+  const screen = document.getElementById('gameScreen');
+  const msg = document.getElementById('gameMsg');
+  const bestDisplay = document.getElementById('bestTime');
+  
+  let gameState = 'idle'; // estados: idle, waiting, ready, result
+  let startTime;
+  let timeoutId;
+  let bestTime = localStorage.getItem('samot_best_time') || 9999;
+  
+  if(bestTime < 9999) bestDisplay.textContent = bestTime;
+
+  screen.addEventListener('click', () => {
+      if(gameState === 'idle' || gameState === 'result') {
+          gameState = 'waiting'; 
+          screen.className = 'game-screen waiting'; 
+          msg.textContent = '...';
+          
+          // Tempo aleatório entre 1s e 3.5s
+          timeoutId = setTimeout(() => { 
+              gameState = 'ready'; 
+              screen.className = 'game-screen now'; 
+              msg.textContent = 'CLICA!'; 
+              startTime = Date.now(); 
+          }, 1000 + Math.random() * 2500);
+
+      } else if(gameState === 'waiting') {
+          // Clicou cedo demais
+          clearTimeout(timeoutId); 
+          gameState = 'result'; 
+          msg.textContent = 'Cedo demais!'; 
+          screen.className = 'game-screen';
+
+      } else if(gameState === 'ready') {
+          // Sucesso
+          const reactionTime = Date.now() - startTime; 
+          gameState = 'result'; 
+          msg.textContent = reactionTime + 'ms'; 
+          screen.className = 'game-screen';
+          
+          if(reactionTime < bestTime) { 
+              bestTime = reactionTime; 
+              bestDisplay.textContent = reactionTime; 
+              localStorage.setItem('samot_best_time', reactionTime); 
+          }
+      }
+  });
+
+  document.getElementById('resetGame').addEventListener('click', (e) => { 
+      e.stopPropagation(); 
+      clearTimeout(timeoutId); 
+      gameState = 'idle'; 
+      msg.textContent = 'Start'; 
+      screen.className = 'game-screen'; 
+  });
+
+  /* ========================================= */
+  /* 4. TRADUÇÕES (PT / EN) */
+  /* ========================================= */
   const translations = {
       'en': {
-          'menuSobre': 'About Me',
-          'menuVideografo': 'Videographer',
-          'menuProjetos': 'Projects',
-          'menuEditor': 'Editor',
-          'menuContactos': 'Contact',
-          'heroSubtitle': 'Videographer / Editor',
-          'titleSobre': 'About Me',
-          'titleVideografo': 'Work as Videographer',
-          'titleProjetos': 'Personal Projects (Director)', 
-          'titleEditor': 'Work as Editor',
-          'titleContactos': 'Contact',
-          'pSobre': 'Tomás Vieira, young adult, part-time artist. Videographer and editor with experience at Porto Canal / FC Porto, student of Audiovisual and Multimedia Communication at ULP.',
-          'footerText': '© 2025 SAMOT — All rights reserved',
+          'menuSobre': 'About', 'menuVideografo': 'Videographer', 'menuProjetos': 'Directing', 'menuEditor': 'Editor', 'menuContactos': 'Contact',
+          'heroSubtitle': 'Videographer / Editor', 'titleSobre': 'About Me', 'titleVideografo': 'Videographer', 'titleProjetos': 'Directing', 'titleEditor': 'Editor', 'titleContactos': 'Get in Touch',
+          'pSobre1': 'Tomás Vieira, 21. Navigating between the chaos of youth and professional discipline. Videographer with background at Porto Canal & FC Porto.',
+          'pSobre2': 'My focus isn\'t just capturing images, but building visual narratives that breathe. I look for the angle no one else is seeing.',
+          'gameTitle': 'Reflex Test', 'gameDesc': 'Click on GREEN.',
+          'footerText': '© 2025 SAMOT — Created in Porto.',
           
-          'p_roles': {
-              'gZWty7tHZlg_role': 'Coverage Clip (2025)',
-              'EfF95Yf0vxU_role': 'Porto Canal (2025)',
-              'EsjzYQ1qLhg_role': 'Raw Footage (2025)',
-              'DUMMY_3_role': 'Game Highlights (2025)',
-              '1O0X5esNQv4_role': 'Official Clip (2025)',
-              'RU6TjLccPsU_role': 'Documentary (2023)',
-              'rZnV_EgftCo_role': 'Short Film (2024)',
-              'zwHU_jOtvtE_role': 'Documentary (2025)',
-              'Zj2FeeNroTc_role': 'Short Film (2025)',
-              'FucYalKzpRs_role': 'Experimental Project (2023)',
-              'JfjUF5nuwd0_role': 'Sketch (2024)',
-              'DUMMY_2_role': 'Personal Documentary (2025)',
-              'P4YQVZSMGjo_role': 'Clips Editing (2025)',
-              'GUck3Raa4D4_role': 'Official Communication (2025)',
-              'FucYalKzpRs_role_2': 'Vertical Edit (2025)',
-              '54ELYGuWrPw_role': 'Vertical Edit (2025)',
-              'm_3-wbV15Tk_role': 'Trend Clip (2025)',
-          },
-          'p_descs': {
-              'gZWty7tHZlg': 'Clip of FC Porto vs Vitória fans. Filmed and edited by me, focusing on the emotion and experience of the stands. High-pressure work.',
-              'EfF95Yf0vxU': 'Clips mostly filmed by me for Porto Canal and all edited by me. Covers various areas of field work and post-production.',
-              'EsjzYQ1qLhg': 'Raw footage of the signing day images of Kotaro Nagata. Entirely filmed by me as a videographer, focusing on capture quality.',
-              'DUMMY_3': 'Moments from the FC Porto vs Vitória game. Filmed and edited by me. Demonstration of high-pressure capture and key moment editing.',
-              '1O0X5esNQv4': 'Editing of Rodrigo Mora\'s renewal clip. Institutional communication work that requires rhythm and clarity in the visual message.',
-              'RU6TjLccPsU': 'Role: Co-Director and Editor. Documentary made by young adults about young adults. Experimental work about fashion and skateboarding in Porto.',
-              'rZnV_EgftCo': 'Role: Director / Script. In his chaotic world, Bruno Nuno is a man lost between the absurdities of the daily life, small failures, and exaggerated ambitions.',
-              'zwHU_jOtvtE': 'Role: Research / Post-production. Presented at Multiplex Cinema Batalha. Documentary about the STOP Commercial Center, which symbolizes the cultural and musical resistance of Porto.',
-              'Zj2FeeNroTc': 'Role: Director / Director of Photography. Presented at Multiplex Cinema Batalha. An intimate look at a relationship, exploring tension and human fragility.',
-              'FucYalKzpRs': 'Role: Director / Editor. A romance without words or ending. Experimental short film focused on visual narrative and environment building.',
-              'JfjUF5nuwd0': 'Role: Actor / Director / Scriptwriter. A casual comedy sketch about penguins, focused on humorous and absurd situations.',
-              'DUMMY_2': 'Role: Director / Editor. Chaotic and immersive documentary about my 21st birthday party. An exploration of fast and immersive documentary narrative.',
-              'P4YQVZSMGjo': 'Fan clips edited by me, focusing on the dynamism and energy of the public in a high-competition context.',
-              'GUck3Raa4D4': 'Official clip of the signing of the FC Porto Women\'s Football player, filmed and edited by me. Demonstration of editing for institutional communication.',
-              'FucYalKzpRs_2': 'Re-editing of my project Living Part-time into a more current, vertical format, adapted for platforms like TikTok and Reels.',
-              '54ELYGuWrPw': 'Re-editing of my project Fumar Mata into a more current, vertical format, adapted for platforms like TikTok and Reels.',
-              'm_3-wbV15Tk': 'Edit de letras 2D, demonstrating mastery of a clip format widely used today on social media, focusing on rhythm and graphic design.',
-          }
+          'role_1': 'Coverage (2025)', 'desc_1': 'Intense atmosphere at Dragão. Raw emotion.',
+          'role_2': 'Raw Footage (2025)', 'desc_2': 'Signing day raw images. Technical demo.',
+          'role_3': 'Broadcast (2025)', 'desc_3': 'Field work and sports coverage compilation.',
+          'role_vd_4': 'Official Clip (2025)', 'desc_vd_4': 'Rhythm and clarity for institutional communication.',
+          
+          'role_pj_1': 'Documentary (2023)', 'desc_pj_1': 'Fashion and skate in Porto. A generational look.',
+          'role_6': 'Fiction / Comedy (2024)', 'desc_6': 'Bruno Nuno\'s absurd life. Satire on failures.',
+          'role_5': 'Documentary (2025)', 'desc_5': 'STOP Mall soul. A tribute to music.',
+          'role_4': 'Experimental (2025)', 'desc_4': 'An intimate look at the tension of silence.',
+          'role_pj_5': 'Experimental (2023)', 'desc_pj_5': 'Short film focused exclusively on visual narrative.',
+          'role_pj_6': 'Sketch (2024)', 'desc_pj_6': 'Humorous and absurd situations.',
+
+          'role_ed_1': 'Fast Edit (2025)', 'desc_ed_1': 'Focus on crowd dynamics and energy.',
+          'role_7': 'Official Comm (2025)', 'desc_7': 'Rhythmic editing for official presentation.',
+          'role_8': 'Motion Graphics (2025)', 'desc_8': 'Style exercise with kinetic typography.',
+          'role_9': 'Vertical (2025)', 'desc_9': 'Adapting short film for mobile consumption.',
+          'role_ed_5': 'Vertical (2025)', 'desc_ed_5': 'Adapting visual narrative for Reels.',
+      },
+      'pt': {
+          'menuSobre': 'Sobre', 'menuVideografo': 'Videógrafo', 'menuProjetos': 'Realização', 'menuEditor': 'Editor', 'menuContactos': 'Contactos',
+          'heroSubtitle': 'Videógrafo / Editor', 'titleSobre': 'Sobre Mim', 'titleVideografo': 'Videógrafo', 'titleProjetos': 'Realização', 'titleEditor': 'Editor', 'titleContactos': 'Contactos',
+          'pSobre1': 'Tomás Vieira, 21 anos. Navego entre o caos da juventude e a disciplina profissional. Videógrafo com percurso no Porto Canal e FC Porto.',
+          'pSobre2': 'O meu foco não é apenas captar imagens, mas construir narrativas visuais que respirem. Procuro sempre o ângulo que ninguém está a ver.',
+          'gameTitle': 'Teste de Reflexos', 'gameDesc': 'Clica quando ficar VERDE.',
+          'footerText': '© 2025 SAMOT — Criado no Porto.',
+          
+          'role_1': 'Cobertura (2025)', 'desc_1': 'Captura da atmosfera intensa no Dragão. Foco na emoção crua.',
+          'role_2': 'Raw Footage (2025)', 'desc_2': 'Imagens "brutas" do dia de contratação. Demonstração técnica.',
+          'role_3': 'Broadcast (2025)', 'desc_3': 'Compilação de trabalhos de campo e cobertura desportiva.',
+          'role_vd_4': 'Clip Oficial (2025)', 'desc_vd_4': 'Ritmo e clareza na mensagem visual para comunicação institucional.',
+
+          'role_pj_1': 'Documentário (2023)', 'desc_pj_1': 'Moda e skate na cidade do Porto. Um olhar geracional.',
+          'role_6': 'Ficção / Comédia (2024)', 'desc_6': 'A vida absurda de Bruno Nuno. Sátira sobre pequenos fracassos.',
+          'role_5': 'Documentário (2025)', 'desc_5': 'A alma do Centro Comercial STOP. Um tributo à música.',
+          'role_4': 'Curta Experimental (2025)', 'desc_4': 'Um olhar íntimo sobre a tensão do silêncio.',
+          'role_pj_5': 'Experimental (2023)', 'desc_pj_5': 'Curta-metragem focada exclusivamente na narrativa visual.',
+          'role_pj_6': 'Sketch (2024)', 'desc_pj_6': 'Situações humorísticas e absurdas. Despretensioso e cómico.',
+
+          'role_ed_1': 'Edição Rápida (2025)', 'desc_ed_1': 'Foco na dinâmica e energia do público em alta competição.',
+          'role_7': 'Comunicação Oficial (2025)', 'desc_7': 'Edição rítmica para apresentação oficial.',
+          'role_8': 'Motion Graphics (2025)', 'desc_8': 'Exercício de estilo e ritmo com tipografia cinética.',
+          'role_9': 'Vertical (2025)', 'desc_9': 'Adaptação da curta para consumo rápido mobile.',
+          'role_ed_5': 'Vertical (2025)', 'desc_ed_5': 'Adaptação de narrativa visual para formato Reels.',
       }
   };
 
-
-  /* ---------- LOADING SCREEN & INITIALIZATION ---------- */
-  window.addEventListener('load', () => {
-      // 1. Simulação da Barra de Carregamento (Animada)
-      if (progressBar) {
-          progressBar.classList.add('visible');
-          let width = 0;
-          const interval = setInterval(() => {
-              if (width >= 100) {
-                  clearInterval(interval);
-                  // 2. Transiciona para o modo Scroll Indicator
-                  setTimeout(() => {
-                      if (loadingScreen) loadingScreen.classList.add('hidden');
-                      if (heroCard) heroCard.classList.add('loaded');
-                      if (langToggle) updateLanguageDisplay();
-                      initializeCardStack(); // Inicializa a posição das cartas
-                      
-                      // Adiciona listener de scroll APÓS o carregamento
-                      window.addEventListener('scroll', updateScrollIndicator);
-                      
-                      // Remove o visible para que a barra de scroll tracking comece invisível
-                      if (progressBar) progressBar.classList.remove('visible');
-                  }, 300); // Dá um tempo para o fade do loading screen
-              } else {
-                  width += 5; // Aumenta 5% por frame simulado
-                  progressBar.style.width = width + '%';
-              }
-          }, 30); // 30ms para uma animação suave
-      } else {
-          // Fallback
-          if (loadingScreen) loadingScreen.classList.add('hidden');
-          if (heroCard) heroCard.classList.add('loaded');
-          if (langToggle) updateLanguageDisplay();
-          initializeCardStack();
-          window.addEventListener('scroll', updateScrollIndicator);
-      }
-  });
-
-  /* ---------- SCROLL INDICATOR FUNCTION ---------- */
-  function updateScrollIndicator() {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      
-      let scrolled = 0;
-      if (scrollHeight !== 0) {
-          scrolled = (scrollTop / scrollHeight) * 100;
-      }
-      
-      if (progressBar) {
-          progressBar.style.width = scrolled + '%';
-          
-          if (scrollTop > 10) {
-               progressBar.classList.add('visible');
-          } else {
-               progressBar.classList.remove('visible');
-          }
-      }
-  }
-
-
-  /* ---------- FUNÇÃO DE TRADUÇÃO PRINCIPAL (MANTIDA) ---------- */
-  function translateContent(lang) {
-      const data = translations[lang];
-
-      // 1. Menu e Títulos de Seção (por ID)
-      document.getElementById('menuSobre').textContent = data.menuSobre;
-      document.getElementById('menuVideografo').textContent = data.menuVideografo;
-      document.getElementById('menuProjetos').textContent = data.menuProjetos;
-      document.getElementById('menuEditor').textContent = data.menuEditor;
-      document.getElementById('menuContactos').textContent = data.menuContactos;
-      
-      document.getElementById('titleSobre').textContent = data.titleSobre;
-      document.getElementById('titleVideografo').textContent = data.titleVideografo;
-      document.getElementById('titleProjetos').textContent = data.titleProjetos;
-      document.getElementById('titleEditor').textContent = data.titleEditor;
-      document.getElementById('titleContactos').textContent = data.titleContactos;
-      
-      // Hero Subtitle
-      document.getElementById('heroSubtitle').textContent = data.heroSubtitle; 
-
-      // Sobre Mim e Footer
-      document.getElementById('pSobre').textContent = data.pSobre;
-      document.getElementById('footerText').textContent = data.footerText;
-      
-      // 2. Overlays (Roles e Descrições)
-      document.querySelectorAll('.project-card').forEach(card => {
-          const roleElement = card.querySelector('.role');
-          const descElement = card.querySelector('p');
-          const roleKey = roleElement ? roleElement.getAttribute('data-key') : null;
-          const descKey = descElement ? descElement.getAttribute('data-key') : null;
-
-          if (roleElement && roleKey && data.p_roles[roleKey]) {
-              roleElement.textContent = data.p_roles[roleKey];
-          }
-          if (descElement && descKey && data.p_descs[descKey]) {
-              descElement.textContent = data.p_descs[descKey];
-          }
-      });
-  }
-
-  function updateLanguageDisplay() {
-      if (currentLang === 'pt') {
-          langToggle.textContent = 'PT / EN';
-          langToggle.classList.remove('active');
-      } else {
-          langToggle.textContent = 'EN / PT';
-          langToggle.classList.add('active');
-      }
-      translateContent(currentLang);
-  }
-
-  if (langToggle) {
-      langToggle.addEventListener('click', () => {
-          currentLang = (currentLang === 'pt' ? 'en' : 'pt');
-          updateLanguageDisplay();
-      });
-  }
-
-
-  /* ---------- STACK INTERACTION (FIXADO) ---------- */
-  const maxInitialOffset = 4; // Offset inicial em px por carta (sutil)
-  const maxInitialRotation = 2; // Rotação inicial em graus por carta (sutil)
-  const maxSeparation = 150; // Distância de separação para o card 1 (em px)
-
-  function initializeCardStack() {
-      // Estado Inicial: Cartas sobrepostas com separação sutil (apenas para borda)
-      cards.forEach((card, index) => {
-          const i = index + 1;
-          const offset = i - ((cards.length + 1) / 2); // Centraliza a stack
-
-          card.style.transform = `
-              rotate(${maxInitialRotation * offset}deg) 
-              translateX(${maxInitialOffset * offset}px)
-          `;
-          card.style.zIndex = 100 - i;
-          card.classList.remove('is-centered');
-      });
-  }
-
-  /**
-   * Aplica o layout de leque (fan-out) com base no card focado/centrado.
-   * @param {number|null} focusedId - ID (1 a 7) do card focado. Null para voltar ao estado inicial.
-   */
-  function applyFanOut(focusedId) {
-      const isInitialState = (focusedId === null);
-      
-      cards.forEach(card => {
-          const i = parseInt(card.dataset.projectId);
-          
-          let rotation, translationX, zIndex;
-          let scale = 1.0;
-          
-          if (isInitialState) {
-              // Estado Inicial (Chamada à função de inicialização)
-              const offset = i - ((cards.length + 1) / 2);
-              rotation = maxInitialRotation * offset;
-              translationX = maxInitialOffset * offset;
-              zIndex = 100 - i;
-              card.classList.remove('is-centered');
-          } else if (i === focusedId) {
-              // CARTA FOCADA (Centrada e Escalada)
-              rotation = 0;
-              translationX = 0;
-              zIndex = 1001;
-              scale = 1.1; 
-              card.classList.add('is-centered');
-          } else {
-              // CARTA LATERAL (Fan-Out Simétrico)
-              const delta = i - focusedId;
-              const side = Math.sign(delta); // -1 para esquerda, 1 para direita
-              const distance = Math.abs(delta); // 1, 2, 3...
-              
-              const baseRotation = 10; 
-              
-              // Aumenta a distância de separação para FORÇAR GAPS VISÍVEIS
-              const finalTranslation = side * (maxSeparation + (distance - 1) * 60);
-              rotation = side * (baseRotation + (distance - 1) * 3);
-              scale = 1.0 - (distance * 0.05); 
-              
-              zIndex = 1000 - distance; 
-              card.classList.remove('is-centered');
-              
-              translationX = finalTranslation;
-          }
-          
-          // Aplicar as transformações
-          card.style.transform = `rotate(${rotation}deg) translateX(${translationX}px) scale(${scale})`;
-          card.style.zIndex = zIndex;
-          card.setAttribute('aria-selected', i === focusedId ? 'true' : 'false');
-      });
-  }
-
-
-  if (cardStack) {
-      const heroSection = document.getElementById('hero');
-
-      // 3D Parallax Tilt Logic (Mantido)
-      if (heroCard && heroSection) {
-          heroSection.addEventListener('mousemove', (e) => {
-              const rect = heroSection.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-
-              const rotY = (x / rect.width - 0.5) * 2; 
-              const rotX = (y / rect.height - 0.5) * 2; 
-              const maxTilt = 4; 
-              
-              heroCard.style.transform = `
-                  rotateX(${rotX * -maxTilt}deg) 
-                  rotateY(${rotY * maxTilt}deg)
-              `;
-          });
-
-          heroSection.addEventListener('mouseleave', () => {
-              heroCard.style.transform = 'rotateX(0deg) rotateY(0deg)';
-          });
-      }
-
-
-      cardStack.addEventListener('mouseenter', () => {
-          applyFanOut(4); // Foca no cartão central por padrão
-      });
-
-      cardStack.addEventListener('mouseleave', () => {
-          applyFanOut(null); // Volta ao estado inicial
-      });
-      
-      cards.forEach(card => {
-          const cardId = parseInt(card.dataset.projectId);
-          
-          card.addEventListener('mouseenter', () => applyFanOut(cardId));
-          
-          // Suporte a teclado
-          card.addEventListener('focus', (e) => applyFanOut(cardId));
-          card.addEventListener('blur', () => {
-              if (!cardStack.contains(document.activeElement)) {
-                  applyFanOut(null);
-              }
-          });
-      });
-  }
-
-
-  /* ---------- SCROLL BEHAVIOR (MANTIDO) ---------- */
-  window.addEventListener('scroll', () => {
-    const y = document.documentElement.scrollTop || document.body.scrollTop;
-    
-    const cardBlurAmount = 8 + Math.min(2, y / 100); 
-    if(heroCard) heroCard.style.backdropFilter = `blur(${cardBlurAmount}px) saturate(140%)`;
-
-    if (y > 120) mini.classList.add('visible'); else mini.classList.remove('visible');
-    
-    updateScrollIndicator();
-  });
-
-  mini.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`;
-  });
-
-  document.querySelectorAll('header a').forEach(a => a.addEventListener('click', ()=> {
-    if (heroCard) heroCard.style.backdropFilter = `blur(10px) saturate(140%)`; 
-    
-    setTimeout(()=>{ 
-      if(window.scrollY < 60 && heroCard) heroCard.style.backdropFilter = `blur(8px) saturate(140%)`; 
-    }, 900);
-  }));
-
-  /* ---------- PROJECT WIDGETS & VIDEO PLAYER (FIXADO) ---------- */
-  const widgets = document.querySelectorAll('.project-card');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('in-view');
-    });
-  }, { threshold: 0.16 });
-  widgets.forEach(w => io.observe(w));
+  let currentLang = 'pt';
+  const toggleBtn = document.getElementById('langToggle');
   
+  toggleBtn.addEventListener('click', () => { 
+      currentLang = currentLang === 'pt' ? 'en' : 'pt'; 
+      toggleBtn.textContent = currentLang === 'pt' ? 'PT' : 'EN'; 
+      applyTranslation(currentLang); 
+  });
+
+  function applyTranslation(lang) {
+      const t = translations[lang];
+      
+      const idsToTranslate = [
+          'menuSobre','menuVideografo','menuProjetos','menuEditor','menuContactos',
+          'heroSubtitle','titleSobre','titleVideografo','titleProjetos','titleEditor','titleContactos',
+          'pSobre1','pSobre2','footerText','gameTitle','gameDesc'
+      ];
+      
+      idsToTranslate.forEach(id => { 
+          if(document.getElementById(id)) {
+              document.getElementById(id).innerHTML = t[id]; 
+          }
+      });
+      
+      document.querySelectorAll('[data-key]').forEach(el => { 
+          const key = el.getAttribute('data-key'); 
+          if(t[key]) el.textContent = t[key]; 
+      });
+  }
+
+  /* ========================================= */
+  /* 5. MODAL VIDEO */
+  /* ========================================= */
   const modal = document.getElementById('modal');
   const modalFrame = document.getElementById('modalFrame');
-  const modalClose = document.getElementById('modalClose');
-  let activeCard = null; 
   
-  function openVideo(id){
-    modal.classList.add('open');
-    modal.setAttribute('aria-hidden','false');
-    const dummyIds = ['DUMMY_1', 'DUMMY_2', 'DUMMY_3']; 
-    
-    if (id && !dummyIds.includes(id)) {
-      const iframe = document.createElement('iframe');
-      // Adicionado rel=0 para evitar vídeos relacionados no final
-      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`; 
-      iframe.setAttribute('allow','accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
-      iframe.style.width = '100%';
-      iframe.style.height = '100%';
-      iframe.style.border = '0';
-      modalFrame.innerHTML = '';
-      modalFrame.appendChild(iframe);
-    } else {
-      modalFrame.innerHTML = '<p style="color:white; text-align:center; padding:20px; font-family: \'Lexend Giga\', sans-serif;">Vídeo em breve!</p>';
-    }
-    document.body.style.overflow = 'hidden';
-  }
-  
-  function closeAllOverlays() {
-      document.querySelectorAll('.project-card.active').forEach(card => {
-          card.classList.remove('active');
+  document.querySelectorAll('.project-card').forEach(card => {
+      card.addEventListener('click', () => {
+          const vid = card.getAttribute('data-vid'); 
+          if(!vid) return;
+          
+          modal.classList.add('open'); 
+          modalFrame.innerHTML = `<iframe src="https://www.youtube.com/embed/${vid}?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen style="width:100%; height:100%;"></iframe>`;
       });
-      activeCard = null;
-  }
-  
-  function handleProjectClick(e) {
-      const clickedCard = e.currentTarget;
-      const vid = clickedCard.dataset.id;
-      
-      if (!vid) return;
-
-      // FIX CRÍTICO: Impede que o document listener feche o overlay imediatamente
-      // se o clique for dentro do project-card (1º ou 2º clique).
-      e.stopPropagation(); 
-
-      if (clickedCard.classList.contains('active')) {
-          // 2º Click: O card já está ativo, abre o vídeo
-          openVideo(vid);
-          closeAllOverlays();
-      } else {
-          // 1º Click: Ativa o overlay
-          closeAllOverlays(); 
-          clickedCard.classList.add('active');
-          activeCard = clickedCard;
-      }
-  }
-
-  // Atribui o novo (e agora fixo) handler a todos os cartões de projeto
-  document.querySelectorAll('.project-card[data-id]').forEach(el => {
-    el.removeEventListener('click', handleProjectClick); // Remove o antigo se houver
-    el.addEventListener('click', handleProjectClick);
   });
   
-  // O document listener só fecha se o clique for FORA de qualquer project-card
-  document.addEventListener('click', (e) => {
-      if (!e.target.closest('.project-card')) {
-          closeAllOverlays();
+  document.getElementById('modalClose').addEventListener('click', () => { 
+      modal.classList.remove('open'); 
+      modalFrame.innerHTML = ''; 
+  });
+  
+  modal.addEventListener('click', (e) => { 
+      if(e.target === modal) { 
+          modal.classList.remove('open'); 
+          modalFrame.innerHTML = ''; 
       }
   });
 
-  // Fechar Modal
-  modalClose.addEventListener('click', () => {
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      modalFrame.innerHTML = '';
-      document.body.style.overflow = '';
-  });
-
-  // Funcionalidade de Email (Mantida)
-  const emailLink = document.getElementById('contactEmail'); 
-  const initialText = ' Email';
-  const initialHTML = '<i class="fas fa-envelope"></i>' + initialText;
-  const revealedHTML = `<i class="fas fa-envelope"></i> ${emailLink ? emailLink.dataset.email : ''}`;
-  if (emailLink) {
-      emailLink.innerHTML = initialHTML;
-      emailLink.addEventListener('mouseenter', () => {
-          emailLink.innerHTML = revealedHTML;
-      });
-      emailLink.addEventListener('mouseleave', () => {
-          emailLink.innerHTML = initialText;
-      });
-      emailLink.addEventListener('click', (e) => {
-          if (emailLink.innerHTML === initialHTML) {
-              e.preventDefault(); 
-              emailLink.innerHTML = revealedHTML;
-          } 
-      });
-      emailLink.addEventListener('blur', () => {
-          emailLink.innerHTML = initialText; 
-      });
-      document.addEventListener('click', (e) => {
-          if (e.target !== emailLink && !e.target.closest('.contact-grid') && emailLink.innerHTML === revealedHTML) {
-              emailLink.innerHTML = initialText; 
-          }
-      });
-  }
 </script>
 </body>
 </html>
+
+
